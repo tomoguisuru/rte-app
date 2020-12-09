@@ -20,6 +20,18 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+    OWNER_ID: process.env.CMS_OWNER_ID,
+    API: process.env.API,
+    API_KEY: process.env.CMS_API_KEY,
+    contentSecurityPolicy: {
+      'default-src': ["'none'"],
+      'script-src': ["'self'", 'unsafe-inline'],
+      'font-src': ["'self'", 'fonts.gstatic.com'],
+      'connect-src': ["'self'", 'http://services.downlynk.localhost:8000', 'https://*.downlynk.com'],
+      'img-src': ["'self'", 'data:'],
+      'style-src': ["'self'", 'unsafe-inline', 'https://fonts.googleapis.com'],
+      'media-src': ["'self'"]
     }
   };
 
