@@ -1,3 +1,30 @@
+<div class="wrapper">
+    <div class="header {{concat 'header--' @model.state}}">
+        {{@model.title}}
+    </div>
+    <div class="body">
+        {{#if (eq @model.state 'complete')}}
+            <div class="notification">
+                This event has ended
+            </div>
+        {{else if (not-eq @model.state 'live')}}
+            <div class="notification">
+                It looks like we're not quite ready yet, sorry
+            </div>
+        {{/if}}
 
-Model Id: {{@model.id}}
-{{outlet}}
+        <div class="streams">
+            {{#each @model.streams as |stream|}}
+                <ChannelViewer
+                    @stream={{stream}}
+                >
+                </ChannelViewer>
+            {{/each}}
+        </div>
+
+        {{outlet}}
+    </div>
+    <div class="footer">
+
+    </div>
+</div>

@@ -48,6 +48,7 @@
     "ember-resolver": "^8.0.2",
     "ember-source": "~3.22.0",
     "ember-template-lint": "^2.14.0",
+    "ember-truth-helpers": "^3.0.0",
     "ember-welcome-page": "^4.0.0",
     "eslint": "^7.11.0",
     "eslint-plugin-ember": "^9.3.0",
@@ -66,6 +67,7 @@
   },
   "dependencies": {
     "pako": "^2.0.2",
+    "phenix-web-sdk": "^2020.2.19",
     "zlib": "^1.0.5"
   }
 }
