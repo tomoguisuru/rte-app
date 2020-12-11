@@ -21,6 +21,15 @@ $warn: "pink";
     }
 
     .body {
+        .streams {
+            .stream {
+                video {
+                    border: 10px solid black;
+                    opacity: 0.6;
+                    box-shadow: 12px 9px 13px rgba(255, 0, 255, 0.75);
+                }
+            }
+        }
 
     }
 

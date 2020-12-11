@@ -22,13 +22,20 @@ module.exports = function(environment) {
       // when it is created
     },
     OWNER_ID: process.env.CMS_OWNER_ID,
-    API: process.env.API,
+    CMS_DOMAIN: process.env.CMS_DOMAIN,
+    API_V4: `${process.env.CMS_DOMAIN}/api/v4`,
     API_KEY: process.env.CMS_API_KEY,
     contentSecurityPolicy: {
       'default-src': ["'none'"],
       'script-src': ["'self'", 'unsafe-inline'],
       'font-src': ["'self'", 'fonts.gstatic.com'],
-      'connect-src': ["'self'", 'http://services.downlynk.localhost:8000', 'https://*.downlynk.com'],
+      'connect-src': [
+        "'self'",
+        'http://services.downlynk.localhost:8000',
+        'https://*.downlynk.com',
+        'https://*.phenixrts.com',
+        'wss://*.phenixrts.com/ws'
+      ],
       'img-src': ["'self'", 'data:'],
       'style-src': ["'self'", 'unsafe-inline', 'https://fonts.googleapis.com'],
       'media-src': ["'self'"]

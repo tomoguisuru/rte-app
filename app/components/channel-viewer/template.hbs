@@ -1,3 +1,8 @@
-<div class="awesome-sauce">
-    {{@stream.name}}
+<div class="stream" {{did-insert onInsert}}>
+    <video
+        width=250
+        height=250
+        autoplay
+    ></video>
+    {{@stream.title}} - {{this.hasChannelExpress}}
 </div>

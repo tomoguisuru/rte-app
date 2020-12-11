@@ -17,6 +17,7 @@
             {{#each @model.streams as |stream|}}
                 <ChannelViewer
                     @stream={{stream}}
+                    @channelExpress={{channelExpress}}
                 >
                 </ChannelViewer>
             {{/each}}

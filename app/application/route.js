@@ -13,7 +13,7 @@ export default class ApplicationRoute extends Route {
         const params = this.buildParams();
         const qs = this.queryParams(params);
 
-        const url = `${ENV.API}/rts/events/${id}/manifest?${qs}`;
+        const url = `${ENV.API_V4}/rts/events/${id}/manifest?${qs}`;
         const request = this.buildRequest();
 
         const resp = await fetch(url, request);
@@ -25,16 +25,25 @@ export default class ApplicationRoute extends Route {
 
             return json.event;
         }
+    }
 
-        console.log('uh ohs')
+    async setupController(controller, model) {
+        super.setupController(controller, model);
+
+        if (controller && model) {
+            const {authenticationData} = model.adminProxyClient;
+            const {channelExpressService} = controller;
+            Object.assign(authenticationData, this.buildParams());
+
+            channelExpressService.setup(model);
+
+            controller.channelExpress = channelExpressService.createChannelExpress();
+            console.log('Channel Express created', controller.channelExpress)
+        }
     }
 
     buildRequest(method, data) {
-        // const params = this.buildParams();
-        let headers = {
-            // Authorization: `${params.msg} ${params.sig}`,
-            // Origin: 'http://localhost:4200',
-        };
+        const headers = {};
         let body;
 
         if (data) {
@@ -63,7 +72,7 @@ export default class ApplicationRoute extends Route {
 
         var msg = btoa(compStr);
 
-        const sig = CryptoJS.HmacSHA256(msg, ENV.API_KEY)
+        const sig = CryptoJS.HmacSHA256(msg, ENV.API_KEY).toString();
 
         return { msg, sig };
     }
