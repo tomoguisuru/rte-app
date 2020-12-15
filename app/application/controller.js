@@ -1,14 +1,14 @@
 import Controller from '@ember/controller';
-import ENV from 'client-app/config/environment';
-import {inject as service} from '@ember/service';
-import {tracked} from '@glimmer/tracking';
+// import ENV from 'client-app/config/environment';
+// import {inject as service} from '@ember/service';
+// import {tracked} from '@glimmer/tracking';
 
 export default class ApplicationController extends Controller {
-    @service('phenix-channel-express')
-    channelExpressService;
+    // @service('phenix-channel-express')
+    // channelExpressService;
 
-    @tracked
-    channelExpress = null;
+    // @tracked
+    // channelExpress = null;
 
-    owner = ENV.OWNER_ID;
+    // owner = ENV.OWNER_ID;
 }

@@ -32,7 +32,7 @@ export default class PhenixChannelExpressService extends Service {
         } = options;
 
         const adminApiProxyClient = new sdk.net.AdminApiProxyClient();
-        adminApiProxyClient.setBackendUri(`${ENV.CMS_DOMAIN}${backendUri}`);
+        adminApiProxyClient.setBackendUri(`${ENV.API_HOST}${backendUri}`);
 
 
         const {tags = []} = authenticationData;

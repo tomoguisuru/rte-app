@@ -22,8 +22,8 @@ module.exports = function(environment) {
       // when it is created
     },
     OWNER_ID: process.env.CMS_OWNER_ID,
-    CMS_DOMAIN: process.env.CMS_DOMAIN,
-    API_V4: `${process.env.CMS_DOMAIN}/api/v4`,
+    API_HOST: process.env.CMS_HOST,
+    API_V4: `${process.env.CMS_HOST}/api/v4`,
     API_KEY: process.env.CMS_API_KEY,
     contentSecurityPolicy: {
       'default-src': ["'none'"],
