@@ -1,6 +1,8 @@
 import Service from '@ember/service';
 import sdk from 'phenix-web-sdk';
 
+import AuthParams from '../utils/auth-params'
+
 import ENV from 'client-app/config/environment';
 
 function uuidv4() {
@@ -34,6 +36,10 @@ export default class PhenixChannelExpressService extends Service {
         const adminApiProxyClient = new sdk.net.AdminApiProxyClient();
         adminApiProxyClient.setBackendUri(`${ENV.API_HOST}${backendUri}`);
 
+        // We need to add the services API auth here
+        const authParams = AuthParams();
+        authenticationData['msg'] = authParams.msg;
+        authenticationData['sig'] = authParams.sig;
 
         const {tags = []} = authenticationData;
 

@@ -22,6 +22,7 @@ export default class EventRoute extends Route {
             channelExpressService.setup(model);
 
             controller.channelExpress = channelExpressService.createChannelExpress();
+            controller.streams = model.streams;
         }
     }
 }

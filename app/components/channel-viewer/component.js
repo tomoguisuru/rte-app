@@ -3,7 +3,6 @@ import Component from '@glimmer/component';
 import {inject as service} from '@ember/service';
 import {action} from '@ember/object';
 
-
 export default class ChannelViewerComponent extends Component {
     channelService = null;
     mediaStream = null;
@@ -21,7 +20,7 @@ export default class ChannelViewerComponent extends Component {
         }, 750);
     }
 
-    willDestroy() {
+    isDestroying() {
         if (this.channelService) {
             this.channelService.leaveChannel();
             this.channelService = null;
