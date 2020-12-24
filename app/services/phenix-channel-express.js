@@ -34,12 +34,6 @@ export default class PhenixChannelExpressService extends Service {
         } = options;
 
         const adminApiProxyClient = new sdk.net.AdminApiProxyClient();
-        adminApiProxyClient.setBackendUri(`${ENV.API_HOST}${backendUri}`);
-
-        // We need to add the services API auth here
-        const authParams = AuthParams();
-        authenticationData['msg'] = authParams.msg;
-        authenticationData['sig'] = authParams.sig;
 
         const {tags = []} = authenticationData;
 
@@ -47,7 +41,28 @@ export default class PhenixChannelExpressService extends Service {
 
         authenticationData['tags'] = tags;
 
-        adminApiProxyClient.setAuthenticationData(authenticationData);
+        adminApiProxyClient.setRequestHandler(async (requestType, args, callback) => {
+            const data = Object.assign({}, args, authenticationData);
+
+            const url = `${ENV.API_HOST}${backendUri}/${requestType}`;
+            let token = null;
+            let error = null;
+
+            try {
+                const request = this._buildRequest('post', data);
+                const resp = await fetch(url, request);
+
+                if (resp.ok) {
+                    const json = await resp.json();
+
+                    token = json.authenticationToken;
+                }
+            } catch (err) {
+                error = err.message;
+            }
+
+            callback(error, token);
+        });
 
         return adminApiProxyClient;
     }
@@ -94,5 +109,26 @@ export default class PhenixChannelExpressService extends Service {
 
     setClientId(clientId) {
         this.clientId = clientId;
+    }
+
+    _buildRequest(method, data) {
+        const authParams = AuthParams();
+        const headers = {
+            'Authorization': `${authParams.msg} ${authParams.sig}`,
+        };
+        let body;
+
+        if (data) {
+            body = JSON.stringify(data);
+
+            headers['Content-Length'] = body.length;
+            headers['Content-Type'] = 'application/json';
+        }
+
+        return {
+            body,
+            method,
+            headers,
+        }
     }
 }

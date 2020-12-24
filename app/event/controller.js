@@ -51,6 +51,23 @@ export default class EventController extends Controller {
         }, this.pollInterval);
     }
 
+    async doSomething() {
+        // const resp = await this.manifestServices.raw(
+        //     'get',
+        //     `/channels`,
+        //     'verizondigitalmedia.com',
+        // );
+
+        // const channel = 'us-southwest#verizondigitalmedia.com#asdfasd.jSlTr6Pu6e7R'
+        // const resp = await this.manifestServices.raw(
+        //     'get',
+        //     `/channel/${encodeURIComponent(channel)}/publishers/count`,
+        //     'cfd3574dde9b4593b05d7c6a2ac1b33c',
+        // );
+
+        // console.log(resp)
+    }
+
     isDestroying() {
         if (this.pollTracker) {
             clearInterval(this.pollTracker);
