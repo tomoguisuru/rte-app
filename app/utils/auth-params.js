@@ -1,6 +1,6 @@
 import ENV from 'client-app/config/environment';
 import pako from 'pako';
-import CryptoJS from 'crypto-js';
+import hmacSHA256 from 'crypto-js/hmac-sha256';
 
 import moment from 'moment';
 
@@ -17,7 +17,7 @@ function AuthParams() {
 
     var msg = btoa(compStr);
 
-    const sig = CryptoJS.HmacSHA256(msg, ENV.API_KEY).toString();
+    const sig = hmacSHA256(msg, ENV.API_KEY).toString();
 
     return {msg, sig};
 }

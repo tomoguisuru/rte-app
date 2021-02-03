@@ -27,17 +27,19 @@ module.exports = function(environment) {
     API_KEY: process.env.CMS_API_KEY,
     contentSecurityPolicy: {
       'default-src': ["'none'"],
-      'script-src': ["'self'", 'unsafe-inline'],
-      'font-src': ["'self'", 'fonts.gstatic.com'],
+      'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      'font-src': ["'self'"],
       'connect-src': [
         "'self'",
-        'http://services.downlynk.localhost:8000',
+        'http://*.downlynk.localhost:8000',
+        'http://*.uplynk.localhost:8000',
         'https://*.downlynk.com',
+        'https://*.uplynk.com',
         'https://*.phenixrts.com',
         'wss://*.phenixrts.com/ws'
       ],
       'img-src': ["'self'", 'data:'],
-      'style-src': ["'self'", 'unsafe-inline', 'https://fonts.googleapis.com'],
+      'style-src': ["'self'"],
       'media-src': ["'self'"]
     }
   };
