@@ -25,7 +25,6 @@
     "@glimmer/tracking": "^1.0.2",
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
-    "crypto-js": "^4.0.0",
     "ember-auto-import": "^1.6.0",
     "ember-cli": "~3.22.0",
     "ember-cli-app-version": "^4.0.0",
@@ -44,18 +43,15 @@
     "ember-inflector": "^4.0.1",
     "ember-load-initializers": "^2.1.1",
     "ember-maybe-import-regenerator": "^0.1.6",
-    "ember-paper": "^1.0.0-beta.35",
     "ember-qunit": "^4.6.0",
     "ember-resolver": "^8.0.2",
     "ember-source": "~3.22.0",
     "ember-template-lint": "^2.14.0",
     "ember-truth-helpers": "^3.0.0",
-    "ember-welcome-page": "^4.0.0",
     "eslint": "^7.11.0",
     "eslint-plugin-ember": "^9.3.0",
     "eslint-plugin-node": "^11.1.0",
     "loader.js": "^4.7.0",
-    "moment": "^2.29.1",
     "npm-run-all": "^4.1.5",
     "qunit-dom": "^1.5.0",
     "sass": "^1.30.0"
@@ -67,6 +63,8 @@
     "edition": "octane"
   },
   "dependencies": {
+    "crypto-js": "^4.0.0",
+    "moment": "^2.29.1",
     "pako": "^2.0.2",
     "phenix-web-sdk": "^2020.2.19",
     "zlib": "^1.0.5"

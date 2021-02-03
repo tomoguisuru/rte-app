@@ -5,16 +5,9 @@ import AuthParams from '../utils/auth-params'
 
 export default class ManifestService extends Service {
     async getManifest(eventId) {
-        const url = `${ENV.API_V4}/rts/events/${eventId}/manifest`;
-        const request = this._buildRequest();
+        const url = `/rts/events/${eventId}/manifest`;
 
-        const resp = await fetch(url, request);
-
-        if (resp.ok) {
-            const json = await resp.json();
-
-            return json.event;
-        }
+        return this.request(url);
     }
 
     async raw(method, url, app_id = null, credential_id = null, data = null) {
@@ -26,16 +19,19 @@ export default class ManifestService extends Service {
             method,
         };
 
-        const _url = `${ENV.API_V4}/rts/admin`;
-        const request = this._buildRequest('post', body);
-        const resp = await fetch(_url, request);
+        return this.request(`/rts/admin`, 'post', body);
+    }
+
+    async request(url, method = 'get', data = null) {
+        const request = this._buildRequest(method, data);
+
+        const resp = await fetch(`${ENV.API_V4}${url}`, request);
 
         if (resp.ok) {
             const json = await resp.json();
 
-            return json;
+            return json.event;
         }
-
     }
 
     _buildRequest(method, data) {
