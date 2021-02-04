@@ -7,7 +7,7 @@ const path = require('path');
 module.exports = function(env) {
   let _path = path.join(path.dirname(__dirname), `.env`);
 
-  if (env !== 'production') {
+  if (!['production', 'prod'].includes(env)) {
     _path += `.${env}`;
   }
 
