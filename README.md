@@ -17,6 +17,7 @@ You will need the following things properly installed on your computer.
 ## Installation
 
 ```bash
+npm install -g ember-cli
 git clone git@git.vzbuilders.com:bdrake/client-app.git
 cd client-app
 npm install
