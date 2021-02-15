@@ -14,6 +14,29 @@ You will need the following things properly installed on your computer.
 
 ---
 
+---
+
+## Docker
+```bash
+git clone git@git.vzbuilders.com:bdrake/client-app.git
+cd client-app
+```
+create .env file and add:
+
+```
+CMS_HOST=http://services.uplynk.com
+CMS_OWNER_ID=<uplynk_owner_id>
+CMS_API_KEY=<uplynk_integration_key>
+```
+run docker with the following commands
+
+```bash
+docker build . -t client-app
+docker run -d -p 4200:4200 -p 7357:7357 -p 9222:9222 client-app
+```
+
+Navigate to `http://localhost:4200/event/:rts_event_id`
+
 ## Installation
 
 ```bash
