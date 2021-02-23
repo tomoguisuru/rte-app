@@ -1,0 +1,79 @@
+@font-face {
+    font-family: 'VerizonNHGeDS-Bold';
+    src: url('/fonts/nhg/VerizonNHGeDS-Bold.woff2') format('woff2'),
+         url('/fonts/nhg/VerizonNHGeDS-Bold.woff') format('woff'),
+         url('/fonts/nhg/VerizonNHGeDS-Bold.eot') format('eot'),
+         url('/fonts/nhg/VerizonNHGeDS-Bold.ttf') format('truetype');
+    font-weight: bold;
+
+}
+
+@font-face {
+    font-family: 'VerizonNHGeDS-Regular';
+    src: url('/fonts/nhg/VerizonNHGeDS-Regular.woff2') format('woff2'),
+         url('/fonts/nhg/VerizonNHGeDS-Regular.woff') format('woff'),
+         url('/fonts/nhg/VerizonNHGeDS-Regular.eot') format('eot'),
+         url('/fonts/nhg/VerizonNHGeDS-Regular.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'VerizonNHGeTX-Bold';
+    src: url('/fonts/nhg/VerizonNHGeTX-Bold.woff2') format('woff2'),
+         url('/fonts/nhg/VerizonNHGeTX-Bold.woff') format('woff'),
+         url('/fonts/nhg/VerizonNHGeTX-Bold.eot') format('eot'),
+         url('/fonts/nhg/VerizonNHGeTX-Bold.ttf') format('truetype');
+    font-weight: bold;
+
+}
+
+@font-face {
+    font-family: 'VerizonNHGeTX-Regular';
+    src: url('/fonts/nhg/VerizonNHGeTX-Regular.woff2') format('woff2'),
+         url('/fonts/nhg/VerizonNHGeTX-Regular.woff') format('woff'),
+         url('/fonts/nhg/VerizonNHGeTX-Regular.eot') format('eot'),
+         url('/fonts/nhg/VerizonNHGeTX-Regular.ttf') format('truetype');
+    font-weight: normal;
+
+}
+
+
+html,
+body {
+    font-family: 'VerizonNHGeTX-Regular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    strong {
+        font-family: 'VerizonNHGeTX-Bold', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'VerizonNHGeDS-Bold', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+h1,
+.rts-h1 {
+    font-weight: bold;
+    font-size: 30px;
+    margin: 0.5em 0;
+}
+
+
+/* Rules for sizing the icon. */
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }

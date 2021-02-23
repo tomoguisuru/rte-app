@@ -1,8 +1,18 @@
-<div class="wrapper">
-    <div class="header {{concat 'header--' @model.state}}">
-        <span>{{@model.title}}</span> {{this.pickRandomNumbers.isRunning}}
-    </div>
-    <div class="body">
+
+<div class="rts-wrap">
+    <header class="rts-hdr">
+        <div class="rts-hdr__title">
+            {{#if @model.state}}
+            <span class="rts-pill rts-hdr__status {{concat 'rts-pill--' @model.state}}">{{@model.state}}</span>
+            {{/if}}
+            <h1>{{@model.title}}</h1>
+        </div>
+        <div class="rts-hdr__brand">
+            <span>powered by</span>
+            <img src="/images/vzm_rgb_r.png" alt="verizon media" />
+        </div>
+    </header>
+    <main class="rts-main">
         {{#if (eq @model.state 'complete')}}
         <div class="notification">
             This event has ended
@@ -13,7 +23,7 @@
         </div>
         {{/if}}
 
-        <div class="streams">
+        <div class="rts-streams">
             {{#each this.streams as |stream|}}
             <ChannelViewer @stream={{stream}} @channelExpress={{channelExpress}}>
             </ChannelViewer>
@@ -21,8 +31,18 @@
         </div>
 
         {{outlet}}
-    </div>
-    <div class="footer">
+    </main>
+    <footer class="rts-ftr">
+        <div>
 
-    </div>
+        </div>
+        <div class="rts-ftr__controls">
+            <button class="rts-btn rts-btn--icon"><span class="material-icons">mic</span></button>
+            <button class="rts-btn rts-btn--icon"><span class="material-icons">videocam</span></button>
+            <button class="rts-btn rts-btn--primary">Leave</button>
+        </div>
+        <div class="rts-ftr__aux">
+
+        </div>
+    </footer>
 </div>

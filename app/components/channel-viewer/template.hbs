@@ -1,6 +1,11 @@
-<div class="stream" {{did-insert onInsert}}>
+<div class="rts-stream" {{did-insert onInsert}}>
     <video
         autoplay
     ></video>
-    {{@stream.title}}
+    <div class="rts-stream__head">
+        <h3 class="rts-stream__title">{{@stream.title}}</h3>
+        <div class="rts-stream__controls">
+            <button class="rts-btn rts-btn--sm rts-btn--icon rts-btn--alert"><span class="material-icons md-18">volume_off</span></button>
+        </div>
+    </div>
 </div>

@@ -28,7 +28,10 @@ module.exports = function(environment) {
     contentSecurityPolicy: {
       'default-src': ["'none'"],
       'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-      'font-src': ["'self'"],
+      'font-src': [
+          "'self'",
+          'https://fonts.gstatic.com'
+      ],
       'connect-src': [
         "'self'",
         'http://*.downlynk.localhost:8000',
@@ -39,7 +42,10 @@ module.exports = function(environment) {
         'wss://*.phenixrts.com/ws'
       ],
       'img-src': ["'self'", 'data:'],
-      'style-src': ["'self'"],
+      'style-src': [
+          "'self'",
+          'https://fonts.googleapis.com/'
+      ],
       'media-src': ["'self'"]
     }
   };

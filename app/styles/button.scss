@@ -1,0 +1,58 @@
+.rts-btn {
+    margin: 2px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    white-space: nowrap;
+    appearance: none;
+    border-radius: 100px;
+    border: 2px solid transparent;
+    height: 34px;
+    min-width: 34px;
+    padding: 3px 34px;
+    font-size: 14px;
+    background-color: $color-gray-dark;
+    color: white;
+
+
+    &--icon {
+        padding: 3px;
+    }
+
+    &--sm {
+        height: 26px;
+        min-width: 26px;
+        padding: 2px 26px;
+
+        &.rts-btn--icon {
+            padding: 2px;
+        }
+    }
+
+    &--lg {
+        height: 48px;
+        min-width: 48px;
+        padding: 4px 48px;
+
+        &.rts-btn--icon {
+            padding: 4px;
+        }
+    }
+
+    &--lg {
+
+    }
+
+    &--primary {
+        background-color: $color-primary;
+    }
+
+    &--secondary {
+
+    }
+
+    &--alert {
+        background-color: $color-alert;
+    }
+}
