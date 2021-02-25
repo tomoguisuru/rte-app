@@ -4,11 +4,15 @@
 @import "type";
 @import "pill";
 @import "button";
+@import "field";
+@import "form";
 
 
 
 body {
     background-color: $color-gray-darkest;
+    color: $color-white;
+    font-size: 14px;
 }
 
 .rts-hdr,
@@ -47,14 +51,14 @@ body {
     }
 
     &__status {
-        margin-left: 24px;
+        margin-left: 20px;
         margin-right: 12px;
     }
 }
 
 
 .rts-ftr__controls {
-    margin: 12px;
+    margin: 12px 20px;
 
     button + button {
         margin-left: 12px;
@@ -74,6 +78,7 @@ body {
     .rts-main {
         flex-grow: 1;
         display: flex;
+        margin: 16px;
     }
 }
 
@@ -81,7 +86,6 @@ body {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    margin: 16px;
 
     &--grid {
 

@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import {inject as service} from '@ember/service';
 import {tracked} from '@glimmer/tracking';
+import { action } from '@ember/object';
 
 export default class EventController extends Controller {
     @service('phenix-channel-express')
@@ -11,6 +12,9 @@ export default class EventController extends Controller {
 
     pollInterval = 10 * 1000;
     isProcessing = false;
+
+    @tracked showSettings = true;
+    @tracked hasJoined = false;
 
     @tracked
     streams = [];
@@ -93,5 +97,22 @@ export default class EventController extends Controller {
                 collectionA.removeObject(stream)
             }
         });
+    }
+
+    @action
+    joinEvent() {
+        this.showSettings = false;
+        this.hasJoined = true;
+    }
+
+    @action
+    leaveEvent() {
+        this.showSettings = true;
+        this.hasJoined = false;
+    }
+
+    @action
+    toggleSettings() {
+        this.toggleProperty('showSettings');
     }
 }

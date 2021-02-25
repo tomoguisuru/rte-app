@@ -1,0 +1,49 @@
+.rts-field {
+    display: block;
+    position: relative;
+    color: currentColor;
+
+    &__label {
+        position: absolute;
+        background-color: $color-gray-darkest;
+        font-size: 12px;
+        user-select: none;
+        line-height: 1;
+        font-weight: 400;
+        display: block;
+        top: -10px;
+        left: 8px;
+        padding-left: 6px;
+        padding-right: 6px;
+        color: $color-gray-light;
+    }
+
+    &__input {
+        color: $color-white;
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        display: block;
+        background-color: transparent;
+        padding: 0 12px;
+        outline: 0;
+        border: 0;
+        cursor: text;
+        line-height: 1.25;
+    }
+
+    &__bin {
+        border-radius: 2px;
+        border: 1px solid $color-gray-light;
+        position: relative;
+        height: 32px;
+        align-items: stretch;
+    }
+
+    &--select {
+
+        .rts-field__input {
+            padding-right: 24px;
+        }
+    }
+}
