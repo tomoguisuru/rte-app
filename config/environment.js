@@ -33,7 +33,9 @@ module.exports = function(environment) {
         "'self'",
         'http://*.downlynk.localhost:8000',
         'http://*.uplynk.localhost:8000',
+        'http://*.downlynk.com',
         'https://*.downlynk.com',
+        'http://*.uplynk.com',
         'https://*.uplynk.com',
         'https://*.phenixrts.com',
         'wss://*.phenixrts.com/ws'

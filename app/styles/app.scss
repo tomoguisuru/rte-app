@@ -2,14 +2,20 @@ $primary: "teal";
 $accent: "light-green";
 $warn: "pink";
 
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
 .wrapper {
     background-color: dimgray;
     color: white;
     display: grid;
-    height: 100%;
+    height: 100vh;
     margin: 0;
     padding: 0;
     width: 100%;
+
 
     grid-template-areas:
         "header"
@@ -26,7 +32,15 @@ $warn: "pink";
         }
     }
 
-    .body {
+    .event-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+            "streams publisher"
+            "publishers publisher";
+
         .streams {
             display: flex;
             flex-wrap: wrap;
