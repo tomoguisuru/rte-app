@@ -31,9 +31,18 @@
                 </ChannelViewer>
             {{/each}}
         </div>
+        {{#if this.showStreamList}}
         <aside class="rts-tray">
-            {{outlet}}
+            {{#each this.streams as |stream|}}
+                <ChannelViewer
+                    @stream={{stream}}
+                    @channelExpress={{channelExpress}}
+                >
+                </ChannelViewer>
+            {{/each}}
         </aside>
+        {{/if}}
+        {{outlet}}
     </main>
     <footer class="rts-ftr">
         <div class="rts-ftr__controls" id="footer_left_controls">
@@ -45,7 +54,10 @@
             <PortalTarget @name="footer-center"/>
         </div>
         <div class="rts-ftr__controls">
-            <PortalTarget @name="footer-right"/>
+            <button class="rts-btn rts-btn--icon" {{on 'click' this.toggleStreamList}}><span class="material-icons md-20">view_sidebar</span></button>
+            <div>
+                <PortalTarget @name="footer-right"/>
+            </div>
         </div>
     </footer>
 </div>

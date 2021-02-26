@@ -13,8 +13,8 @@ export default class EventController extends Controller {
     pollInterval = 10 * 1000;
     isProcessing = false;
 
-    @tracked showSettings = true;
     @tracked hasJoined = false;
+    @tracked showStreamList = false;
 
     @tracked
     streams = [];
@@ -112,7 +112,7 @@ export default class EventController extends Controller {
     }
 
     @action
-    toggleSettings() {
-        this.toggleProperty('showSettings');
+    toggleStreamList() {
+        this.toggleProperty('showStreamList');
     }
 }

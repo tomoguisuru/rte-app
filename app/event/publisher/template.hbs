@@ -1,52 +1,56 @@
-<div class="rts-settings">
-    <div class="rts-settings__preview">
-        <video></video>
-    </div>
-    <div class="rts-settings__config">
-        <form class="rts-form">
-            <div class="rts-form__item">
-                <div class="rts-field">
-                    <div class="rts-field__bin">
-                        <label class="rts-field__label">Confirm Email</label>
-                        <input class="rts-field__input" type="email" />
-                    </div>
-                </div>
-            </div>
-            <div class="rts-form__item">
-                <div class="rts-field">
-                    <div class="rts-field__bin">
-                        <label class="rts-field__label">Passkey</label>
-                        <input class="rts-field__input" type="email" />
-                    </div>
-                </div>
-            </div>
-            <div class="rts-form__item">
-                <div class="rts-field rts-field--select">
-                    <div class="rts-field__bin">
-                        <label class="rts-field__label">Camera</label>
-                        <select class="rts-field__input">
-                            <option>FaceTime HD Camera (Built-in)</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="rts-form__item">
-                <div class="rts-field rts-field--select">
-                    <div class="rts-field__bin">
-                        <label class="rts-field__label">Microphone</label>
-                        <select class="rts-field__input">
-                            <option>Default - AirPods (Bluetooth)</option>
-                        </select>
-                    </div>
-                    <div class="rts-field__hint">
-                        <div class="rts-field__audio">
+{{#if showPublisher}}
+<aside class="rts-tray">
+    <div class="rts-settings">
+        <div class="rts-settings__preview">
+            <video></video>
+        </div>
+        <div class="rts-settings__config">
+            <form class="rts-form">
+                <div class="rts-form__item">
+                    <div class="rts-field">
+                        <div class="rts-field__bin">
+                            <label class="rts-field__label">Confirm Email</label>
+                            <input class="rts-field__input" type="email" />
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
+                <div class="rts-form__item">
+                    <div class="rts-field">
+                        <div class="rts-field__bin">
+                            <label class="rts-field__label">Passkey</label>
+                            <input class="rts-field__input" type="email" />
+                        </div>
+                    </div>
+                </div>
+                <div class="rts-form__item">
+                    <div class="rts-field rts-field--select">
+                        <div class="rts-field__bin">
+                            <label class="rts-field__label">Camera</label>
+                            <select class="rts-field__input">
+                                <option>FaceTime HD Camera (Built-in)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="rts-form__item">
+                    <div class="rts-field rts-field--select">
+                        <div class="rts-field__bin">
+                            <label class="rts-field__label">Microphone</label>
+                            <select class="rts-field__input">
+                                <option>Default - AirPods (Bluetooth)</option>
+                            </select>
+                        </div>
+                        <div class="rts-field__hint">
+                            <div class="rts-field__audio">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+</aside>
+{{/if}}
 
 <Portal @target="footer-center">
     <button class="rts-btn rts-btn--icon"><span class="material-icons">mic</span></button>
@@ -59,5 +63,5 @@
 </Portal>
 
 <Portal @target="footer-right">
-    <button class="rts-btn rts-btn--icon"><span class="material-icons md-20">settings</span></button>
+    <button class="rts-btn rts-btn--icon" {{on "click" this.togglePublisher}}><span class="material-icons md-20">settings</span></button>
 </Portal>
