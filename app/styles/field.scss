@@ -43,7 +43,7 @@
     &--select {
 
         .rts-field__input {
-            padding-right: 24px;
+            width: calc(100% - 8px);
         }
     }
 }

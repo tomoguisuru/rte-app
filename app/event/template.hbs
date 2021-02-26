@@ -12,122 +12,40 @@
         </div>
     </header>
     <main class="rts-main">
-        {{#if this.showSettings}}
-            <div class="rts-settings">
-                <div class="rts-settings__config">
-                    <h2>Hi {{@model.publisher.name}},</h2>
-                    <p>Press 'Join' below when you're ready to enter the staging area for this event.</p>
-                    <form class="rts-form">
-                        <div class="rts-form__item">
-                            <div class="rts-field">
-                                <div class="rts-field__bin">
-                                    <label class="rts-field__label">Display Name</label>
-                                    <input class="rts-field__input" type="text" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="rts-form__item">
-                            <div class="rts-field rts-field--select">
-                                <div class="rts-field__bin">
-                                    <label class="rts-field__label">Camera</label>
-                                    <select class="rts-field__input">
-                                        <option>FaceTime HD Camera (Built-in)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="rts-form__item">
-                            <div class="rts-field rts-field--select">
-                                <div class="rts-field__bin">
-                                    <label class="rts-field__label">Resolution</label>
-                                    <select class="rts-field__input">
-                                        <option>1080p</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="rts-form__item">
-                            <div class="rts-field rts-field--select">
-                                <div class="rts-field__bin">
-                                    <label class="rts-field__label">Aspect Ratio</label>
-                                    <select class="rts-field__input">
-                                        <option>16:9</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="rts-form__item">
-                            <div class="rts-field rts-field--select">
-                                <div class="rts-field__bin">
-                                    <label class="rts-field__label">Frames per Second</label>
-                                    <select class="rts-field__input">
-                                        <option>30</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="rts-form__item">
-                            <div class="rts-field rts-field--select">
-                                <div class="rts-field__bin">
-                                    <label class="rts-field__label">Microphone</label>
-                                    <select class="rts-field__input">
-                                        <option>Default - AirPods (Bluetooth)</option>
-                                    </select>
-                                </div>
-                                <div class="rts-field__hint">
-                                    <div class="rts-field__audio">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="rts-settings__preview">
-                    <video></video>
-                </div>
+        {{#if (eq @model.state 'complete')}}
+            <div class="notification">
+                This event has ended
             </div>
-        {{else}}
-            {{#if (eq @model.state 'complete')}}
-                <div class="notification">
-                    This event has ended
-                </div>
-            {{else if (not-eq @model.state 'live')}}
-                <div class="notification">
-                    It looks like we're not quite ready yet, sorry
-                </div>
-            {{/if}}
-
-            <div class="rts-streams">
-                {{#each this.streams as |stream|}}
-                    <ChannelViewer
-                        @stream={{stream}}
-                        @channelExpress={{channelExpress}}
-                    >
-                    </ChannelViewer>
-                {{/each}}
+        {{else if (not-eq @model.state 'live')}}
+            <div class="notification">
+                It looks like we're not quite ready yet, sorry
             </div>
         {{/if}}
-        {{outlet}}
+
+        <div class="rts-streams">
+            {{#each this.streams as |stream|}}
+                <ChannelViewer
+                    @stream={{stream}}
+                    @channelExpress={{channelExpress}}
+                >
+                </ChannelViewer>
+            {{/each}}
+        </div>
+        <aside class="rts-tray">
+            {{outlet}}
+        </aside>
     </main>
     <footer class="rts-ftr">
-        <div class="rts-ftr__controls">
+        <div class="rts-ftr__controls" id="footer_left_controls">
             {{#if this.hasJoined}}
                 <button class="rts-btn rts-btn--icon"><span class="material-icons md-20">view_module</span></button>
             {{/if}}
         </div>
         <div class="rts-ftr__controls">
-            <button class="rts-btn rts-btn--icon"><span class="material-icons">mic</span></button>
-            <button class="rts-btn rts-btn--icon"><span class="material-icons">videocam</span></button>
-            {{#if this.hasJoined}}
-                <button class="rts-btn rts-btn--primary" {{on "click" this.leaveEvent}}>Leave</button>
-            {{else}}
-                <button class="rts-btn rts-btn--primary" {{on "click" this.joinEvent}}>Join</button>
-            {{/if}}
+            <PortalTarget @name="footer-center"/>
         </div>
         <div class="rts-ftr__controls">
-            {{#if this.hasJoined}}
-                <button class="rts-btn rts-btn--icon" {{on "click" this.toggleSettings}}><span class="material-icons md-20">settings</span></button>
-            {{/if}}
+            <PortalTarget @name="footer-right"/>
         </div>
     </footer>
 </div>

@@ -6,11 +6,12 @@
 @import "button";
 @import "field";
 @import "form";
+@import "tray";
 
 
 
 body {
-    background-color: $color-gray-darkest;
+    background-color: $color-gray-dark;
     color: $color-white;
     font-size: 14px;
 }
@@ -43,6 +44,7 @@ body {
             height: 100%;
             object-fit: contain;
         }
+    }
 
     &__title {
         display: flex;
@@ -73,18 +75,26 @@ body {
     .rts-ftr {
         flex-shrink: 0;
     }
+    .rts-hdr {
+        order: 1;
+    }
 
     .rts-main {
         flex-grow: 1;
+        order: 2;
         display: flex;
-        margin: 16px;
+    }
+
+    .rts-ftr {
+        order: 3;
     }
 }
 
 .rts-streams {
     display: flex;
     flex-wrap: wrap;
-    width: 100%;
+    flex: 1;
+    padding: 20px;
 
     &--grid {
 
@@ -130,51 +140,8 @@ body {
     }
 }
 
-.rts-settings {
-    display: flex;
-
-    .rts-settings__config {
-        flex: 1;
-    }
-
-    .rts-settings__preview {
-        flex: 1;
-
-        video {
-            width: 100%;
-            background-color: black;
-        }
-    }
-}
-
-
-.event-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 0px 0px;
-    grid-template-areas:
-        "streams publisher"
-        "publishers publisher";
-
-    .streams {
-        display: flex;
-        flex-wrap: wrap;
-
-        .stream {
-            background-color: black;
-            border: 10px solid black;
-            border-radius: 5px;
-            box-shadow: 12px 9px 13px rgba(61, 61, 61, 0.75);
-            height: 250px;
-            margin: 5px;
-            position: relative;
-            width: 250px;
-
-            video {
-                position: absolute;
-                width: 100%;
-            }
-        }
-    }
+video {
+    width: 100%;
+    border-radius: 4px;
+    background-color: black;
 }
