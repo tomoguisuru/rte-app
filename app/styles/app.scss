@@ -130,3 +130,20 @@ body {
         margin: 8px;
     }
 }
+
+.rts-settings {
+    display: flex;
+
+    .rts-settings__config {
+        flex: 1;
+    }
+
+    .rts-settings__preview {
+        flex: 1;
+
+        video {
+            width: 100%;
+            background-color: black;
+        }
+    }
+}
