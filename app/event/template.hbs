@@ -99,8 +99,11 @@
 
             <div class="rts-streams">
                 {{#each this.streams as |stream|}}
-                <ChannelViewer @stream={{stream}} @channelExpress={{channelExpress}}>
-                </ChannelViewer>
+                    <ChannelViewer
+                        @stream={{stream}}
+                        @channelExpress={{channelExpress}}
+                    >
+                    </ChannelViewer>
                 {{/each}}
             </div>
         {{/if}}
