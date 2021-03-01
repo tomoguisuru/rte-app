@@ -54,7 +54,7 @@
             <PortalTarget @name="footer-center"/>
         </div>
         <div class="rts-ftr__controls">
-            <button class="rts-btn rts-btn--icon" {{on 'click' this.toggleStreamList}}><span class="material-icons md-20">view_sidebar</span></button>
+            <button class="rts-btn rts-btn--icon {{if this.showStreamList "rts-btn--secondary"}}" {{on 'click' this.toggleStreamList}}><span class="material-icons md-20">view_sidebar</span></button>
             <div>
                 <PortalTarget @name="footer-right"/>
             </div>

@@ -63,5 +63,5 @@
 </Portal>
 
 <Portal @target="footer-right">
-    <button class="rts-btn rts-btn--icon" {{on "click" this.togglePublisher}}><span class="material-icons md-20">settings</span></button>
+    <button class="rts-btn rts-btn--icon {{if this.showPublisher "rts-btn--secondary"}}" {{on "click" this.togglePublisher}}><span class="material-icons md-20">settings</span></button>
 </Portal>

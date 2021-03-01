@@ -6,15 +6,24 @@
     background-image: none;
     white-space: nowrap;
     appearance: none;
-    border-radius: 100px;
+    border-radius: 4px;
     border: 2px solid transparent;
     height: 34px;
     min-width: 34px;
     padding: 3px 34px;
     font-size: 14px;
     background-color: $color-gray-dark;
-    color: white;
+    color: $color-white;
+    transition: color 0.25s, background-color 0.25s;
 
+    &:hover {
+        color: transparentize($color-white, 0.25);
+    }
+
+    &:active {
+        color: $color-white;
+        background-color: transparentize($color-gray-dark, 0.15);
+    }
 
     &--icon {
         padding: 3px;
@@ -46,13 +55,43 @@
 
     &--primary {
         background-color: $color-primary;
+
+        &:hover {
+            color: transparentize($color-white, 0.25);
+        }
+
+        &:active {
+            color: $color-white;
+            background-color: transparentize($color-primary, 0.15);
+        }
     }
 
     &--secondary {
+        background-color: $color-white;
+        color: $color-black;
 
+        &:hover {
+            color: transparentize($color-black, 0.25);
+        }
+
+        &:active {
+            color: $color-black;
+            background-color: transparentize($color-white, 0.15);
+        }
     }
 
     &--alert {
         background-color: $color-alert;
+
+        &:hover {
+            color: transparentize($color-white, 0.25);
+        }
+
+        &:active {
+            color: $color-white;
+            background-color: transparentize($color-alert, 0.15);
+        }
     }
+
+
 }
