@@ -108,15 +108,29 @@ body {
     &--single {
 
     }
+
+    .rts-stream {
+        display: none;
+        border: none;
+
+        &.is-active {
+            display: flex;
+        }
+    }
 }
 
 .rts-stream {
     background-color: $color-black;
     border-radius: 4px;
+    border: 2px solid transparent;
     margin: 4px;
     position: relative;
     flex: 1;
     display: flex;
+
+    &.is-active {
+        border-color: $color-primary;
+    }
 
     video {
         margin: auto auto;
