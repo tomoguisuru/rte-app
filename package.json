@@ -65,6 +65,7 @@
     "edition": "octane"
   },
   "dependencies": {
+    "@phenixrts/sdk": "^2021.0.22",
     "crypto-js": "^4.0.0",
     "moment": "^2.29.1",
     "pako": "^2.0.2",

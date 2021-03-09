@@ -1,0 +1,14 @@
+<div class="rts-stream {{if this.isActive "is-active"}}" {{did-insert onInsert}} {{on "click" this.toggleActive}}>
+    <video
+        autoplay
+    ></video>
+
+    <div class="rts-stream__head">
+        <h3 class="rts-stream__title">{{@stream.title}}</h3>
+        <div class="rts-stream__controls">
+            <button class="rts-btn rts-btn--sm rts-btn--icon rts-btn--alert">
+                <span class="material-icons md-18">volume_off</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -34,11 +34,12 @@
         {{#if this.showStreamList}}
         <aside class="rts-tray">
             {{#each this.streams as |stream|}}
-                <ChannelViewer
+
+
+                <ChannelViewerNew
                     @stream={{stream}}
-                    @channelExpress={{channelExpress}}
                 >
-                </ChannelViewer>
+                </ChannelViewerNew>
             {{/each}}
         </aside>
         {{/if}}

@@ -28,35 +28,14 @@ export default class PhenixChannelExpressService extends Service {
     }
 
     createAdminApiProxyClient(options) {
-        const {
-            backendUri,
-            authenticationData,
-        } = options;
-
         const adminApiProxyClient = new sdk.net.AdminApiProxyClient();
 
-        const {tags = []} = authenticationData;
-
-        tags.push(this.clientTag);
-
-        authenticationData['tags'] = tags;
-
         adminApiProxyClient.setRequestHandler(async (requestType, args, callback) => {
-            const data = Object.assign({}, args, authenticationData);
-
-            const url = `${ENV.API_HOST}${backendUri}/${requestType}`;
             let token = null;
             let error = null;
 
             try {
-                const request = this._buildRequest('post', data);
-                const resp = await fetch(url, request);
-
-                if (resp.ok) {
-                    const json = await resp.json();
-
-                    token = json.authenticationToken;
-                }
+                token = await this.getToken(options, requestType, args);
             } catch (err) {
                 error = err.message;
             }
@@ -84,10 +63,36 @@ export default class PhenixChannelExpressService extends Service {
         return new sdk.express.ChannelExpress(options);
     }
 
+    async getToken(options, requestType = 'stream', args = {}) {
+        const {
+            backendUri,
+            authenticationData,
+        } = options;
+
+        const {tags = []} = authenticationData;
+
+        tags.push(this.clientTag);
+
+        authenticationData['tags'] = tags;
+
+        const url = `${ENV.API_HOST}${backendUri}/${requestType}`;
+        const data = Object.assign({}, args, authenticationData);
+
+        const request = this._buildRequest('post', data);
+        const resp = await fetch(url, request);
+
+        if (resp.ok) {
+            const json = await resp.json();
+
+            return json.authenticationToken;
+        }
+    }
+
     setup(event) {
         const {
             id,
             adminProxyClient,
+            domain,
         } = event;
 
         this.eventId = id;
@@ -95,7 +100,11 @@ export default class PhenixChannelExpressService extends Service {
 
         this.pcastExpress = new sdk.express.PCastExpress({
             adminApiProxyClient,
-        })
+        });
+
+
+        const pcast = this.pcastExpress.getPCast();
+        pcast._baseUri = domain;
     }
 
     joinChannel(channelExpress, options, onJoin, onSubscribe) {

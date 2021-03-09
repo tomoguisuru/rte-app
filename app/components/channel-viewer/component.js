@@ -1,8 +1,7 @@
 import Component from '@glimmer/component';
-// import {tracked} from '@glimmer/tracking';
+import {tracked} from '@glimmer/tracking';
 import {inject as service} from '@ember/service';
 import {action} from '@ember/object';
-import {tracked} from '@glimmer/tracking';
 
 export default class ChannelViewerComponent extends Component {
     channelService = null;
