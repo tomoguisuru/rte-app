@@ -1,8 +1,8 @@
 {{#if showPublisher}}
 <aside class="rts-tray">
     <div class="rts-settings">
-        <div class="rts-settings__preview">
-            <video></video>
+        <div class="rts-settings__preview" {{did-insert onInsert}}>
+            <video id="publisherStream" playsinline autoplay></video>
         </div>
         <div class="rts-settings__config">
             <form class="rts-form">
@@ -10,7 +10,7 @@
                     <div class="rts-field">
                         <div class="rts-field__bin">
                             <label class="rts-field__label">Confirm Email</label>
-                            <input class="rts-field__input" type="email" />
+                            <Input class="rts-field__input" @type="email" @value={{this.email}} />
                         </div>
                     </div>
                 </div>
@@ -18,7 +18,7 @@
                     <div class="rts-field">
                         <div class="rts-field__bin">
                             <label class="rts-field__label">Passkey</label>
-                            <input class="rts-field__input" type="email" />
+                            <Input class="rts-field__input" @type="text" @value={{this.token}} />
                         </div>
                     </div>
                 </div>
@@ -26,8 +26,10 @@
                     <div class="rts-field rts-field--select">
                         <div class="rts-field__bin">
                             <label class="rts-field__label">Camera</label>
-                            <select class="rts-field__input">
-                                <option>FaceTime HD Camera (Built-in)</option>
+                            <select class="rts-field__input" {{on 'change' this.updateSelectedVideo}}>
+                            {{#each this.videoInputOptions as |input|}}
+                                <option>{{input.text}}</option>
+                            {{/each}}
                             </select>
                         </div>
                     </div>
@@ -36,8 +38,10 @@
                     <div class="rts-field rts-field--select">
                         <div class="rts-field__bin">
                             <label class="rts-field__label">Microphone</label>
-                            <select class="rts-field__input">
-                                <option>Default - AirPods (Bluetooth)</option>
+                            <select class="rts-field__input" {{on 'change' this.updateSelectedAudio}}>
+                            {{#each this.audioInputOptions as |input|}}
+                                <option>{{input.text}}</option>
+                            {{/each}}
                             </select>
                         </div>
                         <div class="rts-field__hint">
@@ -53,13 +57,19 @@
 {{/if}}
 
 <Portal @target="footer-center">
-    <button class="rts-btn rts-btn--icon"><span class="material-icons">mic</span></button>
-    <button class="rts-btn rts-btn--icon"><span class="material-icons">videocam</span></button>
+    <button class="rts-btn rts-btn--icon">
+        <span class="material-icons">mic</span>
+    </button>
+    <button class="rts-btn rts-btn--icon">
+        <span class="material-icons">videocam</span>
+    </button>
+
     {{#if this.hasJoined}}
         <button class="rts-btn rts-btn--primary">Leave</button>
     {{else}}
-        <button class="rts-btn rts-btn--primary">Join</button>
+        <button class="rts-btn rts-btn--primary" {{on 'click' this.publishStream}}>Join</button>
     {{/if}}
+
 </Portal>
 
 <Portal @target="footer-right">

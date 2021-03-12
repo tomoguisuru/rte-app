@@ -1,8 +1,5 @@
-import Service from '@ember/service';
+import Service, {inject as service} from '@ember/service';
 import sdk from 'phenix-web-sdk';
-
-import AuthParams from '../utils/auth-params'
-
 import ENV from 'client-app/config/environment';
 
 function uuidv4() {
@@ -13,9 +10,13 @@ function uuidv4() {
 }
 
 export default class PhenixChannelExpressService extends Service {
+    @service('hyperion')
+    hyperionApi;
+
     clientId = null;
     eventId = null;
     pcastExpress = null;
+    tokenUrl = null;
 
     get clientTag() {
         return `client_id:${this.clientId}`;
@@ -27,7 +28,7 @@ export default class PhenixChannelExpressService extends Service {
         this.clientId = uuidv4();
     }
 
-    createAdminApiProxyClient(options) {
+    createAdminApiProxyClient(options, type = 'stream') {
         const adminApiProxyClient = new sdk.net.AdminApiProxyClient();
 
         adminApiProxyClient.setRequestHandler(async (requestType, args, callback) => {
@@ -35,7 +36,12 @@ export default class PhenixChannelExpressService extends Service {
             let error = null;
 
             try {
-                token = await this.getToken(options, requestType, args);
+                if (type === 'publish') {
+                    token = await this.getPublishToken(options, requestType, args);
+                } else {
+                    token = await this.getToken(options, requestType, args);
+                }
+
             } catch (err) {
                 error = err.message;
             }
@@ -63,48 +69,86 @@ export default class PhenixChannelExpressService extends Service {
         return new sdk.express.ChannelExpress(options);
     }
 
-    async getToken(options, requestType = 'stream', args = {}) {
+    async getToken(options, requestType = 'stream', args) {
         const {
-            backendUri,
-            authenticationData,
+            tags = [],
         } = options;
 
-        const {tags = []} = authenticationData;
-
-        tags.push(this.clientTag);
-
-        authenticationData['tags'] = tags;
-
-        const url = `${ENV.API_HOST}${backendUri}/${requestType}`;
-        const data = Object.assign({}, args, authenticationData);
-
-        const request = this._buildRequest('post', data);
-        const resp = await fetch(url, request);
-
-        if (resp.ok) {
-            const json = await resp.json();
-
-            return json.authenticationToken;
+        if (!tags.includes(this.clientTag)) {
+            tags.push(this.clientTag);
         }
+
+        const url = `${ENV.API_HOST}${this.tokenUrl}/${requestType}`;
+
+        options = Object.assign({}, options, args);
+
+        const resp = await this.hyperionApi.requestBase(url, 'post', options);
+        const {authenticationToken} = resp;
+
+        return authenticationToken;
+    }
+
+    async getPublishToken(options, requestType = 'stream', args) {
+        const {
+            tags = [],
+        } = options;
+
+        if (!tags.includes(this.clientTag)) {
+            tags.push(this.clientTag);
+        }
+
+        if (requestType === 'stream') {
+            requestType = 'publish';
+        }
+
+        const url = `${ENV.API_HOST}${this.tokenUrl}/${requestType}`;
+
+        options = Object.assign({}, options, args);
+
+        const resp = await this.hyperionApi.requestBase(url, 'post', options);
+        const {authenticationToken} = resp;
+
+        return authenticationToken;
+    }
+
+    async getStreamToken(options) {
+        const {
+            tags = [],
+        } = options;
+
+        if (!tags.includes(this.clientTag)) {
+            tags.push(this.clientTag);
+        }
+
+        const url = `${ENV.API_HOST}${this.tokenUrl}/stream`;
+
+        const resp = await this.hyperionApi.requestBase(url, 'post', options);
+        const {authenticationToken} = resp;
+
+        return authenticationToken;
     }
 
     setup(event) {
         const {
             id,
             adminProxyClient,
-            domain,
+            connectionInfo: {
+                pcastDomain,
+                tokenUrl,
+            }
         } = event;
 
+        this.tokenUrl = tokenUrl;
         this.eventId = id;
+
         const adminApiProxyClient = this.createAdminApiProxyClient(adminProxyClient);
 
         this.pcastExpress = new sdk.express.PCastExpress({
             adminApiProxyClient,
         });
 
-
         const pcast = this.pcastExpress.getPCast();
-        pcast._baseUri = domain;
+        pcast._baseUri = pcastDomain;
     }
 
     joinChannel(channelExpress, options, onJoin, onSubscribe) {
@@ -118,26 +162,5 @@ export default class PhenixChannelExpressService extends Service {
 
     setClientId(clientId) {
         this.clientId = clientId;
-    }
-
-    _buildRequest(method, data) {
-        const authParams = AuthParams();
-        const headers = {
-            'Authorization': `${authParams.msg} ${authParams.sig}`,
-        };
-        let body;
-
-        if (data) {
-            body = JSON.stringify(data);
-
-            headers['Content-Length'] = body.length;
-            headers['Content-Type'] = 'application/json';
-        }
-
-        return {
-            body,
-            method,
-            headers,
-        }
     }
 }

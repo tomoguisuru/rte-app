@@ -1,28 +1,21 @@
 import Route from '@ember/routing/route';
 import {inject as service} from '@ember/service';
 
-import AuthParams from '../utils/auth-params'
+// import AuthParams from '../utils/auth-params'
 
 export default class EventRoute extends Route {
     @service('manifest')
     manifestService;
 
+    @service('phenix-channel-express')
+    channelExpressService;
+
     async model(params) {
-        return this.manifestService.getManifest(params.event_id);
-    }
+        const model = await this.manifestService.getManifest(params.event_id);
+        const {connectionInfo: {tokenUrl}} = model;
 
-    async setupController(controller, model) {
-        super.setupController(controller, model);
+        this.channelExpressService.tokenUrl = tokenUrl;
 
-        if (controller && model) {
-            const {authenticationData} = model.adminProxyClient;
-            const {channelExpressService} = controller;
-            Object.assign(authenticationData, AuthParams);
-
-            channelExpressService.setup(model);
-
-            controller.channelExpress = channelExpressService.createChannelExpress();
-            controller.streams = model.streams;
-        }
+        return model;
     }
 }

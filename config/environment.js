@@ -41,7 +41,9 @@ module.exports = function(environment) {
         'http://*.uplynk.com',
         'https://*.uplynk.com',
         'https://*.phenixrts.com',
-        'wss://*.phenixrts.com/ws'
+        'wss://*.phenixrts.com/ws',
+        'wss://*.downlynk.com/ws',
+        'wss://*.uplynk.com/ws',
       ],
       'img-src': ["'self'", 'data:'],
       'style-src': [

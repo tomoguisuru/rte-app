@@ -34,7 +34,6 @@ export default class ChannelViewerNewComponent extends Component {
     }
 
     async joinChannel() {
-
         this.channel = Channels.createChannel({
             token: await this.getToken(),
             videoElement: this.videoElement,
@@ -66,20 +65,9 @@ export default class ChannelViewerNewComponent extends Component {
 
     async getToken() {
         const {
-            alias,
-            subscriberOptions
+            connectionOptions,
         } = this.args.stream;
 
-        const options = {
-            subscriberOptions,
-        };
-
-        const args = {
-            channelAlias: alias,
-        };
-
-
-
-        return this.channelExpressService.getToken(options, 'stream', args);
+        return this.channelExpressService.getStreamToken(connectionOptions);
     }
 }

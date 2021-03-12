@@ -24,25 +24,22 @@
 
         <div class="rts-streams">
             {{#each this.streams as |stream|}}
-                <ChannelViewer
+                <ChannelViewerNew
                     @stream={{stream}}
-                    @channelExpress={{channelExpress}}
                 >
-                </ChannelViewer>
+                </ChannelViewerNew>
             {{/each}}
         </div>
-        {{#if this.showStreamList}}
+        {{!--{{#if this.showStreamList}}
         <aside class="rts-tray">
             {{#each this.streams as |stream|}}
-
-
                 <ChannelViewerNew
                     @stream={{stream}}
                 >
                 </ChannelViewerNew>
             {{/each}}
         </aside>
-        {{/if}}
+        {{/if}} --}}
         {{outlet}}
     </main>
     <footer class="rts-ftr">
