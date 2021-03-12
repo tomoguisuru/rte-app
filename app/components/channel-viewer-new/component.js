@@ -7,28 +7,15 @@ import {action} from '@ember/object';
 import {Channels} from '@phenixrts/sdk';
 
 export default class ChannelViewerNewComponent extends Component {
+    @service('phenix-channel-express')
+    channelExpressService;
+
     channel = null;
     mediaStream = null;
     videoElement = null;
 
     @tracked isActive = true;
-
-    @service('phenix-channel-express')
-    channelExpressService;
-
-    @action
-    toggleActive() {
-        this.isActive = !this.isActive;
-    }
-
-    @action
-    onInsert(element) {
-        this.videoElement = element.querySelector('video');
-
-        setTimeout(() => {
-            this.joinChannel();
-        }, 750);
-    }
+    @tracked isMuted = false;
 
     isDestroying() {
     }
@@ -69,5 +56,28 @@ export default class ChannelViewerNewComponent extends Component {
         } = this.args.stream;
 
         return this.channelExpressService.getStreamToken(connectionOptions);
+    }
+
+    @action
+    toggleMute() {
+        this.isMuted = !this.isMuted;
+
+        this.videoElement.muted = this.isMuted;
+    }
+
+    @action
+    onInsert(element) {
+        this.videoElement = element.querySelector('video');
+
+        this.toggleMute();
+
+        setTimeout(() => {
+            this.joinChannel();
+        }, 750);
+    }
+
+    @action
+    toggleActive() {
+        this.isActive = !this.isActive;
     }
 }

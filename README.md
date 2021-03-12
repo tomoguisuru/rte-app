@@ -127,6 +127,23 @@ Navigate to http://localhost:4200/event/:rts_event_id
 
 * `:rts_event_id` is the id of the event that you want to view
 
+___
+
+
+## Publishing a Streams
+
+NOTE: Your event must be in a `LIVE`state or no streams will be returned in the manifest
+
+Navigate to http://localhost:4200/event/:rts_event_id/publisher
+
+* `:rts_event_id` is the id of the event that you want to view
+
+You will need the `email` and `publisher_token` for the stream
+
+You can also "pin" the URL as follows
+
+http://localhost:4200/event/:rts_event_id/publisher?email=john.doe@example.com&token=asdf1234
+
 ---
 
 ## Further Reading / Useful Links

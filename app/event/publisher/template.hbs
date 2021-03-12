@@ -2,10 +2,11 @@
 <aside class="rts-tray">
     <div class="rts-settings">
         <div class="rts-settings__preview" {{did-insert onInsert}}>
-            <video id="publisherStream" playsinline autoplay></video>
+            <video id="publisherStream" playsinline autoplay muted></video>
         </div>
         <div class="rts-settings__config">
             <form class="rts-form">
+            {{#unless hasPublisher}}
                 <div class="rts-form__item">
                     <div class="rts-field">
                         <div class="rts-field__bin">
@@ -14,6 +15,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="rts-form__item">
                     <div class="rts-field">
                         <div class="rts-field__bin">
@@ -22,6 +24,8 @@
                         </div>
                     </div>
                 </div>
+            {{/unless}}
+
                 <div class="rts-form__item">
                     <div class="rts-field rts-field--select">
                         <div class="rts-field__bin">
@@ -34,6 +38,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="rts-form__item">
                     <div class="rts-field rts-field--select">
                         <div class="rts-field__bin">
@@ -60,12 +65,13 @@
     <button class="rts-btn rts-btn--icon">
         <span class="material-icons">mic</span>
     </button>
+
     <button class="rts-btn rts-btn--icon">
         <span class="material-icons">videocam</span>
     </button>
 
-    {{#if this.hasJoined}}
-        <button class="rts-btn rts-btn--primary">Leave</button>
+    {{#if hasPublisher}}
+        <button class="rts-btn rts-btn--primary" {{on 'click' this.stop}}>Leave</button>
     {{else}}
         <button class="rts-btn rts-btn--primary" {{on 'click' this.publishStream}}>Join</button>
     {{/if}}

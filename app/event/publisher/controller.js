@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import {inject as service} from '@ember/service';
 import {tracked} from '@glimmer/tracking';
-import {action} from '@ember/object';
+import {action, computed} from '@ember/object';
 import sdk from 'phenix-web-sdk';
 
 export default class PublisherController extends Controller {
@@ -16,6 +16,7 @@ export default class PublisherController extends Controller {
     footerCenterControls = document.getElementById('footer_center_controls');
 
     @tracked showPublisher = true;
+    @tracked hasPublisher = false;
 
     audioInputOptions = [];
     audioOutputOptions = [];
@@ -87,7 +88,7 @@ export default class PublisherController extends Controller {
                         });
                         break;
                     default:
-                    // do nothing
+                        // do nothing
                 }
             });
 
@@ -130,6 +131,8 @@ export default class PublisherController extends Controller {
             adminApiProxyClient,
             pcastExpress,
         });
+
+        this.hasJoined = true;
     }
 
     publishCallback(error, response) {
@@ -138,13 +141,14 @@ export default class PublisherController extends Controller {
         }
 
         if (response.status !== 'ok' && response.status !== 'ended' && response.status !== 'stream-ended') {
-            this.stopPublisher();
+            this.stop();
 
             throw new Error(response.status);
         }
 
         if (response.status === 'ok' && response.publisher) {
             this.publisher = response.publisher;
+            this.hasPublisher = true;
 
             // this.captureTask = setInterval(
             //     () => this.capture(),
@@ -153,27 +157,13 @@ export default class PublisherController extends Controller {
         }
     }
 
-    async stopPublisher() {
-        if (this.publisher) {
-            if (!this.publisher.hasEnded()) {
-
-                await this.publisher.stop();
-                this.publisher = null;
-            }
-        }
-
-        // if (this.mediaStream) {
-        //     this.mediaStream.getTracks().forEach(t => t.stop());
-
-        //     this.mediaStream = null;
-        // }
-    }
-
     @action
     async onInsert() {
         const element = document.querySelector(this.publisherElementSelector);
 
         await this.getUserMedia();
+
+        element.muted = true;
 
         element.srcObject = this.mediaStream;
     }
@@ -205,25 +195,41 @@ export default class PublisherController extends Controller {
             capabilities: [
                 stream_quality,
                 'streaming',
-                'broadcast',
-                'multi-bitrate',
+                // 'broadcast',
+                // 'multi-bitrate',
             ],
             channel: {
                 name,
                 alias,
             },
             userMediaStream: this.mediaStream,
-            // frameRate: 24,
-            // mediaConstraints: {
-            //     audio: true,
-            //     video: true,
-            // },
+            frameRate: 24,
         };
 
         this.channelExpress.publishToChannel(
             options,
             (error, response) => this.publishCallback(error, response),
         )
+    }
+
+    @action
+    async stop() {
+        if (this.publisher) {
+            if (!this.publisher.hasEnded()) {
+
+                await this.publisher.stop();
+                this.publisher = null;
+                this.hasPublisher = false;
+            }
+        }
+
+        this.hasJoined = false;
+
+        // if (this.mediaStream) {
+        //     this.mediaStream.getTracks().forEach(t => t.stop());
+
+        //     this.mediaStream = null;
+        // }
     }
 
     @action
