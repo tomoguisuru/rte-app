@@ -23,7 +23,7 @@
         {{/if}}
 
         <div class="rts-streams">
-            {{#each this.streams as |stream|}}
+            {{#each this.manifestServices.streams as |stream|}}
                 <ChannelViewerNew
                     @stream={{stream}}
                 >

@@ -23,7 +23,9 @@ export default class EventController extends Controller {
 
         try {
             this.isProcessing = true;
-            const event = await this.manifestServices.getManifest(this.model.id);
+            await this.manifestServices.getManifest(this.model.id);
+
+            const {event} = this.manifestServices;
 
             [
                 'state',
@@ -34,7 +36,7 @@ export default class EventController extends Controller {
                 }
             });
 
-            this.updateStreams(this.streams, event.streams.concat(event.publisherStreams));
+            // this.updateStreams(this.streams, event.streams.concat(event.publisherStreams));
         } catch (err) {
             console.log(err);
         } finally {

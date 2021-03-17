@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import {inject as service} from '@ember/service';
 import {tracked} from '@glimmer/tracking';
-import {action, computed} from '@ember/object';
+import {action} from '@ember/object';
 import sdk from 'phenix-web-sdk';
 
 export default class PublisherController extends Controller {
@@ -15,8 +15,10 @@ export default class PublisherController extends Controller {
 
     footerCenterControls = document.getElementById('footer_center_controls');
 
-    @tracked showPublisher = true;
     @tracked hasPublisher = false;
+    @tracked showPublisher = true;
+    @tracked streamAudio = true;
+    @tracked streamVideo = true;
 
     audioInputOptions = [];
     audioOutputOptions = [];
@@ -44,8 +46,8 @@ export default class PublisherController extends Controller {
         const audioSource = this.selectedAudioInput;
         const videoSource = this.selectedVideoInput;
         const constraints = {
-            audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
-            video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+            audio: this.streamAudio ? {deviceId: audioSource ? {exact: audioSource} : undefined} : false,
+            video: this.streamVideo ? {deviceId: videoSource ? {exact: videoSource} : undefined} : false,
         };
 
         this.mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -157,32 +159,7 @@ export default class PublisherController extends Controller {
         }
     }
 
-    @action
-    async onInsert() {
-        const element = document.querySelector(this.publisherElementSelector);
-
-        await this.getUserMedia();
-
-        element.muted = true;
-
-        element.srcObject = this.mediaStream;
-    }
-
-    @action
-    async publishStream() {
-        if (!this.email || !this.token) {
-            throw new Error('Email and Token must be valid');
-        }
-
-        try {
-            this.stream = await this.streamService
-                .getStream(this.model.id, this.email, this.token);
-        } catch (e) {
-            console.log(e.message);
-        }
-
-        this.initChannelExpress();
-
+    publishToChannel() {
         const videoElement = document.querySelector(this.publisherElementSelector);
         const {
             alias,
@@ -212,15 +189,58 @@ export default class PublisherController extends Controller {
         )
     }
 
+    async updateStream() {
+        await this.getUserMedia();
+
+        const element = document.querySelector(this.publisherElementSelector);
+
+        element.srcObject = this.mediaStream;
+    }
+
+    @action
+    async onInsert() {
+        this.updateStream();
+        const element = document.querySelector(this.publisherElementSelector)
+
+        element.muted = true;
+    }
+
+    @action
+    async publishStream() {
+        if (!this.email || !this.token) {
+            throw new Error('Email and Token must be valid');
+        }
+
+        try {
+            this.stream = await this.streamService
+                .getStream(this.model.id, this.email, this.token);
+
+            // Stream is automatically marked as ready but can be changed to
+            // manual if desired
+
+            await this.streamService.readyStream(this.stream.id);
+        } catch (e) {
+            console.log(e.message);
+        }
+
+        if (!this.channelExpress) {
+            this.initChannelExpress();
+        }
+
+        this.publishToChannel();
+    }
+
     @action
     async stop() {
         if (this.publisher) {
             if (!this.publisher.hasEnded()) {
 
                 await this.publisher.stop();
-                this.publisher = null;
-                this.hasPublisher = false;
+                await this.streamService.leaveStream(this.stream.id);
             }
+
+            this.publisher = null;
+            this.hasPublisher = false;
         }
 
         this.hasJoined = false;
@@ -230,6 +250,34 @@ export default class PublisherController extends Controller {
 
         //     this.mediaStream = null;
         // }
+    }
+
+    @action
+    toggleAudioInput() {
+        this.toggleProperty('streamAudio');
+        this.updateStream();
+
+        if (this.publisher) {
+            if (this.streamAudio) {
+                this.publisher.enableAudio();
+            } else {
+                this.publisher.disableAudio();
+            }
+        }
+    }
+
+    @action
+    toggleVideoInput() {
+        this.toggleProperty('streamVideo');
+        this.updateStream();
+
+        if (this.publisher) {
+            if (this.streamVideo) {
+                this.publisher.enableVideo();
+            } else {
+                this.publisher.disableVideo();
+            }
+        }
     }
 
     @action

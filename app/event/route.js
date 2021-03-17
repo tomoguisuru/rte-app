@@ -1,8 +1,6 @@
 import Route from '@ember/routing/route';
 import {inject as service} from '@ember/service';
 
-// import AuthParams from '../utils/auth-params'
-
 export default class EventRoute extends Route {
     @service('manifest')
     manifestService;
@@ -11,7 +9,8 @@ export default class EventRoute extends Route {
     channelExpressService;
 
     async model(params) {
-        const model = await this.manifestService.getManifest(params.event_id);
+        await this.manifestService.getManifest(params.event_id);
+        const model = this.manifestService.event;
         const {connectionInfo: {tokenUrl}} = model;
 
         this.channelExpressService.tokenUrl = tokenUrl;

@@ -4,6 +4,7 @@
         <div class="rts-settings__preview" {{did-insert onInsert}}>
             <video id="publisherStream" playsinline autoplay muted></video>
         </div>
+
         <div class="rts-settings__config">
             <form class="rts-form">
             {{#unless hasPublisher}}
@@ -24,7 +25,6 @@
                         </div>
                     </div>
                 </div>
-            {{/unless}}
 
                 <div class="rts-form__item">
                     <div class="rts-field rts-field--select">
@@ -55,6 +55,7 @@
                         </div>
                     </div>
                 </div>
+            {{/unless}}
             </form>
         </div>
     </div>
@@ -63,11 +64,15 @@
 
 <Portal @target="footer-center">
     <button class="rts-btn rts-btn--icon">
-        <span class="material-icons">mic</span>
+        <span class="material-icons" {{on 'click' this.toggleAudioInput}}>
+            {{if this.streamAudio "mic" "mic_off"}}
+        </span>
     </button>
 
     <button class="rts-btn rts-btn--icon">
-        <span class="material-icons">videocam</span>
+        <span class="material-icons" {{on 'click' this.toggleVideoInput}}>
+            {{if this.streamVideo "videocam" "videocam_off"}}
+        </span>
     </button>
 
     {{#if hasPublisher}}
@@ -79,5 +84,7 @@
 </Portal>
 
 <Portal @target="footer-right">
-    <button class="rts-btn rts-btn--icon {{if this.showPublisher "rts-btn--secondary"}}" {{on "click" this.togglePublisher}}><span class="material-icons md-20">settings</span></button>
+    <button class="rts-btn rts-btn--icon {{if this.showPublisher "rts-btn--secondary"}}" {{on "click" this.togglePublisher}}>
+        <span class="material-icons md-20">settings</span>
+    </button>
 </Portal>
