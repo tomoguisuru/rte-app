@@ -8,12 +8,4 @@ export default class PublisherRoute extends Route {
     beforeModel() {
         this.manifestService.includeStaged = true;
     }
-
-    async setupController(controller, model) {
-        super.setupController(controller, model);
-
-        if (controller && model) {
-            controller.streams = model.streams;
-        }
-    }
 }

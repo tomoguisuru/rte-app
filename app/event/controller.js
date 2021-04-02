@@ -5,7 +5,7 @@ import {action} from '@ember/object';
 
 export default class EventController extends Controller {
     @service('manifest')
-    manifestServices;
+    manifestService;
 
     pollInterval = 10 * 1000;
     isProcessing = false;
@@ -23,11 +23,12 @@ export default class EventController extends Controller {
 
         try {
             this.isProcessing = true;
-            await this.manifestServices.getManifest(this.model.id);
+            await this.manifestService.getManifest(this.model.id);
 
-            const {event} = this.manifestServices;
+            const {event} = this.manifestService;
 
             [
+                'desc',
                 'state',
                 'title',
             ].forEach(p => {
@@ -35,8 +36,6 @@ export default class EventController extends Controller {
                     this.model[p] = event[p];
                 }
             });
-
-            // this.updateStreams(this.streams, event.streams.concat(event.publisherStreams));
         } catch (err) {
             console.log(err);
         } finally {

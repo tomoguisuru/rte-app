@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import {inject as service} from '@ember/service';
+import RTSEvent from '../models/event';
 
 export default class EventRoute extends Route {
     @service('manifest')
@@ -10,7 +11,8 @@ export default class EventRoute extends Route {
 
     async model(params) {
         await this.manifestService.getManifest(params.event_id);
-        const model = this.manifestService.event;
+        const {event} = this.manifestService;
+        const model = new RTSEvent(event);
         const {connectionInfo: {tokenUrl}} = model;
 
         this.channelExpressService.tokenUrl = tokenUrl;
