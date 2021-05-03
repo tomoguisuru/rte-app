@@ -2,6 +2,17 @@ import Service, {inject as service} from '@ember/service';
 import sdk from 'phenix-web-sdk';
 import ENV from 'client-app/config/environment';
 
+const ALLOWED_PARAMS = [
+    "appId",
+    "capabilities",
+    "channelAlias",
+    "expiresAt",
+    "expiresIn",
+    "originStreamId",
+    "sessionId",
+    "tags",
+]
+
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -60,7 +71,8 @@ export default class PhenixChannelExpressService extends Service {
         const adminApiProxyClient = this.pcastExpress.getAdminAPI();
         const defaultOptions = {
             adminApiProxyClient,
-            features: ['real-time', 'dash', 'hls', 'rtmp'],
+            // features: ['real-time', 'dash', 'hls', 'rtmp'],
+            features: ['real-time'],
             pcastExpress: this.pcastExpress,
         };
 
@@ -82,7 +94,7 @@ export default class PhenixChannelExpressService extends Service {
 
         options = Object.assign({}, options, args);
 
-        const resp = await this.hyperionApi.requestBase(url, 'post', options);
+        const resp = await this.hyperionApi.requestBase(url, 'post', this.filterOptions(options));
         const {authenticationToken} = resp;
 
         return authenticationToken;
@@ -105,7 +117,7 @@ export default class PhenixChannelExpressService extends Service {
 
         options = Object.assign({}, options, args);
 
-        const resp = await this.hyperionApi.requestBase(url, 'post', options);
+        const resp = await this.hyperionApi.requestBase(url, 'post', this.filterOptions(options));
         const {authenticationToken} = resp;
 
         return authenticationToken;
@@ -122,7 +134,7 @@ export default class PhenixChannelExpressService extends Service {
 
         const url = `${ENV.API_HOST}${this.tokenUrl}/stream`;
 
-        const resp = await this.hyperionApi.requestBase(url, 'post', options);
+        const resp = await this.hyperionApi.requestBase(url, 'post', this.filterOptions(options));
         const {authenticationToken} = resp;
 
         return authenticationToken;
@@ -162,5 +174,19 @@ export default class PhenixChannelExpressService extends Service {
 
     setClientId(clientId) {
         this.clientId = clientId;
+    }
+
+    filterOptions(options) {
+        const data = {};
+
+        ALLOWED_PARAMS.forEach(k => {
+            const value = options[k];
+
+            if (value) {
+                data[k] = value;
+            }
+        });
+
+        return data;
     }
 }

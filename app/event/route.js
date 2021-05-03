@@ -12,11 +12,21 @@ export default class EventRoute extends Route {
     async model(params) {
         await this.manifestService.getManifest(params.event_id);
         const {event} = this.manifestService;
-        const model = new RTSEvent(event);
+
+        if (event) {
+            const model = new RTSEvent(event);
+
+            return model;
+        }
+    }
+
+    afterModel(model) {
+        if (!model) {
+            return this.transitionTo('not-found');
+        }
+
         const {connectionInfo: {tokenUrl}} = model;
 
         this.channelExpressService.tokenUrl = tokenUrl;
-
-        return model;
     }
 }

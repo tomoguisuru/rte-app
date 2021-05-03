@@ -10,4 +10,6 @@ Router.map(function() {
   this.route('event', { path: '/event/:event_id'}, function() {
     this.route('publisher');
   });
+
+  this.route('not-found');
 });

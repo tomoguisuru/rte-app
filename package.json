@@ -1,8 +1,8 @@
 {
   "name": "client-app",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
-  "description": "Small description for client-app goes here",
+  "description": "Verizon Media RTS Client Demo",
   "repository": "",
   "license": "MIT",
   "author": "",
@@ -59,7 +59,8 @@
     "sass": "^1.30.0"
   },
   "engines": {
-    "node": "10.* || >= 12"
+    "node": "^14",
+    "npm": "^7"
   },
   "ember": {
     "edition": "octane"

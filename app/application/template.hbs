@@ -1,1 +1,31 @@
-{{outlet}}
+<div class="rts-wrap">
+    <header class="rts-hdr">
+        <div class="rts-hdr__title">
+            <PortalTarget @name="header-title" />
+        </div>
+
+        <div class="rts-hdr__brand">
+            <span>powered by</span>
+            <img src="/images/vzm_rgb_r.png" alt="verizon media" />
+        </div>
+    </header>
+
+    <main class="rts-main">
+        {{outlet}}
+    </main>
+
+    <footer class="rts-ftr">
+        <div class="rts-ftr__controls" id="footer_left_controls">
+            <PortalTarget @name="footer-left" />
+        </div>
+        <div class="rts-ftr__controls">
+            <PortalTarget @name="footer-center"/>
+        </div>
+
+        <div class="rts-ftr__controls">
+            <div>
+                <PortalTarget @name="footer-right"/>
+            </div>
+        </div>
+    </footer>
+</div>

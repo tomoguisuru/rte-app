@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import {inject as service} from '@ember/service';
+import {inject as controller} from '@ember/controller';
 import {tracked} from '@glimmer/tracking';
 import {action} from '@ember/object';
 import sdk from 'phenix-web-sdk';
@@ -10,8 +11,14 @@ export default class PublisherController extends Controller {
     @service('phenix-channel-express')
     channelExpressService;
 
+    @service('manifest')
+    manifestService;
+
     @service('stream')
     streamService;
+
+    @controller('event')
+    eventController;
 
     footerCenterControls = document.getElementById('footer_center_controls');
 
@@ -138,25 +145,30 @@ export default class PublisherController extends Controller {
     }
 
     publishCallback(error, response) {
-        if (error) {
-            console.log('Error!!! ', error);
+        if (error || !response) {
+            console.error(error || 'Unknown Error');
+            return;
         }
 
-        if (response.status !== 'ok' && response.status !== 'ended' && response.status !== 'stream-ended') {
+        if (response.status === 'stream-ended') {
             this.stop();
-
-            throw new Error(response.status);
+            return;
         }
 
         if (response.status === 'ok' && response.publisher) {
             this.publisher = response.publisher;
             this.hasPublisher = true;
 
+            return
+
             // this.captureTask = setInterval(
             //     () => this.capture(),
             //     this.captureIntervalInMS,
             // );
         }
+        this.stop();
+
+        console.debug(response);
     }
 
     publishToChannel() {
@@ -215,12 +227,14 @@ export default class PublisherController extends Controller {
             this.stream = await this.streamService
                 .getStream(this.model.id, this.email, this.token);
 
-            // Stream is automatically marked as ready but can be changed to
-            // manual if desired
-
             await this.streamService.readyStream(this.stream.id);
+
+            this.manifestService.includeStaged = true;
+            this.eventController.updateManifest();
+
         } catch (e) {
-            console.log(e.message);
+            debugger
+            console.debug(e.message);
         }
 
         if (!this.channelExpress) {
@@ -233,23 +247,26 @@ export default class PublisherController extends Controller {
     @action
     async stop() {
         if (this.publisher) {
-            if (!this.publisher.hasEnded()) {
-
+            try {
                 await this.publisher.stop();
                 await this.streamService.leaveStream(this.stream.id);
+            } catch (err) {
+                console.debug(err);
             }
+        }
 
-            this.publisher = null;
-            this.hasPublisher = false;
+        if (this.mediaStream) {
+            this.mediaStream.getTracks().forEach(t => t.stop());
+
+            this.mediaStream = null;
         }
 
         this.hasJoined = false;
+        this.publisher = null;
+        this.hasPublisher = false;
+        this.channelExpress = null;
 
-        // if (this.mediaStream) {
-        //     this.mediaStream.getTracks().forEach(t => t.stop());
-
-        //     this.mediaStream = null;
-        // }
+        this.onInsert();
     }
 
     @action
