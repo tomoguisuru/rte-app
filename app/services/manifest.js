@@ -43,6 +43,13 @@ export default class ManifestService extends Service {
         this.setStreams();
     }
 
+    async setManifest(manifest_data) {
+
+        this.event = manifest_data;
+
+        this.setStreams();
+    }
+
     setStreams() {
         const {
             streams = [],

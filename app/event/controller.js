@@ -7,22 +7,18 @@ export default class EventController extends Controller {
     @service('manifest')
     manifestService;
 
+    @service mqtt;
+
     pollInterval = 10 * 1000;
     isProcessing = false;
 
-    @tracked
-    showStreamList = false;
+    wsUrl = 'ws://localhost:31736/mqtt';
+    isSubscribed = false;
 
-    // @tracked
-    // streams = [];
+    @tracked showStreamList = false;
 
-    /**
-     * Polls for changes from the manifest.
-     *
-     * NOTE: This will eventually be handled through web sockets
-     */
     async updateManifest() {
-        if (this.isProcessing || document.hidden || !this.model) {
+        if (this.isSubscribed || this.isProcessing || document.hidden) {
             return;
         }
 
@@ -45,6 +41,28 @@ export default class EventController extends Controller {
             console.log(err);
         } finally {
             this.isProcessing = false;
+            if(this.mqtt.connected && this.isSubscribed == false)
+            {
+                await this.subscribe();
+            }
+        }
+
+    }
+
+    async subscribe() {
+        if(this.model){
+            this.mqtt.subscribe(`rts/${this.model.id }`).then( ()=>{
+                this.isSubscribed = true;
+
+                this.mqtt.on('mqtt-message',  (sTopic, sMessage) => {
+                    let decoded = new TextDecoder("utf-8").decode(sMessage)
+                    let data = JSON.parse(decoded);
+                    this.manifestService.setManifest(data.event);
+                });
+
+            }).catch( ()=>{
+                this.isSubscribed = false;
+            });
         }
     }
 
@@ -52,6 +70,8 @@ export default class EventController extends Controller {
 
     init() {
         super.init();
+
+        this.mqtt.connect(this.wsUrl);
 
         this.pollTracker = setInterval(() => {
             this.updateManifest();
