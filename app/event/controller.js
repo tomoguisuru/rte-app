@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import {inject as service} from '@ember/service';
 import {tracked} from '@glimmer/tracking';
 import {action} from '@ember/object';
+// import {v4 as uuidv4} from 'uuid';
 
 export default class EventController extends Controller {
     @service('manifest')
@@ -12,8 +13,17 @@ export default class EventController extends Controller {
     pollInterval = 10 * 1000;
     isProcessing = false;
 
-    wsUrl = 'ws://localhost:31736/mqtt';
+    // 8083 maps to 31060 on my local computer
+    // run: kubectl get svc
+    // to get mapping
+    // wsUrl = 'ws://emqx-ausw2-dp-1.downlynk.net:31736/mqtt';
+    wsUrl = 'ws://localhost:30710/mqtt';
     isSubscribed = false;
+
+    subscribeTopics = [
+        'manifest',
+        'message'
+    ]
 
     @tracked showStreamList = false;
 
@@ -51,38 +61,36 @@ export default class EventController extends Controller {
 
     async subscribe() {
         if(this.model){
-            this.mqtt.subscribe(`rts/${this.model.id }`).then( ()=>{
-                this.isSubscribed = true;
-
-                this.mqtt.on('mqtt-message',  (sTopic, sMessage) => {
-                    let decoded = new TextDecoder("utf-8").decode(sMessage)
-                    let data = JSON.parse(decoded);
-                    this.manifestService.setManifest(data.event);
+            this.subscribeTopics.forEach(topicName => {
+                this.mqtt.subscribe(`rts/${this.model.id}/${topicName}`).then( (info)=>{
+                    this.isSubscribed = true;
+                }).catch( ()=>{
+                    this.isSubscribed = false;
                 });
-
-            }).catch( ()=>{
-                this.isSubscribed = false;
             });
         }
     }
 
-    pollTracker = null;
-
-    init() {
-        super.init();
-
-        this.mqtt.connect(this.wsUrl);
-
-        this.pollTracker = setInterval(() => {
-            this.updateManifest();
-        }, this.pollInterval);
+    setupMqttOn() {
+        this.mqtt.on('mqtt-message',  (sTopic, sMessage) => {
+            if (sTopic === `rts/${this.model.id}/message`) {
+                let decoded = new TextDecoder("utf-8").decode(sMessage);
+                let data = JSON.parse(decoded);
+                // Implement this to the UI for onscreen messages
+                console.log('Message DATA:')
+                console.log(data);
+            } else if (sTopic === `rts/${this.model.id}/manifest`) {
+                let decoded = new TextDecoder("utf-8").decode(sMessage);
+                let data = JSON.parse(decoded);
+                this.manifestService.setManifest(data.event);
+            }
+        });
     }
-
-    isDestroying() {
-        if (this.pollTracker) {
-            clearInterval(this.pollTracker);
-            this.pollTracker = null
-        }
+    initMqtt() {
+        this.mqtt.connect(this.wsUrl).then(() => {
+            this.setupMqttOn();
+            this.updateManifest();
+        });
     }
 
     @action

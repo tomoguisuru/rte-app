@@ -44,7 +44,8 @@ module.exports = function(environment) {
         'wss://*.phenixrts.com/ws',
         'wss://*.downlynk.com/ws',
         'wss://*.uplynk.com/ws',
-        'ws://localhost:31736/mqtt',
+        'ws://localhost:30710/mqtt',
+        'ws://emqx-ausw2-dp-1.downlynk.net:31736/mqtt',
       ],
       'img-src': ["'self'", 'data:'],
       'style-src': [
