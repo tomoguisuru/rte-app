@@ -29,4 +29,10 @@ export default class EventRoute extends Route {
 
         this.channelExpressService.tokenUrl = tokenUrl;
     }
+
+    setupController(controller) {
+        super.setupController(...arguments);
+        // Add mqtt listener (websocket)
+        controller.initMqtt();
+    }
 }
