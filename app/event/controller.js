@@ -13,11 +13,6 @@ export default class EventController extends Controller {
     pollInterval = 10 * 1000;
     isProcessing = false;
 
-    // 8083 maps to 31060 on my local computer
-    // run: kubectl get svc
-    // to get mapping
-    // wsUrl = 'ws://emqx-ausw2-dp-1.downlynk.net:31736/mqtt';
-    wsUrl = 'ws://localhost:30710/mqtt';
     isSubscribed = false;
 
     subscribeTopics = [
@@ -82,12 +77,13 @@ export default class EventController extends Controller {
             } else if (sTopic === `rts/${this.model.id}/manifest`) {
                 let decoded = new TextDecoder("utf-8").decode(sMessage);
                 let data = JSON.parse(decoded);
-                this.manifestService.setManifest(data.event);
+                this.manifestService.setManifest(data);
             }
         });
     }
     initMqtt() {
-        this.mqtt.connect(this.wsUrl).then(() => {
+        let sub = this.model.sub;
+        this.mqtt.connect(sub.url,"ClientApp",sub.jwt).then(() => {
             this.setupMqttOn();
             this.updateManifest();
         });
