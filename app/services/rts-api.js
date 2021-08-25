@@ -1,15 +1,15 @@
-import Service from '@ember/service';
+import Service, {inject as service} from '@ember/service';
 import ENV from 'client-app/config/environment';
-import AuthParams from '../utils/auth-params';
 
-export default class HyperionService extends Service {
+export default class RtsApiService extends Service {
+    @service session;
+
     async request(url, method = 'get', data = null) {
-        return this.requestBase(`${ENV.APP.SERVICES.API_V4}${url}`, method, data)
+        return this.requestBase(`${ENV.APP.API_HOST}${url}`, method, data)
     }
 
     async requestBase(url, method = 'get', data = null) {
         const request = this._buildRequest(method, data);
-
         const resp = await fetch(url, request);
 
         if (resp.ok) {
@@ -20,9 +20,8 @@ export default class HyperionService extends Service {
     }
 
     _buildRequest(method, data) {
-        const authParams = AuthParams();
         const headers = {
-            'Authorization': `${authParams.msg} ${authParams.sig}`,
+            'Authorization': `Bearer ${this.session.data.authenticated.token}`,
         };
         let body;
 

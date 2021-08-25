@@ -5,8 +5,13 @@ import hmacSHA256 from 'crypto-js/hmac-sha256';
 import moment from 'moment';
 
 function AuthParams() {
+    const {
+        APP: { SERVICES }
+    } = ENV;
+
+
     const tmp = {
-        _owner: ENV.OWNER_ID,
+        _owner: SERVICES.OWNER_ID,
         _timestamp: moment().unix(),
     }
 
@@ -17,7 +22,7 @@ function AuthParams() {
 
     var msg = btoa(compStr);
 
-    const sig = hmacSHA256(msg, ENV.API_KEY).toString();
+    const sig = hmacSHA256(msg, SERVICES.API_KEY).toString();
 
     return {msg, sig};
 }

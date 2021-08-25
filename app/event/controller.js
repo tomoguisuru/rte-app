@@ -81,12 +81,18 @@ export default class EventController extends Controller {
             }
         });
     }
+
     initMqtt() {
         let sub = this.model.sub;
-        this.mqtt.connect(sub.url,"ClientApp",sub.jwt).then(() => {
-            this.setupMqttOn();
-            this.updateManifest();
-        });
+
+        try {
+            this.mqtt.connect(sub.url, "ClientApp", sub.jwt).then(() => {
+                this.setupMqttOn();
+                this.updateManifest();
+            });
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     @action

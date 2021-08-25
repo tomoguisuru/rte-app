@@ -1,0 +1,19 @@
+    <div class="rts-form__item">
+        <div class="rts-field">
+            <label class="rts-field__input">Email</label>
+            <Input class="rts-field__input" @type="email" @value={{this.email}} />
+        </div>
+    </div>
+
+    <div class="rts-form__item">
+        <div class="rts-field">
+            <label class="rts-field__input">Password</label>
+            <Input class="rts-field__input" @type="password" @value={{this.password}} />
+        </div>
+    </div>
+
+    <button type="submit" class="rts-btn rts-btn--icon" {{on "click" this.login}}>Login</button>
+
+    {{#if this.errorMessage}}
+    <p>{{this.errorMessage}}</p>
+    {{/if}}

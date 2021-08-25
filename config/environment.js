@@ -20,11 +20,15 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+      API_HOST: process.env.API_HOST,
+      SERVICES: {
+        OWNER_ID: process.env.CMS_OWNER_ID,
+        API_HOST: process.env.CMS_HOST,
+        API_V4: `${process.env.CMS_HOST}/api/v4`,
+        API_KEY: process.env.CMS_API_KEY,
+      }
+
     },
-    OWNER_ID: process.env.CMS_OWNER_ID,
-    API_HOST: process.env.CMS_HOST,
-    API_V4: `${process.env.CMS_HOST}/api/v4`,
-    API_KEY: process.env.CMS_API_KEY,
     contentSecurityPolicy: {
       'default-src': ["'none'"],
       'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
@@ -34,6 +38,10 @@ module.exports = function(environment) {
       ],
       'connect-src': [
         "'self'",
+        'http://*.localhost:3000',
+        'http://localhost:3000',
+        'http://*.localhost:4200',
+        'http://localhost:4200',
         'http://*.downlynk.localhost:8000',
         'http://*.uplynk.localhost:8000',
         'http://*.downlynk.com',
@@ -52,8 +60,24 @@ module.exports = function(environment) {
           "'self'",
           'https://fonts.googleapis.com/'
       ],
-      'media-src': ["'self'"]
+      'media-src': ["'self'"],
     }
+  };
+
+  ENV['ember-simple-auth'] = {
+    routeAfterAuthentication: '/events',
+    routeIfAlreadyAuthenticated: '/events',
+  }
+
+  ENV['ember-simple-auth-token'] = {
+    authorizationHeaderName: 'Authorization', // Header name added to each API request
+    authorizationPrefix: 'Bearer ', // Prefix added to each API request
+    refreshAccessTokens: true,
+    refreshTokenPropertyName: 'refreshToken',
+    refreshLeeway: 300, // refresh 5 minutes
+    serverTokenEndpoint: `${ENV.APP.API_HOST}/users/login`,
+    serverTokenRefreshEndpoint: `${ENV.APP.API_HOST}/auth/token/refresh`,
+    tokenPropertyName: 'token',
   };
 
   if (environment === 'development') {
@@ -74,6 +98,11 @@ module.exports = function(environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
+
+    ENV['ember-simple-auth-token'] = {
+      refreshAccessTokens: false,
+      tokenExpirationInvalidateSession: false,
+    };
   }
 
   if (environment === 'production') {

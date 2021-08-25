@@ -90,7 +90,7 @@ export default class PhenixChannelExpressService extends Service {
             tags.push(this.clientTag);
         }
 
-        const url = `${ENV.API_HOST}${this.tokenUrl}/${requestType}`;
+        const url = this.getTokenUrl(requestType);
 
         options = Object.assign({}, options, args);
 
@@ -98,6 +98,10 @@ export default class PhenixChannelExpressService extends Service {
         const {authenticationToken} = resp;
 
         return authenticationToken;
+    }
+
+    getTokenUrl(type) {
+        return `${ENV.APP.SERVICES.API_HOST}${this.tokenUrl}/${type}`;
     }
 
     async getPublishToken(options, requestType = 'stream', args) {
@@ -113,7 +117,7 @@ export default class PhenixChannelExpressService extends Service {
             requestType = 'publish';
         }
 
-        const url = `${ENV.API_HOST}${this.tokenUrl}/${requestType}`;
+        const url = this.getTokenUrl(requestType);
 
         options = Object.assign({}, options, args);
 
@@ -132,7 +136,7 @@ export default class PhenixChannelExpressService extends Service {
             tags.push(this.clientTag);
         }
 
-        const url = `${ENV.API_HOST}${this.tokenUrl}/stream`;
+        const url = this.getTokenUrl('stream');
 
         const resp = await this.hyperionApi.requestBase(url, 'post', this.filterOptions(options));
         const {authenticationToken} = resp;

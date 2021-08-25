@@ -11,8 +11,6 @@ module.exports = function(env) {
     _path += `.${env}`;
   }
 
-  console.log('ENV: ', env, _path);
-
   return {
     clientAllowedKeys: [],
     fastbootAllowedKeys: [],
