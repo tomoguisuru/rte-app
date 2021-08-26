@@ -1,0 +1,72 @@
+{{#if showPublisher}}
+<aside class="rts-tray">
+    <div class="rts-settings">
+        <div class="rts-settings__preview" {{did-insert onInsert}}>
+            <video id="publisherStream" playsinline autoplay muted></video>
+        </div>
+
+        <div class="rts-settings__config">
+            <form class="rts-form">
+            {{#unless hasPublisher}}
+                <div class="rts-form__item">
+                    <div class="rts-field rts-field--select">
+                        <div class="rts-field__bin">
+                            <label class="rts-field__label">Camera</label>
+                            <select class="rts-field__input" {{on 'change' this.updateSelectedVideo}}>
+                            {{#each this.videoInputOptions as |input|}}
+                                <option>{{input.text}}</option>
+                            {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rts-form__item">
+                    <div class="rts-field rts-field--select">
+                        <div class="rts-field__bin">
+                            <label class="rts-field__label">Microphone</label>
+                            <select class="rts-field__input" {{on 'change' this.updateSelectedAudio}}>
+                            {{#each this.audioInputOptions as |input|}}
+                                <option>{{input.text}}</option>
+                            {{/each}}
+                            </select>
+                        </div>
+                        <div class="rts-field__hint">
+                            <div class="rts-field__audio">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/unless}}
+            </form>
+        </div>
+    </div>
+</aside>
+{{/if}}
+
+<Portal @target="footer-center">
+    <button class="rts-btn rts-btn--icon">
+        <span class="material-icons" {{on 'click' this.toggleAudioInput}}>
+            {{if this.streamAudio "mic" "mic_off"}}
+        </span>
+    </button>
+
+    <button class="rts-btn rts-btn--icon">
+        <span class="material-icons" {{on 'click' this.toggleVideoInput}}>
+            {{if this.streamVideo "videocam" "videocam_off"}}
+        </span>
+    </button>
+
+    {{#if hasPublisher}}
+        <button class="rts-btn rts-btn--primary" {{on 'click' this.stop}}>Leave</button>
+    {{else}}
+        <button class="rts-btn rts-btn--primary" {{on 'click' this.publishStream}}>Join</button>
+    {{/if}}
+
+</Portal>
+
+<Portal @target="footer-right">
+    <button class="rts-btn rts-btn--icon {{if this.showPublisher "rts-btn--secondary"}}" {{on "click" this.togglePublisher}}>
+        <span class="material-icons md-20">settings</span>
+    </button>
+</Portal>

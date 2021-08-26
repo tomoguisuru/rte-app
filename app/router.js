@@ -9,6 +9,10 @@ export default class Router extends EmberRouter {
 Router.map(function() {
   this.route('authenticated', { path: '/' }, function() {
     this.route('events');
+
+    this.route('event', { path: '/events/:event_id' }, function() {
+      this.route('publisher', { path: '/publisher/:stream_id' });
+    });
   });
 
   this.route('event', { path: '/event/:event_id'}, function() {

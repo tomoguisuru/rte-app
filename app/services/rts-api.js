@@ -1,4 +1,6 @@
 import Service, {inject as service} from '@ember/service';
+import {underscore} from '@ember/string';
+
 import ENV from 'client-app/config/environment';
 
 export default class RtsApiService extends Service {
@@ -26,6 +28,12 @@ export default class RtsApiService extends Service {
         let body;
 
         if (data) {
+            // Transform options' keys to underscore
+            data = Object.keys(data).reduce((rv, key) => {
+                rv[underscore(key)] = data[key];
+                return rv;
+            }, {});
+
             body = JSON.stringify(data);
 
             headers['Content-Length'] = body.length;
