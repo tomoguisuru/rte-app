@@ -14,7 +14,7 @@
                             <label class="rts-field__label">Camera</label>
                             <select class="rts-field__input" {{on 'change' this.updateSelectedVideo}}>
                             {{#each this.videoInputOptions as |input|}}
-                                <option>{{input.text}}</option>
+                                <option value="{{input.value}}">{{input.text}}</option>
                             {{/each}}
                             </select>
                         </div>
@@ -27,7 +27,7 @@
                             <label class="rts-field__label">Microphone</label>
                             <select class="rts-field__input" {{on 'change' this.updateSelectedAudio}}>
                             {{#each this.audioInputOptions as |input|}}
-                                <option>{{input.text}}</option>
+                                <option value="{{input.value}}">{{input.text}}</option>
                             {{/each}}
                             </select>
                         </div>

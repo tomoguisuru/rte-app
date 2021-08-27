@@ -233,7 +233,6 @@ export default class PublisherController extends Controller {
             this.eventController.updateManifest();
 
         } catch (e) {
-            debugger
             console.debug(e.message);
         }
 

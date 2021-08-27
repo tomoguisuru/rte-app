@@ -5,8 +5,7 @@
     <li>
         {{event.title}}
         {{#if (or (eq event.state 'staging') (eq event.state 'live'))}}
-        <a href="/events/{{event.id}}">View</a>
-        <a href="/events/{{event.id}}/publisher/{{event.stream.id}}">Join</a>
+        <a href="/events/{{event.id}}/publisher">Join</a>
         {{/if}}
     </li>
 {{else}}

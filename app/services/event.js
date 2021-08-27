@@ -1,7 +1,6 @@
 import Service, {inject as service} from '@ember/service';
 
 const ALLOWED_PARAMS = [
-    "appId",
     "capabilities",
     "channelAlias",
     "expiresAt",
@@ -51,12 +50,21 @@ export default class EventService extends Service {
         return `client_id:${this.clientId}`;
     }
 
-    getEvent(eventId) {
+    async getEvent(eventId) {
+        await this.getStreams();
+
         return this.events.find(e => e.id === eventId);
     }
 
-    getStream(streamId) {
-        return this.streams.find(s => s.id === streamId);
+    /**
+     * Returns the event stream
+     * @param {string} eventId
+     * @returns
+     */
+    async getStream(eventId) {
+        const event = await this.getEvent(eventId);
+
+        return event.stream;
     }
 
     async getStreams() {
@@ -91,8 +99,6 @@ export default class EventService extends Service {
         }
 
         options = Object.assign({}, options, args);
-
-        console.log('Options: ', options);
 
         const resp = await this.api.request(
             url,

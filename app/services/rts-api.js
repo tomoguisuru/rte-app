@@ -1,5 +1,5 @@
 import Service, {inject as service} from '@ember/service';
-import {underscore} from '@ember/string';
+import {camelize, underscore} from '@ember/string';
 
 import ENV from 'client-app/config/environment';
 
@@ -17,7 +17,7 @@ export default class RtsApiService extends Service {
         if (resp.ok) {
             const json = await resp.json();
 
-            return json;
+            return this._transform(json);
         }
     }
 
@@ -28,11 +28,7 @@ export default class RtsApiService extends Service {
         let body;
 
         if (data) {
-            // Transform options' keys to underscore
-            data = Object.keys(data).reduce((rv, key) => {
-                rv[underscore(key)] = data[key];
-                return rv;
-            }, {});
+            data = this._transform(data, 'underscore');
 
             body = JSON.stringify(data);
 
@@ -45,5 +41,31 @@ export default class RtsApiService extends Service {
             method,
             headers,
         }
+    }
+
+    _transform(data, method = 'camelize') {
+        if (!(typeof (data) == 'object')) {
+            return data;
+        }
+
+        const keys = Object.keys(data);
+
+        if (keys.length > 0) {
+            return keys.reduce((rv, key) => {
+                let value = data[key];
+
+                if (Array.isArray(value)) {
+                    value = value.map(d => this._transform(d, method));
+                } else {
+                    value = this._transform(value, method);
+                }
+                const _key = method === 'camelize' ? camelize(key) : underscore(key);
+                rv[_key] = value;
+
+                return rv
+            }, {});
+        }
+
+        return data;
     }
 }

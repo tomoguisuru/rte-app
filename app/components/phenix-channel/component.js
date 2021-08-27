@@ -30,12 +30,8 @@ export default class PhenixChannelComponent extends Component {
     }
 
     async joinChannel() {
-        const token = await this.getToken();
-
-        console.log('Token: ', token);
-
         this.channel = Channels.createChannel({
-            token,
+            token: await this.getToken(),
             videoElement: this.videoElement,
         });
 
@@ -47,7 +43,7 @@ export default class PhenixChannelComponent extends Component {
         });
 
         this.channel.state.subscribe(state => {
-            console.log(this.stream.alias, ChannelState[state]);
+            console.info(this.stream.alias, ChannelState[state]);
         });
     }
 

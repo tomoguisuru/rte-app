@@ -1,21 +1,7 @@
 import Service, {inject as service} from '@ember/service';
 import sdk from 'phenix-web-sdk';
 
-const ALLOWED_PARAMS = [
-    "appId",
-    "capabilities",
-    "channelAlias",
-    "expiresAt",
-    "expiresIn",
-    "originStreamId",
-    "sessionId",
-    "tags",
-]
-
 export default class PhenixChannelExpressService extends Service {
-    @service('rts-api')
-    api;
-
     @service('event')
     eventService;
 
@@ -31,7 +17,7 @@ export default class PhenixChannelExpressService extends Service {
 
             try {
                 if (type === 'publish') {
-                    token = await this.getToken(options, 'publish', args);
+                    token = await this.getPublishToken(options, requestType, args);
                 } else {
                     token = await this.getToken(options, requestType, args);
                 }
@@ -45,21 +31,15 @@ export default class PhenixChannelExpressService extends Service {
         return adminApiProxyClient;
     }
 
-    async getToken(options, requestType = 'stream', args) {
-        return this.eventService.getToken(this.eventId, requestType, options, args);
+    async getPublishToken(options, requestType = 'publish', args) {
+        if (requestType === 'stream') {
+            return this.getToken(options, 'publish', args);
+        }
+
+        return this.getToken(options, requestType, args);
     }
 
-    filterOptions(options) {
-        const data = {};
-
-        ALLOWED_PARAMS.forEach(k => {
-            const value = options[k];
-
-            if (value) {
-                data[k] = value;
-            }
-        });
-
-        return data;
+    async getToken(options, requestType = 'stream', args) {
+        return this.eventService.getToken(this.eventId, requestType, options, args);
     }
 }

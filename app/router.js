@@ -11,7 +11,7 @@ Router.map(function() {
     this.route('events');
 
     this.route('event', { path: '/events/:event_id' }, function() {
-      this.route('publisher', { path: '/publisher/:stream_id' });
+      this.route('publisher');
     });
   });
 

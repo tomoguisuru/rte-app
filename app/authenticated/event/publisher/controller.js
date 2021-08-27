@@ -1,13 +1,14 @@
 import Controller from '@ember/controller';
 import {inject as service} from '@ember/service';
-import {tracked} from '@glimmer/tracking';
+import {inject as controller} from '@ember/controller';
 import {action} from '@ember/object';
+
+import {tracked} from '@glimmer/tracking';
+
 import sdk from 'phenix-web-sdk';
 
 export default class PublisherController extends Controller {
-    queryParams = ['email', 'token']
-
-    @service('phenix-channel-express')
+    @service('channel-express')
     channelExpressService;
 
     @service('rts-api-manifest')
@@ -111,54 +112,35 @@ export default class PublisherController extends Controller {
     }
 
     async initChannelExpress() {
-        // const {
-        //     domain,
-        // } = this.eventController.model;
-
-        // const {
-        //     tags,
-        // } = this.model;
-
-        // const data = {
-        //     channelAlias: this.stream.channelAlias,
-        //     tags,
-        // };
-
-        // const adminApiProxyClient = this.channelExpressService
-        //     .createAdminApiProxyClient(data, 'publish');
-
-        // const pcastExpress = new sdk.express.PCastExpress({
-        //     adminApiProxyClient,
-        // });
-
-        // const pcast = pcastExpress.getPCast();
-        // pcast._baseUri = domain;
-
-        // this.channelExpress = new sdk.express.ChannelExpress({
-        //     adminApiProxyClient,
-        //     pcastExpress,
-        // });
-
-        // this.hasJoined = true;
-
         const {
-            id,
+            domain,
+            tags,
         } = this.eventController.model;
 
-        const {
+        const data = {
             tags,
-        } = this.model;
-
-        const tokenOptions = {
-            tags,
+            capabilities: [
+                this.model.streamQuality,
+                'streaming',
+                'on-demand',
+            ],
+            channelAlias: this.model.alias,
         };
-        const authToken = await this.eventService.getToken(id, 'auth', tokenOptions)
 
-        const options = {
-            authToken,
-        }
+        const adminApiProxyClient = this.channelExpressService
+            .createAdminApiProxyClient(data, 'publish');
 
-        this.channelExpress = new sdk.express.ChannelExpress(options);
+        const pcastExpress = new sdk.express.PCastExpress({
+            adminApiProxyClient,
+        });
+
+        const pcast = pcastExpress.getPCast();
+        pcast._baseUri = domain;
+
+        this.channelExpress = new sdk.express.ChannelExpress({
+            adminApiProxyClient,
+            pcastExpress,
+        });
     }
 
     publishCallback(error, response) {
@@ -191,41 +173,17 @@ export default class PublisherController extends Controller {
     async publishToChannel() {
         const videoElement = document.querySelector(this.publisherElementSelector);
         const {
-            channelAlias: alias,
+            alias,
             channelName: name,
-            streamQuality,
-            tags,
-        } = this.stream;
-
-
-        const {
-            id,
-        } = this.eventController.model;
-
-        const tokenOptions = {
-            capabilities: [
-                streamQuality,
-                'streaming',
-                'on-demand',
-                // 'broadcast',
-                // 'multi-bitrate',
-            ],
-            tags,
-        };
-
-        const publishToken = this.eventService.getToken(id, 'publish', tokenOptions);
+        } = this.model;
 
         const options = {
             videoElement,
-            publishToken,
-            tags,
-            // capabilities: [
-            //     streamQuality,
-            //     'streaming',
-            //     'on-demand',
-            //     // 'broadcast',
-            //     // 'multi-bitrate',
-            // ],
+            capabilities: [
+                this.model.streamQuality,
+                'streaming',
+                'on-demand',
+            ],
             channel: {
                 name,
                 alias,
@@ -331,12 +289,14 @@ export default class PublisherController extends Controller {
     }
 
     @action
-    updateSelectedAudio(value) {
-        this.selectedAudioInput = value;
+    updateSelectedAudio(e) {
+        this.selectedVideoInput = e.target.value;
+        this.updateStream();
     }
 
     @action
-    updateSelectedVideo(value) {
-        this.selectedVideoInput = value;
+    updateSelectedVideo(e) {
+        this.selectedVideoInput = e.target.value;
+        this.updateStream();
     }
 }
