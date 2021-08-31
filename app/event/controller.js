@@ -22,52 +22,74 @@ export default class EventController extends Controller {
 
     @tracked showStreamList = false;
 
-    async updateManifest() {
-        if (this.isSubscribed || this.isProcessing || document.hidden) {
-            return;
-        }
+    // async updateManifest() {
+    //     if (this.isSubscribed || this.isProcessing || document.hidden) {
+    //         return;
+    //     }
 
-        try {
-            this.isProcessing = true;
-            await this.manifestService.getManifest(this.model.id);
+    //     try {
+    //         this.isProcessing = true;
+    //         await this.manifestService.getManifest(this.model.id);
 
-            const {event} = this.manifestService;
+    //         const {event} = this.manifestService;
 
-            [
-                'desc',
-                'state',
-                'title',
-            ].forEach(p => {
-                if (this.model[p] !== event[p]) {
-                    this.model[p] = event[p];
-                }
-            });
-        } catch (err) {
-            console.log(err);
-        } finally {
-            this.isProcessing = false;
-            if(this.mqtt.connected && this.isSubscribed == false)
-            {
-                await this.subscribe();
-            }
-        }
+    //         [
+    //             'desc',
+    //             'state',
+    //             'title',
+    //         ].forEach(p => {
+    //             if (this.model[p] !== event[p]) {
+    //                 this.model[p] = event[p];
+    //             }
+    //         });
+    //     } catch (err) {
+    //         console.log(err);
+    //     } finally {
+    //         this.isProcessing = false;
+    //         if(this.mqtt.connected && this.isSubscribed == false)
+    //         {
+    //             await this.subscribe();
+    //         }
+    //     }
 
-    }
+    // }
 
     async subscribe() {
         if(this.model){
             this.subscribeTopics.forEach(topicName => {
                 this.mqtt.subscribe(`rts/${this.model.id}/${topicName}`).then( (info)=>{
                     this.isSubscribed = true;
-                }).catch( ()=>{
+                }).catch(err => {
+                    console.err(err);
                     this.isSubscribed = false;
                 });
             });
         }
     }
 
-    setupMqttOn() {
+    setupMqttListeners() {
+        this.mqtt.on('mqtt-connected',  () => {
+            console.log('MQTT connected.');
+
+        });
+
+        this.mqtt.on('mqtt-disconnected',  () => {
+            console.log('MQTT disconnected.');
+            this.isSubscribed = false;
+        });
+
+        this.mqtt.on('mqtt-close',  () => {
+            console.log('MQTT close.');
+            this.isSubscribed = false;
+        });
+
+        this.mqtt.on('mqtt-error',  () => {
+            console.log('MQTT Error.');
+
+        });
+
         this.mqtt.on('mqtt-message',  (sTopic, sMessage) => {
+            console.log('message', sTopic);
             if (sTopic === `rts/${this.model.id}/message`) {
                 let decoded = new TextDecoder("utf-8").decode(sMessage);
                 let data = JSON.parse(decoded);
@@ -83,9 +105,14 @@ export default class EventController extends Controller {
     }
     initMqtt() {
         let sub = this.model.sub;
-        this.mqtt.connect(sub.url,"ClientApp",sub.jwt).then(() => {
-            this.setupMqttOn();
-            this.updateManifest();
+        this.setupMqttListeners();
+        this.mqtt.connect(sub.url, this.model.id, sub.jwt)
+        .then(() => {
+            // this.updateManifest();
+            this.subscribe();
+        })
+        .catch(err => {
+            console.err(err);
         });
     }
 

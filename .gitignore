@@ -24,3 +24,6 @@
 /bower.json.ember-try
 /package.json.ember-try
 /.idea
+
+# macOS
+.DS_Store
