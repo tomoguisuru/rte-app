@@ -5,6 +5,6 @@ export default class AuthenticatedRoute extends Route {
     @service currentUser;
 
     async beforeModel() {
-        this.transitionTo('authenticated.events');
+        this.replaceWith('authenticated.events');
     }
 }
