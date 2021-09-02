@@ -38,6 +38,7 @@
     "ember-cli-sass": "^10.0.1",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.0",
+    "ember-cli-update": "^1.0.0",
     "ember-data": "~3.22.0",
     "ember-export-application-global": "^2.0.1",
     "ember-fetch": "^8.0.2",
@@ -74,7 +75,7 @@
     "crypto-js": "^4.0.0",
     "moment": "^2.29.1",
     "pako": "^2.0.2",
-    "phenix-web-sdk": "~2021.0.6",
+    "phenix-web-sdk": "~2021.0.17",
     "zlib": "^1.0.5"
   }
 }

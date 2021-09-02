@@ -12,6 +12,7 @@ Router.map(function() {
 
     this.route('event', { path: '/events/:event_id' }, function() {
       this.route('publisher');
+      this.route('pub');
     });
   });
 
