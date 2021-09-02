@@ -139,7 +139,12 @@ NOTE: Your event must be in a `LIVE`state or no streams will be returned in the 
 
 Navigate to http://localhost:4200/event/:rts_event_id/publisher
 
+<<<<<<< HEAD
 * `:rts_event_id` is the id of the event that you want to view
+=======
+* `npm run lint`
+* `npm run lint:fix`
+>>>>>>> 4771af4 (v3.22.0...v3.28.0)
 
 You will need the `email` and `publisher_token` for the stream
 

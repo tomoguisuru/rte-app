@@ -6,6 +6,7 @@ export default class Router extends EmberRouter {
   rootURL = config.rootURL;
 }
 
+<<<<<<< HEAD
 Router.map(function() {
   this.route('authenticated', { path: '/' }, function() {
     this.route('events');
@@ -24,3 +25,6 @@ Router.map(function() {
 
   this.route('not-found');
 });
+=======
+Router.map(function () {});
+>>>>>>> 4771af4 (v3.22.0...v3.28.0)
