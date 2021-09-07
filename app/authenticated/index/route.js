@@ -1,10 +1,10 @@
 import Route from '@ember/routing/route';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default class AuthenticatedRoute extends Route {
-    @service currentUser;
+  @service currentUser;
 
-    async beforeModel() {
-        this.replaceWith('authenticated.events');
-    }
+  async beforeModel() {
+    this.replaceWith('authenticated.events');
+  }
 }

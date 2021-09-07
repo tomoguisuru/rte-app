@@ -1,16 +1,16 @@
 import Service, { inject as service } from '@ember/service';
 
 export default class CurrentUserService extends Service {
-    @service('rts-api') api;
+  @service('rts-api') api;
 
-    user = null;
+  user = null;
 
-    async setCurrentUser() {
-        const resp = await this.api.request('/users/me');
-        this.user = resp.user;
-    }
+  async setCurrentUser() {
+    const resp = await this.api.request('/users/me');
+    this.user = resp.user;
+  }
 
-    clear() {
-        this.user = null;
-    }
+  clear() {
+    this.user = null;
+  }
 }

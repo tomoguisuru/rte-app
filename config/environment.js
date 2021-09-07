@@ -26,16 +26,12 @@ module.exports = function (environment) {
         API_HOST: process.env.CMS_HOST,
         API_V4: `${process.env.CMS_HOST}/api/v4`,
         API_KEY: process.env.CMS_API_KEY,
-      }
-
+      },
     },
     contentSecurityPolicy: {
       'default-src': ["'none'"],
       'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-      'font-src': [
-          "'self'",
-          'https://fonts.gstatic.com'
-      ],
+      'font-src': ["'self'", 'https://fonts.gstatic.com'],
       'connect-src': [
         "'self'",
         'http://*.localhost:3000',
@@ -56,10 +52,7 @@ module.exports = function (environment) {
         'wss://ws-emqx-ausw2-dp-1.downlynk.net:8083/messages/',
       ],
       'img-src': ["'self'", 'data:'],
-      'style-src': [
-          "'self'",
-          'https://fonts.googleapis.com/'
-      ],
+      'style-src': ["'self'", 'https://fonts.googleapis.com/'],
       'media-src': ["'self'"],
     },
   };
@@ -67,7 +60,7 @@ module.exports = function (environment) {
   ENV['ember-simple-auth'] = {
     routeAfterAuthentication: '/events',
     routeIfAlreadyAuthenticated: '/events',
-  }
+  };
 
   ENV['ember-simple-auth-token'] = {
     authorizationHeaderName: 'Authorization', // Header name added to each API request

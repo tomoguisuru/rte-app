@@ -1,4 +1,4 @@
-<div class="rts-stream {{if this.isActive 'is-active'}}" {{did-insert onInsert}}>
+<div class="rts-stream {{if this.isActive 'is-active'}}" {{did-insert this.onInsert}}>
     <video
         autoplay
     ></video>
@@ -6,8 +6,8 @@
     <div class="rts-stream__head">
         <h3 class="rts-stream__title">{{@stream.title}}</h3>
         <div class="rts-stream__controls">
-            <button class="rts-btn rts-btn--sm rts-btn--icon rts-btn--alert" {{on "click" this.toggleMute}}>
-                <span class="material-icons md-18">{{if isMuted 'volume_off' 'volume_up'}}</span>
+            <button class="rts-btn rts-btn--sm rts-btn--icon rts-btn--alert" type="button" {{on "click" this.toggleMute}}>
+                <span class="material-icons md-18">{{if this.isMuted 'volume_off' 'volume_up'}}</span>
             </button>
         </div>
     </div>

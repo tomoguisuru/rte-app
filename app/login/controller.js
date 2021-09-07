@@ -4,5 +4,4 @@ import Controller from '@ember/controller';
 // import {action} from '@ember/object';
 // import {v4 as uuidv4} from 'uuid';
 
-export default class LoginController extends Controller {
-}
+export default class LoginController extends Controller {}

@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 
-import {inject as service} from '@ember/service';
-import {action} from '@ember/object';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class UserLogoutComponent extends Component {
     @service currentUser;
@@ -14,10 +14,10 @@ export default class UserLogoutComponent extends Component {
 
     @action
     async logout() {
-        if (this.session.isAuthenticated) {
-            await this.session.invalidate();
+      if (this.session.isAuthenticated) {
+        await this.session.invalidate();
 
-            this.router.transitionTo('login');
-        }
+        this.router.transitionTo('login');
+      }
     }
 }

@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
-import {tracked} from '@glimmer/tracking';
+import { tracked } from '@glimmer/tracking';
 
-import {inject as service} from '@ember/service';
-import {action} from '@ember/object';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
-import {Channels} from '@phenixrts/sdk';
+import { Channels } from '@phenixrts/sdk';
 import ChannelState from '../../constants/channel-state';
 
 export default class PhenixChannelComponent extends Component {
@@ -20,68 +20,65 @@ export default class PhenixChannelComponent extends Component {
     stream = null;
 
     constructor() {
-        super(...arguments);
+      super(...arguments);
 
-        this.stream = this.args.stream;
+      this.stream = this.args.stream;
     }
 
     isDestroying() {
-        // Perform teardown
+      // Perform teardown
     }
 
     async joinChannel() {
-        this.channel = Channels.createChannel({
-            token: await this.getToken(),
-            videoElement: this.videoElement,
-        });
+      this.channel = Channels.createChannel({
+        token: await this.getToken(),
+        videoElement: this.videoElement,
+      });
 
-        this.channel.authorized.subscribe(async authorized => {
-            if (!authorized) {
-                const token = await this.getToken();
-                this.channel.token = token;
-            }
-        });
+      this.channel.authorized.subscribe(async authorized => {
+        if (!authorized) {
+          const token = await this.getToken();
+          this.channel.token = token;
+        }
+      });
 
-        this.channel.state.subscribe(state => {
-            console.info(this.stream.alias, ChannelState[state]);
-        });
+      this.channel.state.subscribe(state => {
+        console.info(this.stream.alias, ChannelState[state]);
+      });
     }
 
     async getToken() {
-        const {
-            alias: channelAlias,
-            tags,
-        } = this.stream;
+      const { alias: channelAlias, tags } = this.stream;
 
-        const options = {
-            tags,
-            channelAlias,
-            expiresIn: 1800, // 30 minutes
-        };
+      const options = {
+        tags,
+        channelAlias,
+        expiresIn: 1800, // 30 minutes
+      };
 
-        return this.channelExpressService.getToken(options, 'stream');
+      return this.channelExpressService.getToken(options, 'stream');
     }
 
     @action
     toggleMute() {
-        this.isMuted = !this.isMuted;
+      this.isMuted = !this.isMuted;
 
-        this.videoElement.muted = this.isMuted;
+      this.videoElement.muted = this.isMuted;
     }
 
     @action
     onInsert(element) {
-        this.videoElement = element.querySelector('video');
+      this.videoElement = element.querySelector('video');
 
-        this.toggleMute();
+      this.toggleMute();
 
-        setTimeout(async () => {
-            await this.joinChannel();
-        }, 750);
+      setTimeout(async () => {
+        await this.joinChannel();
+      }, 750);
     }
 
     @action
     toggleActive() {
-        this.isActive = !this.isActive;
+      this.isActive = !this.isActive;
     }
 }

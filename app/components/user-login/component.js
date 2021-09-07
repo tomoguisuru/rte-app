@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
 // import {tracked} from '@glimmer/tracking';
 
-import {inject as service} from '@ember/service';
-import {action} from '@ember/object';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class UserLoginComponent extends Component {
     @service session;
@@ -14,15 +14,15 @@ export default class UserLoginComponent extends Component {
 
     @action
     async login() {
-        if (!this.email || !this.password) {
-            this.errorMessage = 'Email and Password are required';
-        }
+      if (!this.email || !this.password) {
+        this.errorMessage = 'Email and Password are required';
+      }
 
-        const authenticator = 'authenticator:jwt';
+      const authenticator = 'authenticator:jwt';
 
-        await this.session.authenticate(authenticator, {
-            email: this.email,
-            password: this.password,
-        });
+      await this.session.authenticate(authenticator, {
+        email: this.email,
+        password: this.password,
+      });
     }
 }

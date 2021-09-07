@@ -14,12 +14,42 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:ember/recommended',
-    'plugin:prettier/recommended',
+    // 'plugin:prettier/recommended',
   ],
   env: {
     browser: true,
   },
-  rules: {},
+  rules: {
+    'array-element-newline': [
+      'error',
+      {
+        ArrayExpression: 'consistent',
+        ArrayPattern: {
+          minItems: 2,
+        },
+      },
+    ],
+    'arrow-parens': [
+      'error',
+      'as-needed',
+    ],
+    'comma-dangle': [
+      'error',
+      'always-multiline',
+    ],
+    'eol-last': [
+      'error',
+      'always',
+    ],
+    'indent': [
+      'error',
+      2,
+    ],
+    'object-curly-spacing': [
+      'error',
+      'always',
+    ],
+  },
   overrides: [
     // node files
     {

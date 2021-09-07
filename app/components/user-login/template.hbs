@@ -1,15 +1,25 @@
 <div class="rts-form">
     <div class="rts-form__item">
         <div class="rts-field">
-            <label class="rts-field__input">Email</label>
-            <Input class="rts-field__input" @type="email" @value={{this.email}} />
+            <label class="rts-field__input" for="user-email">Email</label>
+            <Input
+                id="user-email"
+                class="rts-field__input"
+                @type="email"
+                @value={{this.email}}
+            />
         </div>
     </div>
 
     <div class="rts-form__item">
         <div class="rts-field">
-            <label class="rts-field__input">Password</label>
-            <Input class="rts-field__input" @type="password" @value={{this.password}} />
+            <label class="rts-field__input" for="user-password">Password</label>
+            <Input
+                id="user-password"
+                class="rts-field__input"
+                @type="password"
+                @value={{this.password}}
+            />
         </div>
     </div>
 

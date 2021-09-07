@@ -1,102 +1,122 @@
 import Controller from '@ember/controller';
-import {inject as service} from '@ember/service';
-import {tracked} from '@glimmer/tracking';
-import {action} from '@ember/object';
-// import {v4 as uuidv4} from 'uuid';
+import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 
 export default class EventController extends Controller {
-    @service('manifest')
-    manifestService;
+  @service('manifest')
+  manifestService;
 
-    @service mqtt;
+  @service mqtt;
 
-    pollInterval = 10 * 1000;
-    isProcessing = false;
+  pollInterval = 10 * 1000;
+  pollTracker = null;
 
-    isSubscribed = false;
+  isProcessing = false;
+  isSubscribed = false;
 
-    subscribeTopics = [
-        'manifest',
-        'message'
-    ]
+  subscribeTopics = [
+    'manifest', //
+    'message',
+  ];
 
-    @tracked showStreamList = false;
+  @tracked showStreamList = false;
 
-    async updateManifest() {
-        if (this.isSubscribed || this.isProcessing || document.hidden) {
-            return;
+  async updateManifest() {
+    if (this.isSubscribed || this.isProcessing || document.hidden) {
+      return;
+    }
+
+    try {
+      this.isProcessing = true;
+      await this.manifestService.getManifest(this.model.id);
+
+      const { event } = this.manifestService;
+
+      [
+        'desc',
+        'state',
+        'title',
+      ].forEach(p => {
+        if (this.model[p] !== event[p]) {
+          this.model[p] = event[p];
         }
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      this.isProcessing = false;
+      if (this.mqtt.connected && this.isSubscribed == false) {
+        await this.subscribe();
+      }
+    }
+  }
 
-        try {
-            this.isProcessing = true;
-            await this.manifestService.getManifest(this.model.id);
+  async subscribe() {
+    if (this.model) {
+      this.subscribeTopics.forEach(topicName => {
+        this.mqtt
+          .subscribe(`rts/${this.model.id}/${topicName}`)
+          .then(info => {
+            console.debug('info: ', info);
+            this.isSubscribed = true;
+          })
+          .catch(() => {
+            this.isSubscribed = false;
+          });
+      });
+    }
+  }
 
-            const {event} = this.manifestService;
+  setupMqttOn() {
+    this.mqtt.on('mqtt-message', (sTopic, sMessage) => {
+      if (sTopic === `rts/${this.model.id}/message`) {
+        let decoded = new TextDecoder('utf-8').decode(sMessage);
+        let data = JSON.parse(decoded);
+        // Implement this to the UI for onscreen messages
+        console.log('Message DATA:');
+        console.log(data);
+      } else if (sTopic === `rts/${this.model.id}/manifest`) {
+        let decoded = new TextDecoder('utf-8').decode(sMessage);
+        let data = JSON.parse(decoded);
+        this.manifestService.setManifest(data);
+      }
+    });
+  }
 
-            [
-                'desc',
-                'state',
-                'title',
-            ].forEach(p => {
-                if (this.model[p] !== event[p]) {
-                    this.model[p] = event[p];
-                }
-            });
-        } catch (err) {
-            console.log(err);
-        } finally {
-            this.isProcessing = false;
-            if(this.mqtt.connected && this.isSubscribed == false)
-            {
-                await this.subscribe();
-            }
-        }
+  initMqtt() {
+    let sub = this.model.sub;
 
+    try {
+      this.mqtt.connect(sub.url, 'ClientApp', sub.jwt).then(() => {
+        this.setupMqttOn();
+        this.updateManifest();
+      });
+    } catch (e) {
+      console.log(e);
+      this.initPolling();
+    }
+  }
+
+  initPolling() {
+    if (this.pollTracker) {
+      return;
     }
 
-    async subscribe() {
-        if(this.model){
-            this.subscribeTopics.forEach(topicName => {
-                this.mqtt.subscribe(`rts/${this.model.id}/${topicName}`).then( (info)=>{
-                    this.isSubscribed = true;
-                }).catch( ()=>{
-                    this.isSubscribed = false;
-                });
-            });
-        }
-    }
+    this.pollTracker = setInterval(() => {
+      this.updateManifest();
+    }, this.pollInterval);
+  }
 
-    setupMqttOn() {
-        this.mqtt.on('mqtt-message',  (sTopic, sMessage) => {
-            if (sTopic === `rts/${this.model.id}/message`) {
-                let decoded = new TextDecoder("utf-8").decode(sMessage);
-                let data = JSON.parse(decoded);
-                // Implement this to the UI for onscreen messages
-                console.log('Message DATA:')
-                console.log(data);
-            } else if (sTopic === `rts/${this.model.id}/manifest`) {
-                let decoded = new TextDecoder("utf-8").decode(sMessage);
-                let data = JSON.parse(decoded);
-                this.manifestService.setManifest(data);
-            }
-        });
+  isDestroying() {
+    if (this.pollTracker) {
+      clearInterval(this.pollTracker);
+      this.pollTracker = null;
     }
+  }
 
-    initMqtt() {
-        let sub = this.model.sub;
-
-        try {
-            this.mqtt.connect(sub.url, "ClientApp", sub.jwt).then(() => {
-                this.setupMqttOn();
-                this.updateManifest();
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    @action
-    toggleStreamList() {
-        this.toggleProperty('showStreamList');
-    }
+  @action
+  toggleStreamList() {
+    this.showStreamList = !this.showStreamList;
+  }
 }
