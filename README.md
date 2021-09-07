@@ -40,9 +40,9 @@ Navigate to `http://localhost:4200/event/:rts_event_id`
 ## Installation
 
 ```bash
-# should be using node version 14.9.0
-# should be using npm version 6.14.8
-nvm use 14.9.0
+# should be using node version 12.22.xx
+# should be using npm version 6.14.x
+nvm use 12
 npm install -g ember-cli
 git clone git@git.vzbuilders.com:bdrake/client-app.git
 cd client-app
