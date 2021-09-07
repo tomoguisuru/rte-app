@@ -20,7 +20,6 @@ module.exports = function (environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-<<<<<<< HEAD
       API_HOST: process.env.API_HOST,
       SERVICES: {
         OWNER_ID: process.env.CMS_OWNER_ID,
@@ -62,10 +61,7 @@ module.exports = function (environment) {
           'https://fonts.googleapis.com/'
       ],
       'media-src': ["'self'"],
-    }
-=======
     },
->>>>>>> 4771af4 (v3.22.0...v3.28.0)
   };
 
   ENV['ember-simple-auth'] = {

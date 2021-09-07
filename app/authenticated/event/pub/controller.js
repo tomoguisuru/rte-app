@@ -124,7 +124,11 @@ export default class PublisherController extends Controller {
             backendUri: 'https://example.com/pcast',
         }
 
-        this.pCastExpress = new sdk.express.PCastExpress(pcastOptions);
+        const pcast = new sdk.express.PCastExpress(pcastOptions);
+
+        pcast._baseUri = this.eventController.model.domain;
+
+        this.pCastExpress = pcast;
     }
 
     publishCallback(error, response) {
