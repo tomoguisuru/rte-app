@@ -26,28 +26,25 @@ export default class ManifestService extends Service {
   async getManifest(eventId) {
     let url = `/rts/events/${eventId}/manifest`;
 
+    const queryParams = new URLSearchParams({ update_via_websocket: true });
+    
     if (this.includeStaged) {
-      const queryParams = new URLSearchParams({ include_staged: true });
-
-      url = `${url}?${queryParams}`;
+      queryParams.set('include_staged', true);
     }
 
+    url = queryParams ? `${url}?${queryParams}` : url;
+    console.info(`Requesting manifest: ${url}`);
     const json = await this.hyperionApi.request(url);
-
     if (!json?.event) {
       return null;
     }
-
     const { event } = json;
-
     this.event = event;
-
     this.setStreams();
   }
 
   async setManifest(manifest_data) {
     this.event = manifest_data;
-
     this.setStreams();
   }
 
@@ -58,6 +55,8 @@ export default class ManifestService extends Service {
   }
 
   _updateCollection(collectionA, collectionB) {
+    // There is a bug here that occurs when you include/exclude a stream fast enough that collectionA is not yet flushed out.
+    // For stream includ/exclude actions with few seconds gap in between works fine here.
     const existingIds = collectionA.map(s => s.id);
     const expectedIds = collectionB.map(s => s.id);
 

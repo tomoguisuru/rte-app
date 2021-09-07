@@ -16,7 +16,7 @@ export default class EventController extends Controller {
   isSubscribed = false;
 
   subscribeTopics = [
-    'manifest', //
+    'manifest',
     'message',
   ];
 
@@ -68,14 +68,35 @@ export default class EventController extends Controller {
     }
   }
 
-  setupMqttOn() {
+    setupMqttListeners() {
+        this.mqtt.on('mqtt-connected',  () => {
+            console.log('MQTT connected.');
+
+        });
+
+        this.mqtt.on('mqtt-disconnected',  () => {
+            console.log('MQTT disconnected.');
+            this.isSubscribed = false;
+        });
+
+        this.mqtt.on('mqtt-close',  () => {
+            console.log('MQTT close.');
+            this.isSubscribed = false;
+        });
+
+        this.mqtt.on('mqtt-error',  () => {
+            console.log('MQTT Error.');
+
+        });
+
     this.mqtt.on('mqtt-message', (sTopic, sMessage) => {
+      console.info('message', sTopic);
       if (sTopic === `rts/${this.model.id}/message`) {
         let decoded = new TextDecoder('utf-8').decode(sMessage);
         let data = JSON.parse(decoded);
         // Implement this to the UI for onscreen messages
-        console.log('Message DATA:');
-        console.log(data);
+        console.info('Message DATA:');
+        console.info(data);
       } else if (sTopic === `rts/${this.model.id}/manifest`) {
         let decoded = new TextDecoder('utf-8').decode(sMessage);
         let data = JSON.parse(decoded);
@@ -86,16 +107,17 @@ export default class EventController extends Controller {
 
   initMqtt() {
     let sub = this.model.sub;
-
-    try {
-      this.mqtt.connect(sub.url, 'ClientApp', sub.jwt).then(() => {
-        this.setupMqttOn();
-        this.updateManifest();
+    this.setupMqttListeners();
+    this.mqtt
+      .connect(sub.url, this.model.id, sub.jwt)
+      .then(() => {
+        // this.updateManifest();
+        this.subscribe();
+      })
+      .catch(err => {
+        console.err(err);
+        this.initPolling();
       });
-    } catch (e) {
-      console.log(e);
-      this.initPolling();
-    }
   }
 
   initPolling() {
