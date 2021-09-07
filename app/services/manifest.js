@@ -11,6 +11,7 @@ export default class ManifestService extends Service {
   @tracked allStreams = A([]);
 
   includeStaged = false;
+  updateViaWeb = false;
 
   // @filter('streams', function (stream, _index, _array) {
   //     return stream.included;
@@ -26,10 +27,14 @@ export default class ManifestService extends Service {
   async getManifest(eventId) {
     let url = `/rts/events/${eventId}/manifest`;
 
-    const queryParams = new URLSearchParams({ update_via_websocket: true });
-    
+    const queryParams = new URLSearchParams();
+
     if (this.includeStaged) {
       queryParams.set('include_staged', true);
+    }
+
+    if (this.updateViaWeb) {
+      queryParams.set('update_via_websocket', true);
     }
 
     url = queryParams ? `${url}?${queryParams}` : url;

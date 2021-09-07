@@ -43,9 +43,10 @@ export default class EventController extends Controller {
         }
       });
     } catch (err) {
-      console.log(err);
+      console.err(err);
     } finally {
       this.isProcessing = false;
+
       if (this.mqtt.connected && this.isSubscribed == false) {
         await this.subscribe();
       }
@@ -68,26 +69,24 @@ export default class EventController extends Controller {
     }
   }
 
-    setupMqttListeners() {
-        this.mqtt.on('mqtt-connected',  () => {
-            console.log('MQTT connected.');
+  setupMqttListeners() {
+    this.mqtt.on('mqtt-connected',  () => {
+      console.info('MQTT connected.');
+    });
 
-        });
+    this.mqtt.on('mqtt-disconnected',  () => {
+      console.info('MQTT disconnected.');
+      this.isSubscribed = false;
+    });
 
-        this.mqtt.on('mqtt-disconnected',  () => {
-            console.log('MQTT disconnected.');
-            this.isSubscribed = false;
-        });
+    this.mqtt.on('mqtt-close',  () => {
+      console.info('MQTT close.');
+      this.isSubscribed = false;
+    });
 
-        this.mqtt.on('mqtt-close',  () => {
-            console.log('MQTT close.');
-            this.isSubscribed = false;
-        });
-
-        this.mqtt.on('mqtt-error',  () => {
-            console.log('MQTT Error.');
-
-        });
+    this.mqtt.on('mqtt-error',  () => {
+      console.info('MQTT Error.');
+    });
 
     this.mqtt.on('mqtt-message', (sTopic, sMessage) => {
       console.info('message', sTopic);
@@ -105,19 +104,23 @@ export default class EventController extends Controller {
     });
   }
 
-  initMqtt() {
-    let sub = this.model.sub;
-    this.setupMqttListeners();
-    this.mqtt
-      .connect(sub.url, this.model.id, sub.jwt)
-      .then(() => {
-        // this.updateManifest();
-        this.subscribe();
-      })
-      .catch(err => {
-        console.err(err);
-        this.initPolling();
-      });
+  async initMqtt() {
+    try {
+      const {
+        id,
+        sub: { url, jwt },
+      } = this.model;
+
+      this.setupMqttListeners();
+
+      await this.mqtt.connect(url, id, jwt);
+      this.subscribe();
+    } catch (err) {
+      console.info('Cannot connect to MQTT');
+      console.error(err);
+
+      this.initPolling();
+    }
   }
 
   initPolling() {

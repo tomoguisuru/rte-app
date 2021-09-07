@@ -1,13 +1,16 @@
 import Service, { inject as service } from '@ember/service';
 import { A } from '@ember/array';
+import { tracked } from '@glimmer/tracking';
 
 export default class ManifestService extends Service {
   @service('rts-api') api;
 
-  event = null;
-  excludedStreams = A([]);
-  allStreams = A([]);
+  @tracked event = null;
+  @tracked excludedStreams = A([]);
+  @tracked allStreams = A([]);
+
   includeStaged = false;
+  updateViaWeb = false;
 
   get streams() {
     return this.allStreams.filter(
@@ -18,11 +21,17 @@ export default class ManifestService extends Service {
   async getManifest(eventId) {
     let url = `/events/${eventId}/manifest`;
 
-    if (this.includeStaged) {
-      const queryParams = new URLSearchParams({ include_staged: true });
+    const queryParams = new URLSearchParams();
 
-      url = `${url}?${queryParams}`;
+    if (this.includeStaged) {
+      queryParams.set('include_staged', true);
     }
+
+    if (this.updateViaWeb) {
+      queryParams.set('update_via_websocket', true);
+    }
+
+    url = queryParams ? `${url}?${queryParams}` : url;
 
     const json = await this.api.request(url);
 
@@ -33,7 +42,6 @@ export default class ManifestService extends Service {
     const { event } = json;
 
     this.event = event;
-
     this.setStreams();
   }
 
