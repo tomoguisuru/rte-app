@@ -57,11 +57,14 @@ export default class EventController extends Controller {
     async subscribe() {
         if(this.model){
             this.subscribeTopics.forEach(topicName => {
-                this.mqtt.subscribe(`rts/${this.model.id}/${topicName}`).then( (info)=>{
+                const topic = `rts/${this.model.id}/${topicName}`
+                this.mqtt.subscribe(topic).then( (info)=>{
                     this.isSubscribed = true;
+                    console.log(`Successfully subscribed to topic: ${topic}`);
                 }).catch(err => {
                     console.err(err);
                     this.isSubscribed = false;
+                    console.log(`Error subscribing to topic: ${topic}`);
                 });
             });
         }
