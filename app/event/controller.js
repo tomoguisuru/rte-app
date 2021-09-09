@@ -62,11 +62,12 @@ export default class EventController extends Controller {
       this.mqtt
         .subscribe(`rts/${this.model.id}/${topicName}`)
         .then(info => {
-          console.debug('info: ', info);
+          console.debug(`Successfully subscribed to topic: ${topic}`, info);
           this.isSubscribed = true;
         })
         .catch(() => {
           this.isSubscribed = false;
+          console.log(`Error subscribing to topic: ${topic}`);
         });
     });
   }
