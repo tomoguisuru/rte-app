@@ -23,8 +23,6 @@ export default class PublisherController extends Controller {
   @controller('event')
   eventController;
 
-  footerCenterControls = document.getElementById('footer_center_controls');
-
   @tracked hasPublisher = false;
   @tracked showPublisher = true;
   @tracked streamAudio = true;
@@ -34,7 +32,6 @@ export default class PublisherController extends Controller {
   audioOutputOptions = [];
   videoInputOptions = [];
 
-  publisherElementSelector = '#publisherStream';
   publisher = null;
   stream = null;
 
@@ -48,6 +45,10 @@ export default class PublisherController extends Controller {
 
   get domain() {
     return this.eventController.model.domain;
+  }
+
+  get footerCenterControls() {
+    return document.getElementById('footer_center_controls');
   }
 
   get videoElement() {
@@ -220,6 +221,7 @@ export default class PublisherController extends Controller {
   }
 
   async updateStream() {
+    this.stopTrack();
     await this.getUserMedia();
 
     this.videoElement.srcObject = this.mediaStream;
@@ -319,12 +321,14 @@ export default class PublisherController extends Controller {
   }
 
   @action
-  updateSelectedAudio(value) {
-    this.selectedAudioInput = value;
+  updateSelectedAudio(e) {
+    this.selectedVideoInput = e.target.value;
+    this.updateStream();
   }
 
   @action
-  updateSelectedVideo(value) {
-    this.selectedVideoInput = value;
+  updateSelectedVideo(e) {
+    this.selectedVideoInput = e.target.value;
+    this.updateStream();
   }
 }

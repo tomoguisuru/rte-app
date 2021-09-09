@@ -20,8 +20,6 @@ export default class PublisherController extends Controller {
   @controller('authenticated.event')
   eventController;
 
-  footerCenterControls = document.getElementById('footer_center_controls');
-
   @tracked hasPublisher = false;
   @tracked showPublisher = true;
   @tracked streamAudio = true;
@@ -43,6 +41,10 @@ export default class PublisherController extends Controller {
 
   get domain() {
     return this.eventController.model.domain;
+  }
+
+  get footerCenterControls() {
+    return document.getElementById('footer_center_controls');
   }
 
   get videoElement() {
