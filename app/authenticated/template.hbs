@@ -1,7 +1,7 @@
-Welcome {{this.user.firstName}}!
 
 {{outlet}}
 
 <Portal @target="header-title">
-    <UserLogout></UserLogout>
+    <UserLogout @username={{this.user.firstName}}>
+    </UserLogout>
 </Portal>

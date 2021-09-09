@@ -11,11 +11,15 @@ export default class EventController extends Controller {
     @service mqtt;
 
     pollInterval = 10 * 1000;
-    isProcessing = false;
+    pollTracker = null;
 
+    isProcessing = false;
     isSubscribed = false;
 
-    subscribeTopics = ['manifest', 'message'];
+    subscribeTopics = [
+      'manifest',
+      'message',
+    ];
 
     @tracked showStreamList = false;
 
@@ -30,15 +34,20 @@ export default class EventController extends Controller {
 
         const { event } = this.manifestService;
 
-        ['desc', 'state', 'title'].forEach(p => {
+        [
+          'desc',
+          'state',
+          'title',
+        ].forEach(p => {
           if (this.model[p] !== event[p]) {
             this.model[p] = event[p];
           }
         });
       } catch (err) {
-        console.log(err);
+        console.err(err);
       } finally {
         this.isProcessing = false;
+
         if (this.mqtt.connected && this.isSubscribed == false) {
           await this.subscribe();
         }
@@ -46,29 +55,50 @@ export default class EventController extends Controller {
     }
 
     async subscribe() {
-      if (this.model) {
-        this.subscribeTopics.forEach(topicName => {
-          this.mqtt
-            .subscribe(`rts/${this.model.id}/${topicName}`)
-            .then(info => {
-              console.debug('Info: ', info);
-              this.isSubscribed = true;
-            })
-            .catch(() => {
-              this.isSubscribed = false;
-            });
-        });
+      if (!this.model) {
+        return;
       }
+
+      this.subscribeTopics.forEach(topicName => {
+        this.mqtt
+          .subscribe(`rts/${this.model.id}/${topicName}`)
+          .then(info => {
+            console.debug('info: ', info);
+            this.isSubscribed = true;
+          })
+          .catch(() => {
+            this.isSubscribed = false;
+          });
+      });
     }
 
-    setupMqttOn() {
+    setupMqttListeners() {
+      this.mqtt.on('mqtt-connected',  () => {
+        console.info('MQTT connected.');
+      });
+
+      this.mqtt.on('mqtt-disconnected',  () => {
+        console.info('MQTT disconnected.');
+        this.isSubscribed = false;
+      });
+
+      this.mqtt.on('mqtt-close',  () => {
+        console.info('MQTT close.');
+        this.isSubscribed = false;
+      });
+
+      this.mqtt.on('mqtt-error',  () => {
+        console.info('MQTT Error.');
+      });
+
       this.mqtt.on('mqtt-message', (sTopic, sMessage) => {
+        console.info('message', sTopic);
         if (sTopic === `rts/${this.model.id}/message`) {
           let decoded = new TextDecoder('utf-8').decode(sMessage);
           let data = JSON.parse(decoded);
           // Implement this to the UI for onscreen messages
-          console.log('Message DATA:');
-          console.log(data);
+          console.info('Message DATA:');
+          console.info(data);
         } else if (sTopic === `rts/${this.model.id}/manifest`) {
           let decoded = new TextDecoder('utf-8').decode(sMessage);
           let data = JSON.parse(decoded);
@@ -77,16 +107,39 @@ export default class EventController extends Controller {
       });
     }
 
-    initMqtt() {
-      let sub = this.model.sub;
-
+    async initMqtt() {
       try {
-        this.mqtt.connect(sub.url, 'ClientApp', sub.jwt).then(() => {
-          this.setupMqttOn();
-          this.updateManifest();
-        });
-      } catch (e) {
-        console.log(e);
+        const {
+          id,
+          sub: { url, jwt },
+        } = this.model;
+
+        this.setupMqttListeners();
+
+        await this.mqtt.connect(url, id, jwt);
+        this.subscribe();
+      } catch (err) {
+        console.info('Cannot connect to MQTT');
+        console.error(err);
+
+        this.initPolling();
+      }
+    }
+
+    initPolling() {
+      if (this.pollTracker) {
+        return;
+      }
+
+      this.pollTracker = setInterval(() => {
+        this.updateManifest();
+      }, this.pollInterval);
+    }
+
+    isDestroying() {
+      if (this.pollTracker) {
+        clearInterval(this.pollTracker);
+        this.pollTracker = null;
       }
     }
 

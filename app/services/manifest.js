@@ -61,7 +61,7 @@ export default class ManifestService extends Service {
 
   _updateCollection(collectionA, collectionB) {
     // There is a bug here that occurs when you include/exclude a stream fast enough that collectionA is not yet flushed out.
-    // For stream includ/exclude actions with few seconds gap in between works fine here.
+    // For stream include/exclude actions with few seconds gap in between works fine here.
     const existingIds = collectionA.map(s => s.id);
     const expectedIds = collectionB.map(s => s.id);
 

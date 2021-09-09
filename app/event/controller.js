@@ -54,19 +54,21 @@ export default class EventController extends Controller {
   }
 
   async subscribe() {
-    if (this.model) {
-      this.subscribeTopics.forEach(topicName => {
-        this.mqtt
-          .subscribe(`rts/${this.model.id}/${topicName}`)
-          .then(info => {
-            console.debug('info: ', info);
-            this.isSubscribed = true;
-          })
-          .catch(() => {
-            this.isSubscribed = false;
-          });
-      });
+    if (!this.model) {
+      return;
     }
+
+    this.subscribeTopics.forEach(topicName => {
+      this.mqtt
+        .subscribe(`rts/${this.model.id}/${topicName}`)
+        .then(info => {
+          console.debug('info: ', info);
+          this.isSubscribed = true;
+        })
+        .catch(() => {
+          this.isSubscribed = false;
+        });
+    });
   }
 
   setupMqttListeners() {

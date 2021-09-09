@@ -31,7 +31,6 @@ export default class PublisherController extends Controller {
   audioOutputOptions = [];
   videoInputOptions = [];
 
-  publisherElementSelector = '#publisherStream';
   publisher = null;
 
   selectedAudioInput = null;
@@ -41,6 +40,14 @@ export default class PublisherController extends Controller {
 
   email = null;
   token = null;
+
+  get domain() {
+    return this.eventController.model.domain;
+  }
+
+  get videoElement() {
+    return document.getElementById('publisherStream');
+  }
 
   constructor() {
     super(...arguments);
@@ -83,32 +90,26 @@ export default class PublisherController extends Controller {
         const value = device.deviceId;
 
         switch (device.kind) {
-        case 'audioinput':
-          audioInputOptions.push({
-            value,
-            text:
-                              device.label ||
-                              `microphone ${audioInputOptions.length + 1}`,
-          });
-          break;
-        case 'audiooutput':
-          audioOutputOptions.push({
-            value,
-            text:
-                              device.label ||
-                              `speaker ${audioOutputOptions.length + 1}`,
-          });
-          break;
-        case 'videoinput':
-          videoInputOptions.push({
-            value,
-            text:
-                              device.label ||
-                              `camera ${videoInputOptions.length + 1}`,
-          });
-          break;
-        default:
-                  // do nothing
+          case 'audioinput':
+            audioInputOptions.push({
+              value,
+              text: device.label || `microphone ${audioInputOptions.length + 1}`,
+            });
+            break;
+          case 'audiooutput':
+            audioOutputOptions.push({
+              value,
+              text: device.label || `speaker ${audioOutputOptions.length + 1}`,
+            });
+            break;
+          case 'videoinput':
+            videoInputOptions.push({
+              value,
+              text: device.label || `camera ${videoInputOptions.length + 1}`,
+            });
+            break;
+          default:
+            // do nothing
         }
       });
 
@@ -119,35 +120,24 @@ export default class PublisherController extends Controller {
       this.selectedAudioInput = audioInputOptions[0].value;
       this.selectedVideoInput = videoInputOptions[0].value;
     } catch (err) {
-      console.log(err);
+      console.error('An error occurred while determining media sources', err);
     }
   }
 
   async initChannelExpress() {
-    const { domain, tags } = this.eventController.model;
-
-    const data = {
-      tags,
-      capabilities: [this.model.streamQuality, 'streaming', 'on-demand'],
+    const authOptions = {
       channelAlias: this.model.alias,
+      expiresIn: 3600,
     };
 
-    const adminApiProxyClient =
-          this.channelExpressService.createAdminApiProxyClient(
-            data,
-            'publish',
-          );
-
-    const pcastExpress = new sdk.express.PCastExpress({
-      adminApiProxyClient,
-    });
-
-    const pcast = pcastExpress.getPCast();
-    pcast._baseUri = domain;
+    const authToken = await this.channelExpressService.getToken(
+      authOptions,
+      'auth',
+    );
 
     this.channelExpress = new sdk.express.ChannelExpress({
-      adminApiProxyClient,
-      pcastExpress,
+      authToken,
+      uri: this.domain,
     });
   }
 
@@ -167,53 +157,75 @@ export default class PublisherController extends Controller {
       this.hasPublisher = true;
 
       return;
-
-      // this.captureTask = setInterval(
-      //     () => this.capture(),
-      //     this.captureIntervalInMS,
-      // );
     }
+
     this.stop();
 
     console.debug(response);
   }
 
   async publishToChannel() {
-    const videoElement = document.querySelector(
-      this.publisherElementSelector,
-    );
-    const { alias, channelName: name } = this.model;
-
-    const options = {
-      videoElement,
+    const publishOptions = {
       capabilities: [this.model.streamQuality, 'streaming', 'on-demand'],
-      channel: {
-        name,
-        alias,
-      },
-      frameRate: 24,
-      userMediaStream: this.mediaStream,
+      channelAlias: this.model.alias,
+      expiresIn: 3600,
     };
 
-    this.channelExpress.publishToChannel(options, (error, response) =>
-      this.publishCallback(error, response),
+    const publishToken = await this.channelExpressService.getToken(
+      publishOptions,
+      'publish',
     );
+
+    const {
+      alias,
+      title: name,
+    } = this.model;
+
+    const options = {
+      channel: {
+        alias,
+        name,
+      },
+      publishToken,
+      frameRate: 24,
+      userMediaStream: this.mediaStream,
+      videoElement: this.videoElement,
+    };
+
+    try {
+      this.channelExpress.publishToChannel(
+        options,
+        (error, response) => this.publishCallback(error, response),
+      );
+    } catch (err) {
+      console.error('Unable to publish feed', err);
+    }
+  }
+
+  stopTrack() {
+    const { srcObject } = this.videoElement;
+
+    if (!srcObject) {
+      return;
+    }
+
+    const tracks = srcObject.getTracks();
+
+    tracks.forEach(t => t.stop());
   }
 
   async updateStream() {
+    this.stopTrack();
     await this.getUserMedia();
 
-    const element = document.querySelector(this.publisherElementSelector);
-
-    element.srcObject = this.mediaStream;
+    this.videoElement.srcObject = this.mediaStream;
   }
 
   @action
   async onInsert() {
     this.updateStream();
-    const element = document.querySelector(this.publisherElementSelector);
 
-    element.muted = true;
+    this.videoElement.muted = true;
   }
 
   @action

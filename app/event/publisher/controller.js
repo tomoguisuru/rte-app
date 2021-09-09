@@ -46,6 +46,14 @@ export default class PublisherController extends Controller {
   email = null;
   token = null;
 
+  get domain() {
+    return this.eventController.model.domain;
+  }
+
+  get videoElement() {
+    return document.getElementById('publisherStream');
+  }
+
   constructor() {
     super(...arguments);
 
@@ -87,32 +95,26 @@ export default class PublisherController extends Controller {
         const value = device.deviceId;
 
         switch (device.kind) {
-        case 'audioinput':
-          audioInputOptions.push({
-            value,
-            text:
-                              device.label ||
-                              `microphone ${audioInputOptions.length + 1}`,
-          });
-          break;
-        case 'audiooutput':
-          audioOutputOptions.push({
-            value,
-            text:
-                              device.label ||
-                              `speaker ${audioOutputOptions.length + 1}`,
-          });
-          break;
-        case 'videoinput':
-          videoInputOptions.push({
-            value,
-            text:
-                              device.label ||
-                              `camera ${videoInputOptions.length + 1}`,
-          });
-          break;
-        default:
-                  // do nothing
+          case 'audioinput':
+            audioInputOptions.push({
+              value,
+              text: device.label || `microphone ${audioInputOptions.length + 1}`,
+            });
+            break;
+          case 'audiooutput':
+            audioOutputOptions.push({
+              value,
+              text: device.label || `speaker ${audioOutputOptions.length + 1}`,
+            });
+            break;
+          case 'videoinput':
+            videoInputOptions.push({
+              value,
+              text: device.label || `camera ${videoInputOptions.length + 1}`,
+            });
+            break;
+          default:
+            // do nothing
         }
       });
 
@@ -174,25 +176,18 @@ export default class PublisherController extends Controller {
       this.hasPublisher = true;
 
       return;
-
-      // this.captureTask = setInterval(
-      //     () => this.capture(),
-      //     this.captureIntervalInMS,
-      // );
     }
+
     this.stop();
 
     console.debug(response);
   }
 
   publishToChannel() {
-    const videoElement = document.querySelector(
-      this.publisherElementSelector,
-    );
     const { alias, external_name: name, stream_quality } = this.stream;
 
     const options = {
-      videoElement,
+      videoElement: this.videoElement,
       capabilities: [
         stream_quality,
         'streaming',
@@ -212,20 +207,29 @@ export default class PublisherController extends Controller {
     );
   }
 
+  stopTrack() {
+    const { srcObject } = this.videoElement;
+
+    if (!srcObject) {
+      return;
+    }
+
+    const tracks = srcObject.getTracks();
+
+    tracks.forEach(t => t.stop());
+  }
+
   async updateStream() {
     await this.getUserMedia();
 
-    const element = document.querySelector(this.publisherElementSelector);
-
-    element.srcObject = this.mediaStream;
+    this.videoElement.srcObject = this.mediaStream;
   }
 
   @action
   async onInsert() {
     this.updateStream();
-    const element = document.querySelector(this.publisherElementSelector);
 
-    element.muted = true;
+    this.videoElement.muted = true;
   }
 
   @action

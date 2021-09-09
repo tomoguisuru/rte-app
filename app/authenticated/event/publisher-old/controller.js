@@ -37,7 +37,7 @@ export default class PublisherController extends Controller {
   selectedAudioInput = null;
   selectedVideoInput = null;
 
-  pCastExpress = null;
+  channelExpress = null;
 
   email = null;
   token = null;
@@ -123,27 +123,32 @@ export default class PublisherController extends Controller {
     }
   }
 
-  async initPcastExpress() {
-    const authOptions = {
+  async initChannelExpress() {
+    const { domain, tags } = this.eventController.model;
+
+    const data = {
+      tags,
+      capabilities: [this.model.streamQuality, 'streaming', 'on-demand'],
       channelAlias: this.model.alias,
-      expiresIn: 3600,
     };
 
-    const authToken = await this.channelExpressService.getToken(
-      authOptions,
-      'auth',
-    );
+    const adminApiProxyClient =
+          this.channelExpressService.createAdminApiProxyClient(
+            data,
+            'publish',
+          );
 
-    const pcastOptions = {
-      authToken,
-      backendUri: 'https://example.com/pcast',
-    };
+    const pcastExpress = new sdk.express.PCastExpress({
+      adminApiProxyClient,
+    });
 
-    const pcast = new sdk.express.PCastExpress(pcastOptions);
+    const pcast = pcastExpress.getPCast();
+    pcast._baseUri = domain;
 
-    pcast._baseUri = this.eventController.model.domain;
-
-    this.pCastExpress = pcast;
+    this.channelExpress = new sdk.express.ChannelExpress({
+      adminApiProxyClient,
+      pcastExpress,
+    });
   }
 
   publishCallback(error, response) {
@@ -174,29 +179,23 @@ export default class PublisherController extends Controller {
   }
 
   async publishToChannel() {
-    const publishOptions = {
-      capabilities: [this.model.streamQuality, 'streaming', 'on-demand'],
-      channelAlias: this.model.alias,
-      expiresIn: 3600,
-    };
-
-    const publishToken = await this.channelExpressService.getToken(
-      publishOptions,
-      'publish',
-    );
     const videoElement = document.querySelector(
       this.publisherElementSelector,
     );
+    const { alias, channelName: name } = this.model;
 
     const options = {
-      publishToken,
       videoElement,
+      capabilities: [this.model.streamQuality, 'streaming', 'on-demand'],
+      channel: {
+        name,
+        alias,
+      },
       frameRate: 24,
-      tags: this.eventController.model.tags || [],
       userMediaStream: this.mediaStream,
     };
 
-    this.pCastExpress.publish(options, (error, response) =>
+    this.channelExpress.publishToChannel(options, (error, response) =>
       this.publishCallback(error, response),
     );
   }
@@ -225,8 +224,8 @@ export default class PublisherController extends Controller {
       console.debug(e.message);
     }
 
-    if (!this.pCastExpress) {
-      this.initPcastExpress();
+    if (!this.channelExpress) {
+      this.initChannelExpress();
     }
 
     this.publishToChannel();
@@ -252,7 +251,7 @@ export default class PublisherController extends Controller {
     this.hasJoined = false;
     this.publisher = null;
     this.hasPublisher = false;
-    this.pCastExpress = null;
+    this.channelExpress = null;
 
     this.onInsert();
   }
