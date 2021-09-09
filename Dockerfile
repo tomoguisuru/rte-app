@@ -1,5 +1,5 @@
 
-FROM node:10.23.3
+FROM node:12.22.6
 
 EXPOSE 4200 7357 9222
 

@@ -1,0 +1,44 @@
+{{#if (eq this.model.state 'complete')}}
+    <div class="notification">
+        This event has ended
+    </div>
+{{else if (eq this.manifestService.streams.length 0)}}
+    <div class="notification">
+        It looks like we're not quite ready yet, sorry
+    </div>
+{{/if}}
+
+<div class="rts-streams">
+    {{#each this.manifestService.streams as |stream|}}
+        <PhenixChannel
+            @stream={{stream}}
+        >
+        </PhenixChannel>
+    {{/each}}
+</div>
+
+{{outlet}}
+
+<Portal @target="header-title">
+    {{#if this.model.state}}
+    <span class="rts-pill rts-hdr__status {{concat 'rts-pill--' this.model.state}}">
+        {{this.model.state}}
+    </span>
+    {{/if}}
+
+    <h1>{{this.model.title}}</h1>
+</Portal>
+
+<Portal @target="footer-left">
+    {{#if this.hasJoined}}
+        <button class="rts-btn rts-btn--icon" type="button">
+            <span class="material-icons md-20">view_module</span>
+        </button>
+    {{/if}}
+</Portal>
+
+<Portal @target="footer-right">
+    <button class="rts-btn rts-btn--icon {{if this.showStreamList "rts-btn--secondary"}}" type="button" {{on 'click' this.toggleStreamList}}>
+        <span class="material-icons md-20">view_sidebar</span>
+    </button>
+</Portal>

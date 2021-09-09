@@ -1,0 +1,14 @@
+<h3>Events:</h3>
+
+<ul>
+{{#each this.model as |event|}}
+    <li>
+        {{event.title}}
+        {{#if (or (eq event.state 'staging') (eq event.state 'live'))}}
+        <a href="/events/{{event.id}}/publisher">Join</a>
+        {{/if}}
+    </li>
+{{else}}
+    No Events
+{{/each}}
+</ul>

@@ -5,21 +5,25 @@ import hmacSHA256 from 'crypto-js/hmac-sha256';
 import moment from 'moment';
 
 function AuthParams() {
-    const tmp = {
-        _owner: ENV.OWNER_ID,
-        _timestamp: moment().unix(),
-    }
+  const {
+    APP: { SERVICES },
+  } = ENV;
 
-    const json_str = JSON.stringify(tmp)
+  const tmp = {
+    _owner: SERVICES.OWNER_ID,
+    _timestamp: moment().unix(),
+  };
 
-    const comp = pako.deflate(json_str, {level: 9})
-    const compStr = String.fromCharCode(...comp)
+  const json_str = JSON.stringify(tmp);
 
-    var msg = btoa(compStr);
+  const comp = pako.deflate(json_str, { level: 9 });
+  const compStr = String.fromCharCode(...comp);
 
-    const sig = hmacSHA256(msg, ENV.API_KEY).toString();
+  var msg = btoa(compStr);
 
-    return {msg, sig};
+  const sig = hmacSHA256(msg, SERVICES.API_KEY).toString();
+
+  return { msg, sig };
 }
 
 export default AuthParams;

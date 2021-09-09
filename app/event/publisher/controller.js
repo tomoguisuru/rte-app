@@ -1,314 +1,334 @@
 import Controller from '@ember/controller';
-import {inject as service} from '@ember/service';
-import {inject as controller} from '@ember/controller';
-import {tracked} from '@glimmer/tracking';
-import {action} from '@ember/object';
+import { inject as service } from '@ember/service';
+import { inject as controller } from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import sdk from 'phenix-web-sdk';
 
 export default class PublisherController extends Controller {
-    queryParams = ['email', 'token']
+  queryParams = [
+    'email',
+    'token',
+  ];
 
-    @service('phenix-channel-express')
-    channelExpressService;
+  @service('phenix-channel-express')
+  channelExpressService;
 
-    @service('manifest')
-    manifestService;
+  @service('manifest')
+  manifestService;
 
-    @service('stream')
-    streamService;
+  @service('stream')
+  streamService;
 
-    @controller('event')
-    eventController;
+  @controller('event')
+  eventController;
 
-    footerCenterControls = document.getElementById('footer_center_controls');
+  @tracked hasPublisher = false;
+  @tracked showPublisher = true;
+  @tracked streamAudio = true;
+  @tracked streamVideo = true;
 
-    @tracked hasPublisher = false;
-    @tracked showPublisher = true;
-    @tracked streamAudio = true;
-    @tracked streamVideo = true;
+  audioInputOptions = [];
+  audioOutputOptions = [];
+  videoInputOptions = [];
 
-    audioInputOptions = [];
-    audioOutputOptions = [];
-    videoInputOptions = [];
+  publisher = null;
+  stream = null;
 
-    publisherElementSelector = '#publisherStream'
-    publisher = null;
-    stream = null;
+  selectedAudioInput = null;
+  selectedVideoInput = null;
 
-    selectedAudioInput = null;
-    selectedVideoInput = null;
+  channelExpress = null;
 
-    channelExpress = null;
+  email = null;
+  token = null;
 
-    email = null;
-    token = null;
+  get domain() {
+    return this.eventController.model.domain;
+  }
 
-    async init() {
-        super.init(...arguments);
+  get footerCenterControls() {
+    return document.getElementById('footer_center_controls');
+  }
 
-        await this.getUserMediaSources();
-    }
+  get videoElement() {
+    return document.getElementById('publisherStream');
+  }
 
-    async getUserMedia() {
-        const audioSource = this.selectedAudioInput;
-        const videoSource = this.selectedVideoInput;
-        const constraints = {
-            audio: this.streamAudio ? {deviceId: audioSource ? {exact: audioSource} : undefined} : false,
-            video: this.streamVideo ? {deviceId: videoSource ? {exact: videoSource} : undefined} : false,
-        };
+  constructor() {
+    super(...arguments);
 
-        this.mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+    this.getUserMediaSources();
+  }
 
-        return this.mediaStream;
-    }
+  async getUserMedia() {
+    const audioSource = this.selectedAudioInput;
+    const videoSource = this.selectedVideoInput;
+    const constraints = {
+      audio: this.streamAudio
+        ? { deviceId: audioSource ? { exact: audioSource } : undefined }
+        : false,
+      video: this.streamVideo
+        ? { deviceId: videoSource ? { exact: videoSource } : undefined }
+        : false,
+    };
 
-    async getUserMediaSources() {
-        try {
-            const devices = await navigator.mediaDevices.enumerateDevices();
+    this.mediaStream = await navigator.mediaDevices.getUserMedia(
+      constraints,
+    );
 
-            if (!devices) {
-                throw new Error('No devices');
-            }
+    return this.mediaStream;
+  }
 
-            const audioInputOptions = [];
-            const audioOutputOptions = [];
-            const videoInputOptions = [];
+  async getUserMediaSources() {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
 
-            devices.forEach(device => {
-                const value = device.deviceId;
+      if (!devices) {
+        throw new Error('No devices');
+      }
 
-                switch (device.kind) {
-                    case 'audioinput':
-                        audioInputOptions.push({
-                            value,
-                            text: device.label || `microphone ${audioInputOptions.length + 1}`,
-                        });
-                        break;
-                    case 'audiooutput':
-                        audioOutputOptions.push({
-                            value,
-                            text: device.label || `speaker ${audioOutputOptions.length + 1}`,
-                        });
-                        break;
-                    case 'videoinput':
-                        videoInputOptions.push({
-                            value,
-                            text: device.label || `camera ${videoInputOptions.length + 1}`,
-                        });
-                        break;
-                    default:
-                        // do nothing
-                }
+      const audioInputOptions = [];
+      const audioOutputOptions = [];
+      const videoInputOptions = [];
+
+      devices.forEach(device => {
+        const value = device.deviceId;
+
+        switch (device.kind) {
+          case 'audioinput':
+            audioInputOptions.push({
+              value,
+              text: device.label || `microphone ${audioInputOptions.length + 1}`,
             });
-
-            this.audioInputOptions = audioInputOptions;
-            this.audioOutputOptions = audioOutputOptions;
-            this.videoInputOptions = videoInputOptions;
-
-            this.selectedAudioInput = audioInputOptions[0].value;
-            this.selectedVideoInput = videoInputOptions[0].value;
-        } catch (err) {
-            console.log(err);
+            break;
+          case 'audiooutput':
+            audioOutputOptions.push({
+              value,
+              text: device.label || `speaker ${audioOutputOptions.length + 1}`,
+            });
+            break;
+          case 'videoinput':
+            videoInputOptions.push({
+              value,
+              text: device.label || `camera ${videoInputOptions.length + 1}`,
+            });
+            break;
+          default:
+            // do nothing
         }
+      });
+
+      this.audioInputOptions = audioInputOptions;
+      this.audioOutputOptions = audioOutputOptions;
+      this.videoInputOptions = videoInputOptions;
+
+      this.selectedAudioInput = audioInputOptions[0].value;
+      this.selectedVideoInput = videoInputOptions[0].value;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  initChannelExpress() {
+    const {
+      connectionInfo: { pcastDomain, tags, tokenUrl },
+    } = this.model;
+
+    this.channelExpressService.tokenUrl = tokenUrl;
+
+    const data = {
+      channelAlias: this.stream.alias,
+      tags,
+    };
+
+    const adminApiProxyClient =
+          this.channelExpressService.createAdminApiProxyClient(
+            data,
+            'publish',
+          );
+    const pcastExpress = new sdk.express.PCastExpress({
+      adminApiProxyClient,
+    });
+    const pcast = pcastExpress.getPCast();
+    pcast._baseUri = pcastDomain;
+
+    this.channelExpress = new sdk.express.ChannelExpress({
+      adminApiProxyClient,
+      pcastExpress,
+    });
+
+    this.hasJoined = true;
+  }
+
+  publishCallback(error, response) {
+    if (error || !response) {
+      console.error(error || 'Unknown Error');
+      return;
     }
 
-    initChannelExpress() {
-        const {
-            connectionInfo: {
-                pcastDomain,
-                tags,
-                tokenUrl,
-            },
-        } = this.model;
-
-        this.channelExpressService.tokenUrl = tokenUrl;
-
-        const data = {
-            channelAlias: this.stream.alias,
-            tags,
-        };
-
-        const adminApiProxyClient = this.channelExpressService
-            .createAdminApiProxyClient(data, 'publish');
-        const pcastExpress = new sdk.express.PCastExpress({
-            adminApiProxyClient,
-        });
-        const pcast = pcastExpress.getPCast();
-        pcast._baseUri = pcastDomain;
-
-        this.channelExpress = new sdk.express.ChannelExpress({
-            adminApiProxyClient,
-            pcastExpress,
-        });
-
-        this.hasJoined = true;
+    if (response.status === 'stream-ended') {
+      this.stop();
+      return;
     }
 
-    publishCallback(error, response) {
-        if (error || !response) {
-            console.error(error || 'Unknown Error');
-            return;
-        }
+    if (response.status === 'ok' && response.publisher) {
+      this.publisher = response.publisher;
+      this.hasPublisher = true;
 
-        if (response.status === 'stream-ended') {
-            this.stop();
-            return;
-        }
-
-        if (response.status === 'ok' && response.publisher) {
-            this.publisher = response.publisher;
-            this.hasPublisher = true;
-
-            return
-
-            // this.captureTask = setInterval(
-            //     () => this.capture(),
-            //     this.captureIntervalInMS,
-            // );
-        }
-        this.stop();
-
-        console.debug(response);
+      return;
     }
 
-    publishToChannel() {
-        const videoElement = document.querySelector(this.publisherElementSelector);
-        const {
-            alias,
-            external_name: name,
-            stream_quality,
-        } = this.stream;
+    this.stop();
 
-        const options = {
-            videoElement,
-            capabilities: [
-                stream_quality,
-                'streaming',
-                // 'broadcast',
-                // 'multi-bitrate',
-            ],
-            channel: {
-                name,
-                alias,
-            },
-            userMediaStream: this.mediaStream,
-            frameRate: 24,
-        };
+    console.debug(response);
+  }
 
-        this.channelExpress.publishToChannel(
-            options,
-            (error, response) => this.publishCallback(error, response),
-        )
+  publishToChannel() {
+    const { alias, external_name: name, stream_quality } = this.stream;
+
+    const options = {
+      videoElement: this.videoElement,
+      capabilities: [
+        stream_quality,
+        'streaming',
+        // 'broadcast',
+        // 'multi-bitrate',
+      ],
+      channel: {
+        name,
+        alias,
+      },
+      userMediaStream: this.mediaStream,
+      frameRate: 24,
+    };
+
+    this.channelExpress.publishToChannel(options, (error, response) =>
+      this.publishCallback(error, response),
+    );
+  }
+
+  stopTrack() {
+    const { srcObject } = this.videoElement;
+
+    if (!srcObject) {
+      return;
     }
 
-    async updateStream() {
-        await this.getUserMedia();
+    const tracks = srcObject.getTracks();
 
-        const element = document.querySelector(this.publisherElementSelector);
+    tracks.forEach(t => t.stop());
+  }
 
-        element.srcObject = this.mediaStream;
+  async updateStream() {
+    this.stopTrack();
+    await this.getUserMedia();
+
+    this.videoElement.srcObject = this.mediaStream;
+  }
+
+  @action
+  async onInsert() {
+    this.updateStream();
+
+    this.videoElement.muted = true;
+  }
+
+  @action
+  async publishStream() {
+    if (!this.email || !this.token) {
+      throw new Error('Email and Token must be valid');
     }
 
-    @action
-    async onInsert() {
-        this.updateStream();
-        const element = document.querySelector(this.publisherElementSelector)
+    try {
+      this.stream = await this.streamService.getStream(
+        this.model.id,
+        this.email,
+        this.token,
+      );
 
-        element.muted = true;
+      await this.streamService.readyStream(this.stream.id);
+
+      this.manifestService.includeStaged = true;
+      this.eventController.updateManifest();
+    } catch (e) {
+      console.debug(e.message);
     }
 
-    @action
-    async publishStream() {
-        if (!this.email || !this.token) {
-            throw new Error('Email and Token must be valid');
-        }
-
-        try {
-            this.stream = await this.streamService
-                .getStream(this.model.id, this.email, this.token);
-
-            await this.streamService.readyStream(this.stream.id);
-
-            this.manifestService.includeStaged = true;
-            this.eventController.updateManifest();
-
-        } catch (e) {
-            debugger
-            console.debug(e.message);
-        }
-
-        if (!this.channelExpress) {
-            this.initChannelExpress();
-        }
-
-        this.publishToChannel();
+    if (!this.channelExpress) {
+      this.initChannelExpress();
     }
 
-    @action
-    async stop() {
-        if (this.publisher) {
-            try {
-                await this.publisher.stop();
-                await this.streamService.leaveStream(this.stream.id);
-            } catch (err) {
-                console.debug(err);
-            }
-        }
+    this.publishToChannel();
+  }
 
-        if (this.mediaStream) {
-            this.mediaStream.getTracks().forEach(t => t.stop());
-
-            this.mediaStream = null;
-        }
-
-        this.hasJoined = false;
-        this.publisher = null;
-        this.hasPublisher = false;
-        this.channelExpress = null;
-
-        this.onInsert();
+  @action
+  async stop() {
+    if (this.publisher) {
+      try {
+        await this.publisher.stop();
+        await this.streamService.leaveStream(this.stream.id);
+      } catch (err) {
+        console.debug(err);
+      }
     }
 
-    @action
-    toggleAudioInput() {
-        this.toggleProperty('streamAudio');
-        this.updateStream();
+    if (this.mediaStream) {
+      this.mediaStream.getTracks().forEach(t => t.stop());
 
-        if (this.publisher) {
-            if (this.streamAudio) {
-                this.publisher.enableAudio();
-            } else {
-                this.publisher.disableAudio();
-            }
-        }
+      this.mediaStream = null;
     }
 
-    @action
-    toggleVideoInput() {
-        this.toggleProperty('streamVideo');
-        this.updateStream();
+    this.hasJoined = false;
+    this.publisher = null;
+    this.hasPublisher = false;
+    this.channelExpress = null;
 
-        if (this.publisher) {
-            if (this.streamVideo) {
-                this.publisher.enableVideo();
-            } else {
-                this.publisher.disableVideo();
-            }
-        }
-    }
+    this.onInsert();
+  }
 
-    @action
-    togglePublisher() {
-        this.toggleProperty('showPublisher');
-    }
+  @action
+  toggleAudioInput() {
+    this.streamAudio = !this.strea;
+    this.updateStream();
 
-    @action
-    updateSelectedAudio(value) {
-        this.selectedAudioInput = value;
+    if (this.publisher) {
+      if (this.streamAudio) {
+        this.publisher.enableAudio();
+      } else {
+        this.publisher.disableAudio();
+      }
     }
+  }
 
-    @action
-    updateSelectedVideo(value) {
-        this.selectedVideoInput = value;
+  @action
+  toggleVideoInput() {
+    this.streamVideo = !this.streamVideo;
+    this.updateStream();
+
+    if (this.publisher) {
+      if (this.streamVideo) {
+        this.publisher.enableVideo();
+      } else {
+        this.publisher.disableVideo();
+      }
     }
+  }
+
+  @action
+  togglePublisher() {
+    this.showPublisher = !this.showPublisher;
+  }
+
+  @action
+  updateSelectedAudio(e) {
+    this.selectedVideoInput = e.target.value;
+    this.updateStream();
+  }
+
+  @action
+  updateSelectedVideo(e) {
+    this.selectedVideoInput = e.target.value;
+    this.updateStream();
+  }
 }

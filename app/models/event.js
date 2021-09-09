@@ -1,4 +1,4 @@
-import {tracked} from '@glimmer/tracking';
+import { tracked } from '@glimmer/tracking';
 
 export default class RTSEvent {
     @tracked desc;
@@ -6,6 +6,6 @@ export default class RTSEvent {
     @tracked title;
 
     constructor(obj = {}) {
-        Object.assign(this, obj);
+      Object.assign(this, obj);
     }
 }

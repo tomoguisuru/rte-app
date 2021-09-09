@@ -40,6 +40,9 @@ Navigate to `http://localhost:4200/event/:rts_event_id`
 ## Installation
 
 ```bash
+# should be using node version 12.22.xx
+# should be using npm version 6.14.x
+nvm use 12
 npm install -g ember-cli
 git clone git@git.vzbuilders.com:bdrake/client-app.git
 cd client-app
@@ -136,7 +139,7 @@ NOTE: Your event must be in a `LIVE`state or no streams will be returned in the 
 
 Navigate to http://localhost:4200/event/:rts_event_id/publisher
 
-* `:rts_event_id` is the id of the event that you want to view
+`:rts_event_id` is the id of the event that you want to view
 
 You will need the `email` and `publisher_token` for the stream
 
