@@ -1,11 +1,7 @@
-import { tracked } from '@glimmer/tracking';
+import Model, { attr }from '@ember-data/model';
 
-export default class RTSEvent {
-    @tracked desc;
-    @tracked state;
-    @tracked title;
-
-    constructor(obj = {}) {
-      Object.assign(this, obj);
-    }
+export default class EventModel extends Model {
+    @attr('string') desc;
+    @attr('string') title;
+    @attr('string') state;
 }

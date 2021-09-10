@@ -52,7 +52,11 @@ module.exports = function (environment) {
         'wss://ws-emqx-ausw2-dp-1.downlynk.net/messages/',
       ],
       'img-src': ["'self'", 'data:'],
-      'style-src': ["'self'", 'https://fonts.googleapis.com/'],
+      'style-src': [
+        "'self'",
+        "'unsafe-inline'",
+        'https://fonts.googleapis.com/',
+      ],
       'media-src': ["'self'"],
     },
   };

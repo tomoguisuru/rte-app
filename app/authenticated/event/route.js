@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-import RTSEvent from '../../models/event';
+import RTSEvent from '../../objects/event';
 
 export default class EventRoute extends Route {
     @service('rts-api-manifest')

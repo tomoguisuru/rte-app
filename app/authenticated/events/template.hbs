@@ -1,14 +1,23 @@
-<h3>Events:</h3>
+<div class="rts-events">
+    <div class="rts-events--items">
+    {{#each this.model as |stream|}}
+        {{#with stream.event as |event|}}
+        <div class="rts-event">
+            <div class="rts-event--title">
+                <span>{{event.title}}</span>
+                <span class="rts-pill">{{event.state}}</span>
+            </div>
+            <p class="rts-event--description">
+                {{event.desc}}
+            </p>
 
-<ul>
-{{#each this.model as |event|}}
-    <li>
-        {{event.title}}
-        {{#if (or (eq event.state 'staging') (eq event.state 'live'))}}
-        <a href="/events/{{event.id}}/publisher">Join</a>
-        {{/if}}
-    </li>
-{{else}}
-    No Events
-{{/each}}
-</ul>
+            {{#if (or (eq event.state 'staging') (eq event.state 'live'))}}
+            <a class="rts-btn rts-btn--secondary" href="/events/{{event.id}}/publisher">Join</a>
+            {{/if}}
+        </div>
+        {{/with}}
+    {{else}}
+        <p>No Events</p>
+    {{/each}}
+    </div>
+</div>

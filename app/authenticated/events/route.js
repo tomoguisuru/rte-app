@@ -3,9 +3,13 @@ import { inject as service } from '@ember/service';
 
 export default class EventsRoute extends Route {
   @service event;
+  @service store;
+
+  async beforeModel() {
+    await this.store.findAll('stream');
+  }
 
   async model() {
-    await this.event.getStreams();
-    return this.event.events;
+    return this.store.peekAll('stream');
   }
 }

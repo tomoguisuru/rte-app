@@ -9,7 +9,7 @@ export default class AuthenticatedRoute extends Route {
     await this.session.requireAuthentication(transition, 'login');
 
     if (this.session.isAuthenticated && !this.currentUser.user) {
-      await this.currentUser.setCurrentUser();
+      await this.currentUser.load();
     }
   }
 }

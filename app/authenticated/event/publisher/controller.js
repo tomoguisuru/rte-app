@@ -233,9 +233,9 @@ export default class PublisherController extends Controller {
   @action
   async publishStream() {
     try {
-      await this.eventService.readyStream(this.model.id);
+      await this.model.readyStream();
     } catch (e) {
-      console.debug(e.message);
+      console.error(e.message);
     }
 
     if (!this.channelExpress) {

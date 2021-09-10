@@ -15,14 +15,18 @@
     background-color: $color-gray-dark;
     color: $color-white;
     transition: color 0.25s, background-color 0.25s;
+    text-decoration: none;
+    box-shadow: 2px 2px 6px 0px $color-black;
 
     &:hover {
         color: transparentize($color-white, 0.25);
+        box-shadow: 1px 1px 4px 0px $color-black;
     }
 
     &:active {
         color: $color-white;
         background-color: transparentize($color-gray-dark, 0.15);
+        box-shadow: none;
     }
 
     &--icon {
@@ -92,6 +96,11 @@
             background-color: transparentize($color-alert, 0.15);
         }
     }
+}
 
-
+a.rts-btn {
+    display: block;
+    text-align: center;
+    height: auto;
+    padding: 10px;
 }

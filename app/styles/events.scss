@@ -1,0 +1,40 @@
+.rts-events {
+    padding: 10px 50px;
+
+    &--items {
+        display: flex;
+    }
+
+    .rts-event {
+        background-color: $color-gray;
+        border-radius: 5px;
+        color: $color-black;
+        display: flex;
+        flex-direction: column;
+        margin: 5px;
+        min-width: 250px;
+        padding: 15px;
+
+        &--title {
+            align-items: center;
+            display: flex;
+
+            :first-child {
+                font-size: 20px;
+            }
+
+            :last-child {
+                color: $color-white;
+                margin-left: auto;
+            }
+        }
+
+        &--description {
+            font-style: italic;
+        }
+
+        :last-child {
+            margin-top: auto;
+        }
+    }
+}
