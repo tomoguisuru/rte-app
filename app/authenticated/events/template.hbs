@@ -12,7 +12,13 @@
             </p>
 
             {{#if (or (eq event.state 'staging') (eq event.state 'live'))}}
-            <a class="rts-btn rts-btn--secondary" href="/events/{{event.id}}/publisher">Join</a>
+            <LinkTo
+                class="rts-btn rts-btn--secondary"
+                @route='authenticated.event.publisher'
+                @model={{event.id}}
+            >
+                Join
+            </LinkTo>
             {{/if}}
         </div>
         {{/with}}
