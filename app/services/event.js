@@ -106,21 +106,9 @@ export default class EventService extends Service {
     );
 
     if (!('token' in resp)) {
-      throw new Error('Unabled to retrieve token');
+      throw new Error('Unable to retrieve token');
     }
 
     return resp.token;
-  }
-
-  async readyStream(id) {
-    const url = `/streams/${id}/ready`;
-
-    await this.api.request(url, 'post');
-  }
-
-  async leaveStream(id) {
-    const url = `/streams/${id}/leave`;
-
-    await this.api.request(url, 'post');
   }
 }

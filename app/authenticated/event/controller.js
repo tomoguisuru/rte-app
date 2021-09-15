@@ -2,9 +2,10 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-// import {v4 as uuidv4} from 'uuid';
 
-export default class EventController extends Controller {
+import BaseController from '../../event/controller';
+
+export default class EventController extends BaseController {
     @service('rts-api-manifest')
     manifestService;
 
@@ -63,11 +64,12 @@ export default class EventController extends Controller {
         this.mqtt
           .subscribe(`rts/${this.model.id}/${topicName}`)
           .then(info => {
-            console.debug('info: ', info);
+            console.debug(`Successfully subscribed to topic: ${topicName}`, info);
             this.isSubscribed = true;
           })
           .catch(() => {
             this.isSubscribed = false;
+            console.log(`Error subscribing to topic: ${topicName}`);
           });
       });
     }

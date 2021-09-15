@@ -1,4 +1,4 @@
-import Model, { attr, belongsTo }from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class StreamModel extends Model {
   @attr('string') alias;
@@ -6,10 +6,15 @@ export default class StreamModel extends Model {
   @attr('string') channelName;
   @attr('string') desc;
   @attr('string') ready;
-  @attr('string') streamQuality;
+  @attr('string') quality;
   @attr('string') title;
 
   @belongsTo('event') event;
+
+  async leaveStream() {
+    const adapter = this.store.adapterFor('stream');
+    return adapter.leave(this);
+  }
 
   async readyStream() {
     const adapter = this.store.adapterFor('stream');

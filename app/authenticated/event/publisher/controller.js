@@ -168,7 +168,11 @@ export default class PublisherController extends Controller {
 
   async publishToChannel() {
     const publishOptions = {
-      capabilities: [this.model.streamQuality, 'streaming', 'on-demand'],
+      capabilities: [
+        this.model.quality,
+        'streaming',
+        'on-demand',
+      ],
       channelAlias: this.model.alias,
       expiresIn: 3600,
     };
@@ -250,7 +254,7 @@ export default class PublisherController extends Controller {
     if (this.publisher) {
       try {
         await this.publisher.stop();
-        await this.eventService.leaveStream(this.stream.id);
+        await this.model.leaveStream();
       } catch (err) {
         console.debug(err);
       }

@@ -16,20 +16,4 @@ export default class StreamService extends Service {
 
     return json['@included'][0];
   }
-
-  async readyStream(id) {
-    const url = `/rts/streams/${id}/ready`;
-    const timestamp = Math.trunc(Date.now() / 1000);
-    const data = { timestamp };
-
-    await this.hyperionApi.request(url, 'put', data);
-  }
-
-  async leaveStream(id) {
-    const url = `/rts/streams/${id}/leave`;
-    const timestamp = Math.trunc(Date.now() / 1000);
-    const data = { timestamp };
-
-    await this.hyperionApi.request(url, 'put', data);
-  }
 }

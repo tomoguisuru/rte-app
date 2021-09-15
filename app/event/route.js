@@ -1,13 +1,11 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+
 import RTSEvent from '../objects/event';
 
 export default class EventRoute extends Route {
-  @service('manifest')
+  @service('rts-api-manifest')
   manifestService;
-
-  @service('phenix-channel-express')
-  channelExpressService;
 
   async model(params) {
     await this.manifestService.getManifest(params.event_id);
@@ -24,16 +22,11 @@ export default class EventRoute extends Route {
     if (!model) {
       return this.transitionTo('not-found');
     }
-
-    const {
-      connectionInfo: { tokenUrl },
-    } = model;
-
-    this.channelExpressService.tokenUrl = tokenUrl;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
+
     // Add mqtt listener (websocket)
     controller.initMqtt();
   }
