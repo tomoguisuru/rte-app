@@ -7,6 +7,9 @@ export default class EventRoute extends Route {
   @service('rts-api-manifest')
   manifestService;
 
+  @service('channel-express')
+  channelExpressService;
+
   // Needed so that shared implementations can share the template
   templateName = 'event'
 
@@ -25,6 +28,8 @@ export default class EventRoute extends Route {
     if (!model) {
       return this.transitionTo('not-found');
     }
+
+    this.channelExpressService.eventId = model.id;
   }
 
   setupController(controller) {
