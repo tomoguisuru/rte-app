@@ -1,13 +1,7 @@
-@import "normalize";
-@import "colors";
-@import "mixins";
-@import "type";
-@import "pill";
-@import "button";
-@import "field";
+@import "global";
+
 @import "form";
-@import "tray";
-@import "user-login";
+@import "components";
 @import "events";
 
 body, html {

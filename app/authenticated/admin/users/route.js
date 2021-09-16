@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class UsersRoute extends Route {
-  @service api;
   @service currentUser;
   @service store;
 
@@ -11,12 +10,11 @@ export default class UsersRoute extends Route {
 
     if (!(['admin'].includes(user.role))) {
       transition.abort();
-
-      this.transitionTo('events');
+      this.transitionTo('authenticated.events');
     }
   }
 
   async model() {
-    return this.store.findAll('event');
+    return this.store.findAll('user');
   }
 }

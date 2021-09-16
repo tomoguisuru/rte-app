@@ -1,6 +1,6 @@
-.rts-form {
 
-    &__item {
-        margin: 24px 0;
-    }
-}
+@import "form/pill";
+@import "form/button";
+@import "form/field";
+@import "form/form";
+@import "form/tray";

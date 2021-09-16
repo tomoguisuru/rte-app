@@ -6,11 +6,3 @@ export default class EventStreamModel extends Model {
     @belongsTo('stream') stream;
     @belongsTo('user') user;
 }
-
-/*
-  eventId: string;
-  ownerId: string;
-  streamId: string;
-  userId: string;
-}
-*/

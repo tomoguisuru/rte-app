@@ -1,0 +1,10 @@
+<div class="rts-users">
+    <h3>Users:</h3>
+    <ul class="rts-users--list">
+    {{#each this.model as |user|}}
+        <li class="rts-user">
+            <UserListItem @user={{user}}></UserListItem>
+        </li>
+    {{/each}}
+    </ul>
+</div>

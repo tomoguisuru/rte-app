@@ -10,10 +10,10 @@
 
 <div class="rts-streams">
     {{#each this.manifestService.streams as |stream|}}
-        <ChannelViewerNew
+        <PhenixChannel
             @stream={{stream}}
         >
-        </ChannelViewerNew>
+        </PhenixChannel>
     {{/each}}
 </div>
 

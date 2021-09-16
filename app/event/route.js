@@ -7,6 +7,9 @@ export default class EventRoute extends Route {
   @service('rts-api-manifest')
   manifestService;
 
+  // Needed so that shared implementations can share the template
+  templateName = 'event'
+
   async model(params) {
     await this.manifestService.getManifest(params.event_id);
     const { event } = this.manifestService;
