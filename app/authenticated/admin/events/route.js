@@ -5,6 +5,6 @@ export default class EventRoute extends Route {
   @service store;
 
   async model() {
-    return this.store.findAll('event');
+    return this.store.query('event', { page: 1, page_size: 20 });
   }
 }

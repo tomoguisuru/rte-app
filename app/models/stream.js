@@ -5,11 +5,14 @@ export default class StreamModel extends Model {
   @attr('string') channelId;
   @attr('string') channelName;
   @attr('string') desc;
+  @attr('string') eventId;
   @attr('string') ready;
   @attr('string') quality;
   @attr('string') title;
+  @attr('string') userId;
 
   @belongsTo('event') event;
+  @belongsTo('user') user;
 
   async leaveStream() {
     const adapter = this.store.adapterFor('stream');

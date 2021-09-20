@@ -3,6 +3,7 @@
 
     &--items {
         display: flex;
+        flex-wrap: wrap;
     }
 
     .rts-event {

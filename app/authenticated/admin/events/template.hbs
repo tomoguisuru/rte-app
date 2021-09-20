@@ -1,7 +1,27 @@
-<div>
-    {{#each this.model as |event|}}
-        {{event.title}}
-    {{/each}}
+<div class="rts-events">
+  <div class="rts-events--items">
+  {{#each this.model as |event|}}
+    <div class="rts-event">
+      <div class="rts-event--title">
+        <span>{{event.title}}</span>
+        <span class="rts-pill">{{event.state}}</span>
+      </div>
+      <p class="rts-event--description">
+        {{event.desc}}
+      </p>
+
+      <LinkTo
+        class="rts-btn rts-btn--secondary"
+        @route='authenticated.admin.events.event'
+        @model={{event.id}}
+      >
+        Details
+      </LinkTo>
+    </div>
+  {{else}}
+  <p>No Events</p>
+  {{/each}}
+  </div>
 </div>
 
 {{outlet}}

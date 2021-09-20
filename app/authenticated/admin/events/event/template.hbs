@@ -1,3 +1,26 @@
-<div>
-    YO SUCKA!{{this.model.title}}
+<div class="event">
+  {{this.model.title}}
+
+  <div class="event-streams">
+  {{#each this.model.streams as |stream|}}
+    <div class="event-streams--item">
+      <span>{{stream.title}}</span>
+      <select class="rts-select" {{on 'change' (fn this.updateUser stream)}}>
+      {{#if (not stream.userId)}}
+        <option disabled selected value>-- Select a User --</option>
+      {{/if}}
+      {{#each this.users as |user|}}
+        <option
+          value="{{user.id}}"
+          selected="{{if (eq user.id stream.userId) 'true'}}"
+          >
+          {{user.firstName}} {{user.lastName}} ({{user.email}})
+        </option>
+      {{/each}}
+      </select>
+
+      <span>Dirty? {{stream.hasDirtyAttributes}}</span>
+    </div>
+  {{/each}}
+  </div>
 </div>
