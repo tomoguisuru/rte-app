@@ -208,6 +208,33 @@ export default class PublisherController extends Controller {
     }
   }
 
+  async reset() {
+    if (this.publisher) {
+      try {
+        await this.publisher.stop();
+      } catch (err) {
+        console.debug(err);
+      }
+    }
+
+    try {
+      await this.model.leaveStream();
+    } catch (err) {
+      console.debug(err);
+    }
+
+    if (this.mediaStream) {
+      this.mediaStream.getTracks().forEach(t => t.stop());
+
+      this.mediaStream = null;
+    }
+
+    this.hasJoined = false;
+    this.publisher = null;
+    this.hasPublisher = false;
+    this.channelExpress = null;
+  }
+
   stopTrack() {
     const { srcObject } = this.videoElement;
 
@@ -251,25 +278,7 @@ export default class PublisherController extends Controller {
 
   @action
   async stop() {
-    if (this.publisher) {
-      try {
-        await this.publisher.stop();
-        await this.model.leaveStream();
-      } catch (err) {
-        console.debug(err);
-      }
-    }
-
-    if (this.mediaStream) {
-      this.mediaStream.getTracks().forEach(t => t.stop());
-
-      this.mediaStream = null;
-    }
-
-    this.hasJoined = false;
-    this.publisher = null;
-    this.hasPublisher = false;
-    this.channelExpress = null;
+    await this.reset();
 
     this.onInsert();
   }

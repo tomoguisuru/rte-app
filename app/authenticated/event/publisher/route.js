@@ -10,4 +10,11 @@ export default class PublisherRoute extends Route {
     const streams = await this.store.findAll('stream');
     return streams.find(s => s.belongsTo('event').id() === event.id);
   }
+
+  // @action
+  async resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.reset();
+    }
+  }
 }

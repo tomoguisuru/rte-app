@@ -43,7 +43,7 @@ export default class EventController extends Controller {
         }
       });
     } catch (err) {
-      console.err(err);
+      console.error(err);
     } finally {
       this.isProcessing = false;
 
