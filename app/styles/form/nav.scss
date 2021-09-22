@@ -1,0 +1,41 @@
+.rts-nav {
+  > div {
+    align-items: center;
+    display: flex;
+
+    nav {
+      ul {
+        display: flex;
+        margin: 0;
+        overflow: hidden;
+        padding: 0;
+
+        li {
+          list-style: none;
+
+          a {
+            color: white;
+            display: block;
+            padding: 20px 15px 10px;
+            text-decoration: none;
+
+            &:hover {
+              background-color: $color-gray-darkest;
+              text-decoration: none;
+            }
+
+            &:active, &.active {
+              background-color: $color-gray;
+              text-decoration: none;
+            }
+          }
+        }
+      }
+    }
+
+    > button {
+      margin-left: auto;
+    }
+  }
+}
+

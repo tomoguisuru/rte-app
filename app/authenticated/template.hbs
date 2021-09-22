@@ -1,7 +1,17 @@
 
 {{outlet}}
 
-<Portal @target="header-title">
-    <UserLogout @username={{this.user.firstName}}>
-    </UserLogout>
+<Portal @target="nav">
+  <nav>
+    <ul>
+      <li><LinkTo @route="authenticated.events">My Events</LinkTo></li>
+      {{#if (eq this.user.role "admin")}}
+      <li><LinkTo @route="authenticated.admin.users">Users</LinkTo></li>
+      <li><LinkTo @route="authenticated.admin.events">Events</LinkTo></li>
+      {{/if}}
+    </ul>
+  </nav>
+
+  <UserLogout @username={{this.user.firstName}}>
+  </UserLogout>
 </Portal>
