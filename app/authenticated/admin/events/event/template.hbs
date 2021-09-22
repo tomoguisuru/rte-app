@@ -1,26 +1,52 @@
 <div class="event">
-  {{this.model.title}}
-
-  <div class="event-streams">
-  {{#each this.model.streams as |stream|}}
-    <div class="event-streams--item">
-      <span>{{stream.title}}</span>
-      <select class="rts-select" {{on 'change' (fn this.updateUser stream)}}>
-      {{#if (not stream.userId)}}
-        <option disabled selected value>-- Select a User --</option>
-      {{/if}}
-      {{#each this.users as |user|}}
-        <option
-          value="{{user.id}}"
-          selected="{{if (eq user.id stream.userId) 'true'}}"
-          >
-          {{user.firstName}} {{user.lastName}} ({{user.email}})
-        </option>
-      {{/each}}
-      </select>
-
-      <span>Dirty? {{stream.hasDirtyAttributes}}</span>
+  <div class="event--wrapper">
+    <div class="event-header">
+      <div class="event-header--title">
+        {{this.model.title}}
+      </div>
+      <div class="event-header--desc">
+        {{this.model.desc}}
+      </div>
     </div>
-  {{/each}}
+
+    <div class="event-streams">
+      <div class="event-streams--header">
+        Streams:
+      </div>
+
+      {{#each this.model.streams as |stream|}}
+      <div class="event-streams--item">
+        <div class="rts-form__item">
+          <div class="rts-field rts-field--select">
+            <div class="rts-field__bin">
+              <label class="rts-field__label">{{stream.title}}</label>
+              <select class="rts-field__input" {{on 'change' (fn this.updateUser stream)}}>
+              {{#if (not stream.userId)}}
+                <option disabled selected value>-- Select a User --</option>
+              {{/if}}
+              {{#each this.users as |user|}}
+                <option
+                  value="{{user.id}}"
+                  selected="{{if (eq user.id stream.userId) 'true'}}"
+                  >
+                  {{user.firstName}} {{user.lastName}} ({{user.email}})
+                </option>
+              {{/each}}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{else}}
+      <span>No Publisher Streams</span>
+      {{/each}}
+    </div>
+
+    <LinkTo
+      class="rts-btn rts-btn--primary"
+      @route="authenticated.admin.events"
+    >
+      Close
+    </LinkTo>
   </div>
 </div>

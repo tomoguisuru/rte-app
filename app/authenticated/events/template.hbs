@@ -2,25 +2,10 @@
     <div class="rts-events--items">
     {{#each this.model as |stream|}}
         {{#with stream.event as |event|}}
-        <div class="rts-event">
-            <div class="rts-event--title">
-                <span>{{event.title}}</span>
-                <span class="rts-pill">{{event.state}}</span>
-            </div>
-            <p class="rts-event--description">
-                {{event.desc}}
-            </p>
-
-            {{#if (or (eq event.state 'staging') (eq event.state 'live'))}}
-            <LinkTo
-                class="rts-btn rts-btn--secondary"
-                @route='authenticated.event.publisher'
-                @model={{event.id}}
-            >
-                Join
-            </LinkTo>
-            {{/if}}
-        </div>
+        <EventItem
+          @event={{event}}
+          @onClick={{fn this.onEventClick event.id}}
+        ></EventItem>
         {{/with}}
     {{else}}
         <p>No Events</p>

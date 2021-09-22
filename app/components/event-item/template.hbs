@@ -1,0 +1,12 @@
+<a
+  class="rts-event"
+  {{on "click" (fn @onClick)}}
+>
+    <div class="rts-event--title">
+        <span>{{@event.title}}</span>
+        <span class="rts-pill">{{@event.state}}</span>
+    </div>
+    <p class="rts-event--description">
+        {{@event.desc}}
+    </p>
+</a>
