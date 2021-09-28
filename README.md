@@ -1,7 +1,6 @@
 # Phenix Client Demo App
 
-Basic demo of a client app using the manifest data provided
-from the `v4 services` API
+Basic implementation demo for EdgeCast Real Time Events
 
 ## Prerequisites
 
@@ -12,22 +11,27 @@ You will need the following things properly installed on your computer.
 * [Ember CLI](https://ember-cli.com/)
 * [Google Chrome](https://google.com/chrome/)
 
----
+
+
+This application requires a backend API to be setup to handle requests.
+
+You can find a pre-constructed demo API [here](https://github.com/tomoguisuru/rte-api)
+
+Both are provided as an example only and are provided without warranty or support
 
 ---
 
 ## Docker
 ```bash
-git clone git@git.vzbuilders.com:bdrake/client-app.git
+git clone <current-repo-ssh-link>
 cd client-app
 ```
 create .env file and add:
 
 ```
-CMS_HOST=http://services.uplynk.com
-CMS_OWNER_ID=<uplynk_owner_id>
-CMS_API_KEY=<uplynk_integration_key>
+API_HOST=https://rtsapi.uplynk.com
 ```
+
 run docker with the following commands
 
 ```bash
@@ -35,7 +39,8 @@ docker build . -t client-app
 docker run -d -p 4200:4200 -p 7357:7357 -p 9222:9222 client-app
 ```
 
-Navigate to `http://localhost:4200/event/:rts_event_id`
+Client: `http://localhost:4200/event/:rts_event_id`
+Admin/Publisher: `http://localhost:4200`
 
 ## Installation
 
@@ -44,7 +49,7 @@ Navigate to `http://localhost:4200/event/:rts_event_id`
 # should be using npm version 6.14.x
 nvm use 12
 npm install -g ember-cli
-git clone git@git.vzbuilders.com:bdrake/client-app.git
+git clone <current-repo-ssh-link>
 cd client-app
 npm install
 ```
@@ -67,9 +72,7 @@ touch .env.staging
 you will then need to add the following to each file
 
 ```
-CMS_HOST=<api_domain>
-CMS_OWNER_ID=cms_owner_id
-CMS_API_KEY=cms_integration_key
+API_HOST=https://rtsapi.uplynk.com
 ```
 
 ### Where do I get my `owner_id` and `integration key`?
@@ -80,23 +83,18 @@ CMS_API_KEY=cms_integration_key
 
 _.env.development_
 ```
-CMS_HOST=http://services.downlynk.localhost:8000
-CMS_OWNER_ID=<downlynk_owner_id>
-CMS_API_KEY=<downlynk_integration_key>
+API_HOST=https://rtsapi.uplynk.com
 ```
 
 _.env.staging_
 ```
-CMS_HOST=http://services.uplynk.localhost:8000
-CMS_OWNER_ID=<uplynk_owner_id>
-CMS_API_KEY=<uplynk_integration_key>
+API_HOST=https://rtsapi-staging.uplynk.com
 ```
 
 _.env_
 ```
-CMS_HOST=http://services.uplynk.com
-CMS_OWNER_ID=<uplynk_owner_id>
-CMS_API_KEY=<uplynk_integration_key>
+
+API_HOST=http://rtsapi.uplynk.localhost:3000
 ```
 
 ---
@@ -137,15 +135,9 @@ ___
 
 NOTE: Your event must be in a `LIVE`state or no streams will be returned in the manifest
 
-Navigate to http://localhost:4200/event/:rts_event_id/publisher
+Navigate to http://localhost:4200/
 
-`:rts_event_id` is the id of the event that you want to view
-
-You will need the `email` and `publisher_token` for the stream
-
-You can also "pin" the URL as follows
-
-http://localhost:4200/event/:rts_event_id/publisher?email=john.doe@example.com&token=asdf1234
+Login using either an `admin` or `publisher` account
 
 ---
 
