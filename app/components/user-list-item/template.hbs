@@ -1,4 +1,7 @@
-<div class="user-list-item">
+<a
+  class="user-list-item"
+  {{on "click" (fn @onClick)}}
+>
     <div class="user-list-item--bubble">
         {{this.initials}}
     </div>
@@ -11,4 +14,4 @@
             {{@user.email}}
         </div>
     </div>
-</div>
+</a>

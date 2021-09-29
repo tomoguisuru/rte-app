@@ -1,0 +1,12 @@
+.users {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  flex: 2;
+
+  &--items {
+    display: flex;
+    flex-direction: column;
+  }
+}

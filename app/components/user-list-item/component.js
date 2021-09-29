@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
 
 export default class UserListItemComponent extends Component {
-  // @tracked user;
-
   get initials() {
     const {
       user: {

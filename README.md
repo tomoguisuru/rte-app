@@ -1,4 +1,4 @@
-# Phenix Client Demo App
+# Real Time Events Demo App
 
 Basic implementation demo for EdgeCast Real Time Events
 
