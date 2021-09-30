@@ -1,44 +1,46 @@
 {{#if this.showPublisher}}
-<aside class="rts-tray">
-  <div class="rts-settings">
-    <div class="rts-settings__preview" {{did-insert this.onInsert}}>
-      <video id="publisherStream" playsinline autoplay muted></video>
-    </div>
+<aside class="rts-tray publisher">
+  <div class="rts-tray__wrapper">
+    <div class="rts-settings">
+      <div class="rts-settings__preview" {{did-insert this.onInsert}}>
+        <video id="publisherStream" playsinline autoplay muted></video>
+      </div>
 
-    <div class="rts-settings__config">
-      <form class="rts-form">
-        {{#unless this.hasPublisher}}
-        <div class="rts-form__item">
-          <div class="rts-field rts-field--select">
-            <div class="rts-field__bin">
-              <label class="rts-field__label">Camera</label>
-              <select class="rts-field__input" {{on 'change' this.updateSelectedVideo}}>
-                {{#each this.videoInputOptions as |input|}}
-                <option value="{{input.value}}">{{input.text}}</option>
-                {{/each}}
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="rts-form__item">
-          <div class="rts-field rts-field--select">
-            <div class="rts-field__bin">
-              <label class="rts-field__label">Microphone</label>
-              <select class="rts-field__input" {{on 'change' this.updateSelectedAudio}}>
-                {{#each this.audioInputOptions as |input|}}
-                <option value="{{input.value}}">{{input.text}}</option>
-                {{/each}}
-              </select>
-            </div>
-            <div class="rts-field__hint">
-              <div class="rts-field__audio">
+      <div class="rts-settings__config">
+        <form class="rts-form">
+          {{#unless this.hasPublisher}}
+          <div class="rts-form__item">
+            <div class="rts-field rts-field--select">
+              <div class="rts-field__bin">
+                <label class="rts-field__label">Camera</label>
+                <select class="rts-field__input" {{on 'change' this.updateSelectedVideo}}>
+                  {{#each this.videoInputOptions as |input|}}
+                  <option value="{{input.value}}">{{input.text}}</option>
+                  {{/each}}
+                </select>
               </div>
             </div>
           </div>
-        </div>
-        {{/unless}}
-      </form>
+
+          <div class="rts-form__item">
+            <div class="rts-field rts-field--select">
+              <div class="rts-field__bin">
+                <label class="rts-field__label">Microphone</label>
+                <select class="rts-field__input" {{on 'change' this.updateSelectedAudio}}>
+                  {{#each this.audioInputOptions as |input|}}
+                  <option value="{{input.value}}">{{input.text}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="rts-field__hint">
+                <div class="rts-field__audio">
+                </div>
+              </div>
+            </div>
+          </div>
+          {{/unless}}
+        </form>
+      </div>
     </div>
   </div>
 </aside>

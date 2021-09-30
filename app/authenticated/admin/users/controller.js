@@ -15,6 +15,6 @@ export default class UsersController extends Controller {
   @action
   onUserClick(userId) {
     this.selectedUserId = userId;
-    this.router.transitionTo('authenticated.admin.users.user', userId);
+    this.router.transitionTo('authenticated.admin.users.edit', userId);
   }
 }

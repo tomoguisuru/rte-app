@@ -2,7 +2,9 @@
 
 @import "form";
 @import "components";
+
 @import "events";
+@import "streams";
 @import "users";
 
 body,
@@ -85,59 +87,6 @@ body {
   max-height: 100%;
   overflow: hidden;
   position: relative;
-}
-
-.rts-streams {
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1;
-  height: 100%;
-  justify-content: center;
-  margin: 0 auto;
-  max-width: 1166px;
-
-  .rts-stream {
-    border: none;
-    display: none;
-
-    &.is-active {
-      display: flex;
-    }
-  }
-}
-
-.rts-stream {
-  border-radius: 4px;
-  border: 2px solid transparent;
-  display: flex;
-  flex: 1;
-  margin: 4px;
-  position: relative;
-
-  &.is-active {
-    border-color: $color-primary;
-  }
-
-  video {
-    margin: auto auto;
-    width: 100%;
-  }
-
-  &__head {
-    @include scrimGradient($direction: "to top");
-    bottom: 0;
-    color: $color-white;
-    display: flex;
-    justify-content: space-between;
-    left: 0;
-    padding: 6px 12px;
-    position: absolute;
-    right: 0;
-  }
-
-  &__title {
-    margin: 8px;
-  }
 }
 
 video {
