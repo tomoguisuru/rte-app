@@ -12,40 +12,10 @@
 }
 
 .event {
-  flex: 1;
-  padding: 10px 0;
-  background-color: $color-gray-darkest;
-
-  &-header {
-    padding-bottom: 20px;
-
-    &--title {
-      font-size: 24px;
-    }
-
-    &--desc {
-      font-style: italic;
-    }
-  }
-
   &-streams {
     &--header {
       font-size: 20px;
       padding-bottom: 10px;
-    }
-
-  }
-
-  &--wrapper {
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow-y: auto;
-
-    > :last-child {
-      color: $color-white;
-      margin-top: auto;
     }
   }
 }

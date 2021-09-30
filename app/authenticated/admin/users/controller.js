@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 
 export default class UsersController extends Controller {
   @service currentUser;
+  @service router;
 
   selectedUserId = null;
 

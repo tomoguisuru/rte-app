@@ -9,4 +9,8 @@ export default class UserAdapter extends ApplicationAdapter {
 
     return super.urlForQueryRecord(...arguments);
   }
+
+  urlForCreateRecord() {
+    return super.urlForCreateRecord(...arguments) + '/register';
+  }
 }

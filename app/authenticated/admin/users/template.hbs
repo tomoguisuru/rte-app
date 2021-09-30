@@ -8,3 +8,14 @@
     {{/each}}
   </div>
 </div>
+
+{{outlet}}
+
+{{#if (eq this.router.currentRouteName "authenticated.admin.users.index")}}
+  <LinkTo
+    @route="authenticated.admin.users.new"
+    class="users--add-user rts-btn rts-btn--primary"
+  >
+    +
+  </LinkTo>
+{{/if}}

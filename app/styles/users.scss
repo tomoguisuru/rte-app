@@ -9,4 +9,19 @@
     display: flex;
     flex-direction: column;
   }
+
+  &--add-user {
+    position: absolute;
+    display: block;
+    right: 0;
+    height: 34px;
+    width: 34px;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 10px;
+    right: 10px;
+    font-size: 30px;
+  }
 }

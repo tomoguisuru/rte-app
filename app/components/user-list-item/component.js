@@ -4,9 +4,9 @@ export default class UserListItemComponent extends Component {
   get initials() {
     const {
       user: {
-        firstName ='',
+        firstName = '',
         lastName = '',
-      } ,
+      },
     } = this.args;
 
     return `${firstName[0]}${lastName[0]}`.toUpperCase();

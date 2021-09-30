@@ -4,6 +4,7 @@ export default class UserModel extends Model {
     @attr('string') firstName;
     @attr('string') lastName;
     @attr('string') email;
+    @attr('string') password;
     @attr('string') role;
 
     @hasMany('stream') streams;
