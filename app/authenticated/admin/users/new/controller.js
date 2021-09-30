@@ -9,7 +9,7 @@ export default class NewUserController extends Controller {
   @action
   async onSave() {
     try {
-      const user = this.store.createRecord('User', {
+      const user = this.store.createRecord('user', {
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,

@@ -9,6 +9,6 @@ export default class UserListItemComponent extends Component {
       },
     } = this.args;
 
-    return `${firstName[0]}${lastName[0]}`.toUpperCase();
+    return `${firstName[0] || ''}${lastName[0] || ''}`.toUpperCase();
   }
 }
