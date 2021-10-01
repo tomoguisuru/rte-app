@@ -1,6 +1,6 @@
 {{#if this.showPublisher}}
-<aside class="rts-tray publisher">
-  <div class="rts-tray__wrapper">
+<RtsTray @trayClass="publisher">
+  <:content>
     <div class="rts-settings">
       <div class="rts-settings__preview" {{did-insert this.onInsert}}>
         <video id="publisherStream" playsinline autoplay muted></video>
@@ -9,41 +9,29 @@
       <div class="rts-settings__config">
         <form class="rts-form">
           {{#unless this.hasPublisher}}
-          <div class="rts-form__item">
-            <div class="rts-field rts-field--select">
-              <div class="rts-field__bin">
-                <label class="rts-field__label">Camera</label>
-                <select class="rts-field__input" {{on 'change' this.updateSelectedVideo}}>
-                  {{#each this.videoInputOptions as |input|}}
-                  <option value="{{input.value}}">{{input.text}}</option>
-                  {{/each}}
-                </select>
-              </div>
-            </div>
-          </div>
 
-          <div class="rts-form__item">
-            <div class="rts-field rts-field--select">
-              <div class="rts-field__bin">
-                <label class="rts-field__label">Microphone</label>
-                <select class="rts-field__input" {{on 'change' this.updateSelectedAudio}}>
-                  {{#each this.audioInputOptions as |input|}}
-                  <option value="{{input.value}}">{{input.text}}</option>
-                  {{/each}}
-                </select>
-              </div>
-              <div class="rts-field__hint">
-                <div class="rts-field__audio">
-                </div>
-              </div>
-            </div>
-          </div>
+          <RtsField @type="select" @label="Camera">
+            <select class="rts-field__input" {{on 'change' this.updateSelectedVideo}}>
+              {{#each this.videoInputOptions as |input|}}
+              <option value="{{input.value}}">{{input.text}}</option>
+              {{/each}}
+            </select>
+          </RtsField>
+
+          <RtsField @type="select" @label="Microphone">
+            <select class="rts-field__input" {{on 'change' this.updateSelectedAudio}}>
+              {{#each this.audioInputOptions as |input|}}
+              <option value="{{input.value}}">{{input.text}}</option>
+              {{/each}}
+            </select>
+          </RtsField>
+
           {{/unless}}
         </form>
       </div>
     </div>
-  </div>
-</aside>
+  </:content>
+</RtsTray>
 {{/if}}
 
 <Portal @target="footer-center">
@@ -60,16 +48,19 @@
   </button>
 
   {{#if this.hasPublisher}}
-  <button class="rts-btn rts-btn--primary" type="button" {{on 'click' this.stop}}>Leave</button>
-  {{else}}
-  <button class="rts-btn rts-btn--primary" type="button" {{on 'click' this.publishStream}}>Join</button>
+    <button class="rts-btn rts-btn--primary" type="button" {{on 'click' this.stop}}>
+      Leave
+    </button>
+    {{else}}
+    <button class="rts-btn rts-btn--primary" type="button" {{on 'click' this.publishStream}}>
+      Join
+    </button>
   {{/if}}
 
 </Portal>
 
 <Portal @target="footer-right">
-  <button class="rts-btn rts-btn--icon {{if this.showPublisher " rts-btn--secondary"}}" type="button" {{on "click"
-    this.togglePublisher}}>
+  <button class="rts-btn rts-btn--icon {{if this.showPublisher " rts-btn--secondary"}}" type="button" {{on "click" this.togglePublisher}}>
     <span class="material-icons md-20">settings</span>
   </button>
 </Portal>

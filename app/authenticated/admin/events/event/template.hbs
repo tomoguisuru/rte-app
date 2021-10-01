@@ -1,52 +1,48 @@
-<div class="rts-tray event">
-  <div class="rts-tray__wrapper">
-    <div class="rts-tray__header">
-      <div class="rts-tray__header--title">
-        {{this.model.title}}
-      </div>
-      <div class="rts-tray__header--desc">
-        {{this.model.desc}}
-      </div>
+<RtsTray @trayClass="event">
+  <:title>
+    {{this.model.title}}
+  </:title>
+
+  <:desc>
+    {{this.model.desc}}
+  </:desc>
+
+  <:content>
+    <div class="event-streams--header">
+      Streams:
     </div>
 
-    <div class="rts-tray__content event-streams">
-      <div class="event-streams--header">
-        Streams:
-      </div>
-
+    <div class="event-streams">
       {{#each this.model.streams as |stream|}}
       <div class="event-streams--item">
-        <div class="rts-form__item">
-          <div class="rts-field rts-field--select">
-            <div class="rts-field__bin">
-              <label class="rts-field__label">{{stream.title}}</label>
-              <select class="rts-field__input" {{on 'change' (fn this.updateUser stream)}}>
-              {{#if (not stream.userId)}}
-                <option disabled selected value>-- Select a User --</option>
-              {{/if}}
-              {{#each this.users as |user|}}
-                <option
-                  value="{{user.id}}"
-                  selected="{{if (eq user.id stream.userId) 'true'}}"
-                  >
-                  {{user.firstName}} {{user.lastName}} ({{user.email}})
-                </option>
-              {{/each}}
-              </select>
-            </div>
-          </div>
-        </div>
+        <RtsField @type='select' @label={{stream.title}}>
+          <select class="rts-field__input" {{on 'change' (fn this.updateUser stream)}}>
+          {{#if (not stream.userId)}}
+            <option disabled selected value>-- Select a User --</option>
+          {{/if}}
+          {{#each this.users as |user|}}
+            <option
+              value="{{user.id}}"
+              selected="{{if (eq user.id stream.userId) 'true'}}"
+              >
+              {{user.firstName}} {{user.lastName}} ({{user.email}})
+            </option>
+          {{/each}}
+          </select>
+        </RtsField>
       </div>
       {{else}}
       <span>No Publisher Streams</span>
       {{/each}}
     </div>
+  </:content>
 
+  <:actions>
     <LinkTo
       class="rts-btn rts-btn--primary"
       @route="authenticated.admin.events"
     >
       Close
     </LinkTo>
-  </div>
-</div>
+  </:actions>
+</RtsTray>

@@ -1,73 +1,50 @@
-<aside class="rts-tray user">
-  <div class="rts-tray__wrapper">
-    <div class="rts-tray__header">
-      <div class="rts-tray__header--title">
+<RtsTray @trayClass="user">
+  <:title>
         New User:
-      </div>
+  </:title>
+
+  <:content>
+    <div class="rts-form">
+      <RtsField @label="First Name">
+        <Input
+          id="user-firstName"
+          class="rts-field__input"
+          @type="text"
+          @value={{this.firstName}}
+        />
+      </RtsField>
+
+      <RtsField @label="Last Name">
+        <Input
+          id="user-lastName"
+          class="rts-field__input"
+          @type="text"
+          @value={{this.lastName}}
+        />
+      </RtsField>
+
+      <RtsField @label="Email">
+        <Input
+          id="user-email"
+          class="rts-field__input"
+          @type="text"
+          @value={{this.email}}
+        />
+      </RtsField>
+
+      <RtsField @label="Password">
+        <label class="rts-field__label" for="user-password">Password</label>
+        <Input
+          id="user-password"
+          class="rts-field__input"
+          @type="password"
+          @value={{this.password}}
+        />
+      </RtsField>
     </div>
+  </:content>
 
-    <div class="rts-tray__content">
-      <div class="rts-form">
-        <div class="rts-form__item">
-          <div class="rts-field">
-            <div class="rts-field__bin">
-              <label class="rts-field__label" for="user-firstName">First Name</label>
-              <Input
-                id="user-firstName"
-                class="rts-field__input"
-                @type="text"
-                @value={{this.firstName}}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="rts-form__item">
-          <div class="rts-field">
-            <div class="rts-field__bin">
-              <label class="rts-field__label" for="user-email">Last Name</label>
-              <Input
-                id="user-lastName"
-                class="rts-field__input"
-                @type="text"
-                @value={{this.lastName}}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="rts-form__item">
-          <div class="rts-field">
-            <div class="rts-field__bin">
-              <label class="rts-field__label" for="user-email">Email</label>
-              <Input
-                id="user-email"
-                class="rts-field__input"
-                @type="text"
-                @value={{this.email}}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="rts-form__item">
-          <div class="rts-field">
-            <div class="rts-field__bin">
-              <label class="rts-field__label" for="user-password">Password</label>
-              <Input
-                id="user-password"
-                class="rts-field__input"
-                @type="password"
-                @value={{this.password}}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="rts-tray__actions">
+  <:actions>
     <LinkTo
       @route="authenticated.admin.users"
       class="rts-btn rts-btn--secondary"
@@ -78,5 +55,5 @@
     <button class="rts-btn rts-btn--primary" {{on "click" this.onSave}}>
       Save
     </button>
-  </div>
-</aside>
+  </:actions>
+</RtsTray>

@@ -1,0 +1,31 @@
+<aside class="rts-tray {{@trayClass}}">
+  <div class="rts-tray__wrapper">
+    {{#if (or (has-block "title") (has-block "desc"))}}
+    <div class="rts-tray__header">
+      {{#if (has-block "title")}}
+      <div class="rts-tray__header--title">
+        {{yield to="title"}}
+      </div>
+      {{/if}}
+
+      {{#if (has-block "desc")}}
+      <div class="rts-tray__header--desc">
+        {{yield to="desc"}}
+      </div>
+      {{/if}}
+    </div>
+    {{/if}}
+
+    {{#if (has-block "content")}}
+    <div class="rts-tray__content">
+      {{yield to="content"}}
+    </div>
+    {{/if}}
+  </div>
+
+  {{#if (has-block "actions")}}
+  <div class="rts-tray__actions">
+    {{yield to="actions"}}
+  </div>
+  {{/if}}
+</aside>

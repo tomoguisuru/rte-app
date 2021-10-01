@@ -1,14 +1,14 @@
 <div class="rts-events">
-    <div class="rts-events--items">
-    {{#each this.model as |stream|}}
-        {{#with stream.event as |event|}}
-        <EventItem
-          @event={{event}}
-          @onClick={{fn this.onEventClick event.id}}
-        ></EventItem>
-        {{/with}}
-    {{else}}
-        <p>No Events</p>
-    {{/each}}
-    </div>
+  <div class="rts-events--items">
+  {{#each this.model as |stream|}}
+    {{#with stream.event as |event|}}
+    <EventItem
+      @event={{event}}
+      @onClick={{fn this.onEventClick event.id}}
+    ></EventItem>
+    {{/with}}
+  {{else}}
+    <p>No Events</p>
+  {{/each}}
+  </div>
 </div>

@@ -1,17 +1,14 @@
-<a
-  class="user-list-item"
-  {{on "click" (fn @onClick)}}
->
-    <div class="user-list-item--bubble">
-        {{this.initials}}
-    </div>
+<a class="user-list-item" {{on "click" (fn @onClick)}}>
+  <div class="user-list-item--bubble">
+    {{this.initials}}
+  </div>
 
-    <div class="user-list-item--info">
-        <div class="info--name">
-            {{@user.firstName}} {{@user.lastName}}
-        </div>
-        <div class="info--email">
-            {{@user.email}}
-        </div>
+  <div class="user-list-item--info">
+    <div class="info--name">
+      {{@user.firstName}} {{@user.lastName}}
     </div>
+    <div class="info--email">
+      {{@user.email}}
+    </div>
+  </div>
 </a>

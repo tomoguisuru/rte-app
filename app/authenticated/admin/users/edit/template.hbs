@@ -1,73 +1,47 @@
-<aside class="rts-tray user">
-  <div class="rts-tray__wrapper">
-    <div class="rts-tray__header">
-      <div class="rts-tray__header--title">
-        User: {{this.model.firstName}} {{this.model.lastName}}
-      </div>
-    </div>
+<RtsTray @trayClass="user">
+  <:title>
+    {{this.model.firstName}} {{this.model.lastName}}
+  </:title>
 
-    <div class="rts-tray__content">
-      <div class="rts-form">
-        <div class="rts-form__item">
-          <div class="rts-field">
-            <div class="rts-field__bin">
-              <label class="rts-field__label" for="user-firstName">First Name</label>
-              <Input
-                id="user-firstName"
-                class="rts-field__input"
-                @type="text"
-                @value={{this.model.firstName}}
-              />
-            </div>
-          </div>
-        </div>
+  <:content>
+    <RtsField @label="First Name">
+      <Input
+        id="user-firstName"
+        class="rts-field__input"
+        @type="text"
+        @value={{this.model.firstName}}
+      />
+    </RtsField>
 
-        <div class="rts-form__item">
-          <div class="rts-field">
-            <div class="rts-field__bin">
-              <label class="rts-field__label" for="user-email">Last Name</label>
-              <Input
-                id="user-lastName"
-                class="rts-field__input"
-                @type="text"
-                @value={{this.model.lastName}}
-              />
-            </div>
-          </div>
-        </div>
+    <RtsField @label="Last Name">
+      <Input
+        id="user-lastName"
+        class="rts-field__input"
+        @type="text"
+        @value={{this.model.lastName}}
+      />
+    </RtsField>
 
-        <div class="rts-form__item">
-          <div class="rts-field">
-            <div class="rts-field__bin">
-              <label class="rts-field__label" for="user-email">Email</label>
-              <Input
-                id="user-email"
-                class="rts-field__input"
-                @type="text"
-                @value={{this.model.email}}
-              />
-            </div>
-          </div>
-        </div>
+    <RtsField @label="Email">
+      <Input
+        id="user-email"
+        class="rts-field__input"
+        @type="text"
+        @value={{this.model.email}}
+      />
+    </RtsField>
 
-        <div class="rts-form__item">
-          <div class="rts-field">
-            <div class="rts-field__bin">
-              <label class="rts-field__label" for="user-password">Password</label>
-              <Input
-                id="user-password"
-                class="rts-field__input"
-                @type="password"
-                @value={{this.model.password}}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    {{!-- <RtsField @label="Password">
+      <Input
+        id="user-password"
+        class="rts-field__input"
+        @type="password"
+        @value={{this.model.password}}
+      />
+    </RtsField> --}}
+  </:content>
 
-  <div class="rts-tray__actions">
+  <:actions>
     <button class="rts-btn rts-btn--secondary" {{on "click" this.onCancel}}>
       Cancel
     </button>
@@ -75,5 +49,5 @@
     <button class="rts-btn rts-btn--primary" {{on "click" this.onSave}}>
       Save
     </button>
-  </div>
-</aside>
+  </:actions>
+</RtsTray>
