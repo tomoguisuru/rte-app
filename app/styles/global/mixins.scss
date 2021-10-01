@@ -3,6 +3,7 @@ A simple little SCSS mixin for creating scrim gradients
 Inspired by Andreas Larson - https://github.com/larsenwork
 https://css-tricks.com/easing-linear-gradients/
 */
+@use "sass:math";
 
 @mixin scrimGradient($startColor: $color-black, $direction: 'to bottom') {
 
@@ -28,7 +29,7 @@ https://css-tricks.com/easing-linear-gradients/
   $stops: ();
 
   @each $colorStop, $alphaValue in $scrimCoordinates {
-    $stop: hsla($hue, $saturation, $lightness, $alphaValue) percentage($colorStop/100);
+    $stop: hsla($hue, $saturation, $lightness, $alphaValue) percentage(math.div($colorStop, 100));
     $stops: append($stops, $stop, comma);
   }
 

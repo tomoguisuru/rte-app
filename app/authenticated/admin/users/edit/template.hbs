@@ -42,11 +42,11 @@
   </:content>
 
   <:actions>
-    <button class="rts-btn rts-btn--secondary" {{on "click" this.onCancel}}>
+    <button class="rts-btn rts-btn--secondary" type="reset" {{on "click" this.onCancel}}>
       Cancel
     </button>
 
-    <button class="rts-btn rts-btn--primary" {{on "click" this.onSave}}>
+    <button class="rts-btn rts-btn--primary" type="submit" {{on "click" this.onSave}}>
       Save
     </button>
   </:actions>

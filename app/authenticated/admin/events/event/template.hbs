@@ -17,9 +17,9 @@
       <div class="event-streams--item">
         <RtsField @type='select' @label={{stream.title}}>
           <select class="rts-field__input" {{on 'change' (fn this.updateUser stream)}}>
-          {{#if (not stream.userId)}}
+          {{#unless stream.userId}}
             <option disabled selected value>-- Select a User --</option>
-          {{/if}}
+          {{/unless}}
           {{#each this.users as |user|}}
             <option
               value="{{user.id}}"
