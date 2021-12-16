@@ -1,15 +1,9 @@
 @import "global";
-
-@import "form";
 @import "components";
-
-@import "events";
-@import "streams";
-@import "users";
 
 body,
 html {
-  background-color: $color-black;
+  background-color: $color-white;
   height: 100vh;
   max-height: 100vh;
 }
@@ -17,80 +11,4 @@ html {
 body {
   color: $color-white;
   font-size: 14px;
-}
-
-.rts-hdr,
-.rts-ftr {
-  background-color: $color-black;
-  color: $color-white;
-  display: flex;
-  height: 64px;
-  justify-content: space-between;
-  max-width: 100%;
-}
-
-.rts-hdr {
-  &__brand {
-    align-items: center;
-    display: flex;
-    margin-left: auto;
-    width: 180px;
-
-    span {
-      font-size: 11px;
-      opacity: 0.5;
-    }
-
-    & img {
-      height: 100%;
-      object-fit: contain;
-      width: auto;
-    }
-  }
-
-  &__title {
-    align-items: center;
-    display: flex;
-
-    > div {
-      align-items: center;
-      display: flex;
-    }
-  }
-
-  &__status {
-    margin-left: 20px;
-    margin-right: 12px;
-  }
-}
-
-.rts-ftr__controls {
-  display: flex;
-  margin: 12px 20px;
-
-  button + button {
-    margin-left: 12px;
-  }
-}
-
-.rts-wrap {
-  background-color: $color-gray-dark;
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  margin: 0;
-  min-height: 100vh;
-  max-height: 100vh;
-}
-
-.rts-main {
-  display: flex;
-  max-height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-
-video {
-  background-color: black;
-  border-radius: 4px;
-  width: 100%;
 }

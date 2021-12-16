@@ -38,18 +38,6 @@ module.exports = function (environment) {
         'http://localhost:3000',
         'http://*.localhost:4200',
         'http://localhost:4200',
-        'http://*.downlynk.localhost:8000',
-        'http://*.uplynk.localhost:8000',
-        'http://*.downlynk.com',
-        'https://*.downlynk.com',
-        'http://*.uplynk.com',
-        'https://*.uplynk.com',
-        'https://*.phenixrts.com',
-        'wss://*.phenixrts.com/ws',
-        'wss://*.downlynk.com/ws',
-        'wss://*.uplynk.com/ws',
-        'wss://*.downlynk.net/messages',
-        'wss://ws-emqx-ausw2-dp-1.downlynk.net/messages/',
       ],
       'img-src': ["'self'", 'data:'],
       'style-src': [
@@ -61,21 +49,21 @@ module.exports = function (environment) {
     },
   };
 
-  ENV['ember-simple-auth'] = {
-    routeAfterAuthentication: '/events',
-    routeIfAlreadyAuthenticated: '/events',
-  };
+  // ENV['ember-simple-auth'] = {
+  //   routeAfterAuthentication: '/events',
+  //   routeIfAlreadyAuthenticated: '/events',
+  // };
 
-  ENV['ember-simple-auth-token'] = {
-    authorizationHeaderName: 'Authorization', // Header name added to each API request
-    authorizationPrefix: 'Bearer ', // Prefix added to each API request
-    refreshAccessTokens: true,
-    refreshTokenPropertyName: 'refreshToken',
-    refreshLeeway: 300, // refresh 5 minutes
-    serverTokenEndpoint: `${ENV.APP.API_HOST}/users/login`,
-    serverTokenRefreshEndpoint: `${ENV.APP.API_HOST}/auth/token/refresh`,
-    tokenPropertyName: 'token',
-  };
+  // ENV['ember-simple-auth-token'] = {
+  //   authorizationHeaderName: 'Authorization', // Header name added to each API request
+  //   authorizationPrefix: 'Bearer ', // Prefix added to each API request
+  //   refreshAccessTokens: true,
+  //   refreshTokenPropertyName: 'refreshToken',
+  //   refreshLeeway: 300, // refresh 5 minutes
+  //   serverTokenEndpoint: `${ENV.APP.API_HOST}/users/login`,
+  //   serverTokenRefreshEndpoint: `${ENV.APP.API_HOST}/auth/token/refresh`,
+  //   tokenPropertyName: 'token',
+  // };
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
@@ -96,10 +84,10 @@ module.exports = function (environment) {
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
 
-    ENV['ember-simple-auth-token'] = {
-      refreshAccessTokens: false,
-      tokenExpirationInvalidateSession: false,
-    };
+    // ENV['ember-simple-auth-token'] = {
+    //   refreshAccessTokens: false,
+    //   tokenExpirationInvalidateSession: false,
+    // };
   }
 
   if (environment === 'production') {
