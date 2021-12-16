@@ -1,0 +1,16 @@
+<div class="state-machine">
+  <div class="lights">
+    {{#each this.stateTracker.currentSet as |color|}}
+      <SLight @color={{color}}></SLight>
+    {{/each}}
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-secondary" type="button" {{on "click" this.previous}}>
+      Previous
+    </button>
+    <button class="btn btn-primary" type="button" {{on "click" this.next}}>
+      Next
+    </button>
+  </div>
+</div>

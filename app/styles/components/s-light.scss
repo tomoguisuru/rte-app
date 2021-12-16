@@ -1,0 +1,14 @@
+.s-light {
+  border-radius: 100%;
+  height: 100px;
+  width: 100px;
+  border: 1px solid black;
+  background-color: black;
+
+  > div {
+    border-radius: 100%;
+    height: 100px;
+    width: 100px;
+    content: '';
+  }
+}
