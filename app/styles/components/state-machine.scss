@@ -1,3 +1,20 @@
 .state-machine {
+  background: white;
   display: flex;
+  flex-direction: column;
+  margin: 25px auto;
+  padding: 50px;
+  width: 350px;
+
+  .actions {
+    justify-content: space-evenly;
+    align-items: center;
+    display: flex;
+  }
+
+  .lights {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+  }
 }

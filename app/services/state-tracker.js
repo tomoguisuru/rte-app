@@ -56,8 +56,6 @@ export default class StateTrackerService extends Service {
       const isOn = !Math.round(Math.random());
       const value = isOn ? this._generateColor() : null;
 
-      console.log('VALUE: ', value);
-
       _set.push(value);
     }
 

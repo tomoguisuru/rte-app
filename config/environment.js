@@ -49,22 +49,6 @@ module.exports = function (environment) {
     },
   };
 
-  // ENV['ember-simple-auth'] = {
-  //   routeAfterAuthentication: '/events',
-  //   routeIfAlreadyAuthenticated: '/events',
-  // };
-
-  // ENV['ember-simple-auth-token'] = {
-  //   authorizationHeaderName: 'Authorization', // Header name added to each API request
-  //   authorizationPrefix: 'Bearer ', // Prefix added to each API request
-  //   refreshAccessTokens: true,
-  //   refreshTokenPropertyName: 'refreshToken',
-  //   refreshLeeway: 300, // refresh 5 minutes
-  //   serverTokenEndpoint: `${ENV.APP.API_HOST}/users/login`,
-  //   serverTokenRefreshEndpoint: `${ENV.APP.API_HOST}/auth/token/refresh`,
-  //   tokenPropertyName: 'token',
-  // };
-
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
@@ -84,10 +68,6 @@ module.exports = function (environment) {
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
 
-    // ENV['ember-simple-auth-token'] = {
-    //   refreshAccessTokens: false,
-    //   tokenExpirationInvalidateSession: false,
-    // };
   }
 
   if (environment === 'production') {
