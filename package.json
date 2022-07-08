@@ -80,11 +80,11 @@
     "edition": "octane"
   },
   "dependencies": {
-    "@phenixrts/sdk": "~2021.0.27",
+    "@phenixrts/sdk": "~2022.0.2",
     "crypto-js": "^4.0.0",
     "moment": "^2.29.1",
     "pako": "^2.0.2",
-    "phenix-web-sdk": "~2021.0.17",
+    "phenix-web-sdk": "~2022.0.1",
     "zlib": "^1.0.5"
   }
 }

@@ -1,11 +1,11 @@
 import Service, { inject as service } from '@ember/service';
+import sdk from 'phenix-web-sdk';
 
 export default class ChannelExpressService extends Service {
   @service('event')
   eventService;
 
   eventId = null;
-  pcastExpress = null;
 
   async getPublishToken(options, requestType = 'publish', args) {
     if (requestType === 'stream') {

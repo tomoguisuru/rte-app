@@ -1,17 +1,31 @@
-
 {{outlet}}
 
 <Portal @target="nav">
   <nav>
     <ul>
-      <li><LinkTo @route="authenticated.events">My Events</LinkTo></li>
+      <li>
+        <LinkTo
+          @route="authenticated.events"
+          @current-when='authenticated.events authenticated.event'
+        >
+          My Events
+        </LinkTo>
+      </li>
+      <li>
+        <LinkTo
+          @route="authenticated.rooms"
+          @current-when='authenticated.rooms authenticated.room'
+        >
+          My Rooms
+        </LinkTo>
+      </li>
       {{#if (eq this.user.role "admin")}}
       <li><LinkTo @route="authenticated.admin.users">Users</LinkTo></li>
       <li><LinkTo @route="authenticated.admin.events">Events</LinkTo></li>
+      <li><LinkTo @route="authenticated.admin.rooms">Rooms</LinkTo></li>
       {{/if}}
     </ul>
   </nav>
 
-  <UserLogout @username={{this.user.firstName}}>
-  </UserLogout>
+  <UserLogout @username={{this.user.firstName}} />
 </Portal>

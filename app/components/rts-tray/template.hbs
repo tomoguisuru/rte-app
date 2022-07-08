@@ -1,4 +1,4 @@
-<aside class="rts-tray {{@trayClass}}">
+<aside class="rts-tray {{@trayClass}} {{if @visible '' 'publisher--hidden'}}">
   <div class="rts-tray__wrapper">
     {{#if (or (has-block "title") (has-block "desc"))}}
     <div class="rts-tray__header">

@@ -66,7 +66,7 @@ The .env addon allows you to have different environment configurations available
 cd client-app
 touch .env
 touch .env.development
-touch .env.staging
+touch .env.test
 ```
 
 you will then need to add the following to each file
@@ -83,18 +83,12 @@ API_HOST=https://rtsapi.uplynk.com
 
 _.env.development_
 ```
-API_HOST=https://rtsapi.uplynk.com
-```
-
-_.env.staging_
-```
-API_HOST=https://rtsapi-staging.uplynk.com
+API_HOST=http://rtsapi.uplynk.localhost:3000
 ```
 
 _.env_
 ```
-
-API_HOST=http://rtsapi.uplynk.localhost:3000
+API_HOST=https://rtsapi.uplynk.com
 ```
 
 ---
@@ -106,11 +100,6 @@ the `development` environment is the default but you can easily specify addition
 Development
 ```bash
 ember s
-```
-
-Staging
-```bash
-ember s -e staging
 ```
 
 Production

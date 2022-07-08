@@ -8,6 +8,8 @@
 /bower_components/
 /node_modules/
 
+*.rdb
+
 # misc
 /.env*
 /.pnp*

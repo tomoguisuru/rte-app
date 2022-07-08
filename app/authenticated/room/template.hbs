@@ -1,0 +1,16 @@
+<div class="content">
+  <div>{{model.title}}</div>
+  <div>{{roomService.screenName}}</div>
+
+  <ul>
+    {{#each roomService.members as |member|}}
+    <li>{{member.screenName}}</li>
+    {{/each}}
+  </ul>
+</div>
+
+<Portal @target="header-title">
+    <h1>{{model.title}}</h1>
+</Portal>
+
+{{outlet}}

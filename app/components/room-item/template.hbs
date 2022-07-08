@@ -1,0 +1,12 @@
+<a
+  class="room-item"
+  {{on "click" (fn @onClick)}}
+>
+    <div class="room-item--title">
+        <span>{{@room.title}}</span>
+    </div>
+
+    <p class="room-item--description">
+        {{@room.desc}}
+    </p>
+</a>

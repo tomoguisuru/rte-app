@@ -1,0 +1,29 @@
+<RtsTray @trayClass="user">
+  <:title>
+    {{this.model.firstName}} {{this.model.lastName}}
+  </:title>
+
+  <:content>
+    <RtsField @label="Title">
+      {{this.model.title}}
+    </RtsField>
+
+    <RtsField @label="Description">
+      {{this.model.desc}}
+    </RtsField>
+
+    <RtsField @label="Room ID">
+      {{this.model.roomId}}
+    </RtsField>
+  </:content>
+
+  <:actions>
+    <button class="rts-btn rts-btn--secondary" type="reset" {{on "click" this.onCancel}}>
+      Cancel
+    </button>
+
+    <button class="rts-btn rts-btn--primary" type="submit" {{on "click" this.onSave}}>
+      Save
+    </button>
+  </:actions>
+</RtsTray>
