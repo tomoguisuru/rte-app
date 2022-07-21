@@ -1,16 +1,16 @@
 <div class="publisher-window">
-  <div class="publisher-window__preview" {{did-insert onInsert}}>
+  <div class="publisher-window__preview" {{did-insert this.onInsert}}>
     <video id="publisherStream" playsinline autoplay muted></video>
     <div class="publisher-window__preview-actions">
       <button class="rts-btn rts-btn--icon" type="button">
-        <span class="material-icons" {{on 'click' toggleAudio}}>
-          {{if streamAudio "mic" "mic_off"}}
+        <span class="material-icons" {{on 'click' this.toggleAudio}}>
+          {{if this.streamAudio "mic" "mic_off"}}
         </span>
       </button>
 
       <button class="rts-btn rts-btn--icon" type="button">
-        <span class="material-icons" {{on 'click' toggleVideo}}>
-          {{if streamVideo "videocam" "videocam_off"}}
+        <span class="material-icons" {{on 'click' this.toggleVideo}}>
+          {{if this.streamVideo "videocam" "videocam_off"}}
         </span>
       </button>
     </div>
@@ -21,16 +21,16 @@
       {{#unless @hideSettings}}
 
         <RtsField @type="select" @label="Camera">
-          <select class="rts-field__input" {{on 'change' updateSelectedVideo}}>
-            {{#each videoInputOptions as |input|}}
+          <select class="rts-field__input" {{on 'change' this.updateSelectedVideo}}>
+            {{#each this.videoInputOptions as |input|}}
             <option value="{{input.value}}">{{input.text}}</option>
             {{/each}}
           </select>
         </RtsField>
 
         <RtsField @type="select" @label="Microphone">
-          <select class="rts-field__input" {{on 'change' updateSelectedAudio}}>
-            {{#each audioInputOptions as |input|}}
+          <select class="rts-field__input" {{on 'change' this.updateSelectedAudio}}>
+            {{#each this.audioInputOptions as |input|}}
             <option value="{{input.value}}">{{input.text}}</option>
             {{/each}}
           </select>
@@ -47,7 +47,7 @@
           <button
             class="rts-btn rts-btn--primary"
             type="button"
-            {{on 'click' onJoin}}
+            {{on 'click' this.onJoin}}
           >
             Join
           </button>
@@ -55,7 +55,7 @@
           <button
             class="rts-btn rts-btn--primary"
             type="button"
-            {{on 'click' onLeave}}
+            {{on 'click' this.onLeave}}
           >
             Leave
           </button>

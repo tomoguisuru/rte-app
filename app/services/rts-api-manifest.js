@@ -18,7 +18,7 @@ export default class ManifestService extends Service {
     );
   }
 
-  async getManifest(eventId) {
+  async getManifest(eventId, withTokens = false) {
     let url = `/events/${eventId}/manifest`;
 
     const queryParams = new URLSearchParams();
@@ -29,6 +29,10 @@ export default class ManifestService extends Service {
 
     if (this.updateViaWeb) {
       queryParams.set('update_via_websocket', true);
+    }
+
+    if (withTokens) {
+      queryParams.set('include_tokens', true);
     }
 
     url = queryParams ? `${url}?${queryParams}` : url;

@@ -8,8 +8,8 @@ import { Channels } from '@phenixrts/sdk';
 import ChannelState from '../../constants/channel-state';
 
 export default class PhenixChannelComponent extends Component {
-    @service('channel-express')
-    channelExpressService;
+    @service('channel-express') channelExpressService;
+    @service('stream') streamService;
 
     channel = null;
     mediaStream = null;
@@ -18,11 +18,19 @@ export default class PhenixChannelComponent extends Component {
     @tracked isActive = true;
     @tracked isMuted = false;
     stream = null;
+    token = null;
 
     constructor() {
       super(...arguments);
 
-      this.stream = this.args.stream;
+      const {
+        stream,
+      } =  this.args;
+
+      const { streamToken } = stream;
+
+      this.stream = stream;
+      // this.token = streamToken;
     }
 
     isDestroying() {
@@ -30,14 +38,20 @@ export default class PhenixChannelComponent extends Component {
     }
 
     async joinChannel() {
+      let token = this.token;
+
+      if (!token) {
+        token = await this.getToken('stream');
+      }
+
       this.channel = Channels.createChannel({
-        token: await this.getToken(),
+        token,
         videoElement: this.videoElement,
       });
 
       this.channel.authorized.subscribe(async authorized => {
         if (!authorized) {
-          const token = await this.getToken();
+          const token = await this.getToken('stream');
           this.channel.token = token;
         }
       });
@@ -47,16 +61,12 @@ export default class PhenixChannelComponent extends Component {
       });
     }
 
-    async getToken() {
-      const { alias: channelAlias, tags } = this.stream;
-
+    async getToken(type = 'stream') {
       const options = {
-        tags,
-        channelAlias,
         expiresIn: 1800, // 30 minutes
       };
 
-      return this.channelExpressService.getToken(options, 'stream');
+      return this.streamService.getToken(this.stream, type, options);
     }
 
     @action

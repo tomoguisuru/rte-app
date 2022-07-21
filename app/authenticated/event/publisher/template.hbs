@@ -3,12 +3,12 @@
 >
   <:content>
     <PublisherWindow
-      @hideSettings={{hasPublisher}}
-      @isJoined={{(not hasPublisher)}}
-      @onJoin={{publishStream}}
-      @onLeave={{stop}}
-      @onAudioToggle={{toggleAudioInput}}
-      @onVideoToggle={{toggleVideoInput}}
+      @hideSettings={{this.hasPublisher}}
+      @isJoined={{(not this.hasPublisher)}}
+      @onJoin={{this.publishStream}}
+      @onLeave={{this.stop}}
+      @onAudioToggle={{this.toggleAudioInput}}
+      @onVideoToggle={{this.toggleVideoInput}}
     />
   </:content>
 </RtsTray>

@@ -116,8 +116,6 @@ export default class PublisherWindowComponent extends Component {
       tracks = tracks.filter(t => t.kind === kind);
     }
 
-    console.log('Tracks: ', tracks)
-
     tracks.forEach(t => t.stop());
   }
 
@@ -160,8 +158,10 @@ export default class PublisherWindowComponent extends Component {
     this.streamAudio = !this.streamAudio;
     this.updateStream('audio');
 
-    if (this.args.onAudioToggle) {
-      this.args.onAudioToggle(this.streamAudio);
+    const { onAudioToggle } = this.args;
+
+    if (onAudioToggle && typeof(onAudioToggle) === 'function') {
+      onAudioToggle(this.streamAudio);
     }
   }
 
@@ -170,8 +170,10 @@ export default class PublisherWindowComponent extends Component {
     this.streamVideo = !this.streamVideo;
     this.updateStream('video');
 
-    if (this.args.onVideoToggle) {
-      this.args.onVideoToggle(this.streamVideo);
+    const { onVideoToggle } = this.args;
+
+    if (onVideoToggle && typeof(onVideoToggle) === 'function') {
+      onVideoToggle(this.streamVideo);
     }
   }
 

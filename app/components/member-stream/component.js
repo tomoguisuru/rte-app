@@ -46,19 +46,19 @@ export default class MemberStreamComponent extends Component {
 
   @action
   async onInsert() {
-    if (!this.roomExpress) {
-      throw new Error('roomExpress not set');
-    }
+    // if (!this.roomExpress) {
+    //   throw new Error('roomExpress not set');
+    // }
 
-    const options = {
-      videoElement: this.videoElement,
-      streamToken: await this.roomService.getToken('stream'),
-    };
+    // const options = {
+    //   videoElement: this.videoElement,
+    //   streamToken: await this.roomService.getToken('stream'),
+    // };
 
-    this.roomExpress.subscribeToMemberStream(
-      this.memberStream,
-      options,
-      (error, response) => this.onConnect(error, response),
-    );
+    // this.roomExpress.subscribeToMemberStream(
+    //   this.memberStream,
+    //   options,
+    //   (error, response) => this.onConnect(error, response),
+    // );
   }
 }

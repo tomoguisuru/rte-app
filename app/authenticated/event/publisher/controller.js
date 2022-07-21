@@ -148,4 +148,43 @@ export default class PublisherController extends Controller {
   async stop() {
     await this.reset();
   }
+
+  @action
+  toggleAudioInput() {
+    // this.streamAudio = !this.streamAudio;
+    // this.updateStream();
+    // if (this.publisher) {
+    //   if (this.streamAudio) {
+    //     this.publisher.enableAudio();
+    //   } else {
+    //     this.publisher.disableAudio();
+    //   }
+    // }
+  }
+  @action
+  toggleVideoInput() {
+    // this.streamVideo = !this.streamVideo;
+    // this.updateStream();
+    // if (this.publisher) {
+    //   if (this.streamVideo) {
+    //     this.publisher.enableVideo();
+    //   } else {
+    //     this.publisher.disableVideo();
+    //   }
+    // }
+  }
+  @action
+  togglePublisher() {
+    this.showPublisher = !this.showPublisher;
+  }
+  @action
+  updateSelectedAudio(e) {
+    this.selectedVideoInput = e.target.value;
+    this.updateStream();
+  }
+  @action
+  updateSelectedVideo(e) {
+    this.selectedVideoInput = e.target.value;
+    this.updateStream();
+  }
 }
