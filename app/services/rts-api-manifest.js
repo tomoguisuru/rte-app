@@ -9,25 +9,22 @@ export default class ManifestService extends Service {
   @tracked excludedStreams = A([]);
   @tracked allStreams = A([]);
 
-  includeStaged = false;
-  updateViaWeb = false;
-
   get streams() {
     return this.allStreams.filter(
       s => !this.excludedStreams.includes(s.id),
     );
   }
 
-  async getManifest(eventId, withTokens = false) {
+  async getManifest(eventId, { withTokens = false, useSockets = false, withStaged = false }) {
     let url = `/events/${eventId}/manifest`;
 
     const queryParams = new URLSearchParams();
 
-    if (this.includeStaged) {
+    if (withStaged) {
       queryParams.set('include_staged', true);
     }
 
-    if (this.updateViaWeb) {
+    if (useSockets) {
       queryParams.set('update_via_websocket', true);
     }
 

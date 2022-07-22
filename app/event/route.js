@@ -16,7 +16,12 @@ export default class EventRoute extends Route {
   templateName = 'event'
 
   async model(params) {
-    await this.manifestService.getManifest(params.event_id, true);
+    const options = {
+      withTokens: true,
+      useSockets: true,
+    };
+
+    await this.manifestService.getManifest(params.event_id, options);
     const { event } = this.manifestService;
 
     if (event) {
@@ -38,6 +43,6 @@ export default class EventRoute extends Route {
     super.setupController(...arguments);
 
     // Add mqtt listener (websocket)
-    // controller.initMqtt();
+    controller.initMqtt();
   }
 }

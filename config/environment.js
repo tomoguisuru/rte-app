@@ -37,7 +37,7 @@ module.exports = function (environment) {
         'wss://*.downlynk.com/ws',
         'wss://*.uplynk.com/ws',
         'wss://*.downlynk.net/messages',
-        'wss://ws-emqx-ausw2-dp-1.downlynk.net/messages/',
+        'wss://*.uplynk.net/messages/',
       ],
       'img-src': ["'self'", 'data:'],
       'style-src': [
