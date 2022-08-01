@@ -8,6 +8,7 @@ export default class ManifestService extends Service {
   @tracked event = null;
   @tracked excludedStreams = A([]);
   @tracked allStreams = A([]);
+  @tracked activeStreamId = null;
 
   get streams() {
     return this.allStreams.filter(
@@ -15,7 +16,12 @@ export default class ManifestService extends Service {
     );
   }
 
-  async getManifest(eventId, { withTokens = false, useSockets = false, withStaged = false }) {
+  async getManifest(eventId, options = {}) {
+    const {
+      withTokens = false,
+      useSockets = false,
+      withStaged = false
+    } = options;
     let url = `/events/${eventId}/manifest`;
 
     const queryParams = new URLSearchParams();
@@ -56,6 +62,20 @@ export default class ManifestService extends Service {
     const { streams = [] } = this.event;
 
     this._updateCollection(this.allStreams, streams);
+
+    if (this.activeStreamId === null || this.streams.findIndex(s => s.id === this.activeStreamId) < 0) {
+      if (this.streams.length > 0) {
+        this.setActiveStream(this.streams[0].id);
+      } else if (this.activeStreamId !== null) {
+        this.activeStreamId = null;
+      }
+    }
+  }
+
+  setActiveStream(id) {
+    if (id !== this.activeStreamId) {
+      this.activeStreamId = id;
+    }
   }
 
   _updateCollection(collectionA, collectionB) {

@@ -13,6 +13,7 @@
       {{#each this.manifestService.streams as |stream|}}
           <PhenixChannel
               @stream={{stream}}
+              @activeId={{this.activeId}}
           >
           </PhenixChannel>
       {{/each}}

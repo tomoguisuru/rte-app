@@ -9,6 +9,8 @@ export default class EventController extends Controller {
 
   @service mqtt;
 
+  @tracked activeId = null;
+
   pollInterval = 10 * 1000;
   pollTracker = null;
 

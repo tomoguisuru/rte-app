@@ -1,4 +1,4 @@
-<div class="rts-stream {{if this.isActive 'is-active'}}" {{did-insert this.onInsert}}>
+<div class="rts-stream {{if this.isActive 'is-active'}}" {{did-insert this.onInsert}} {{on 'click' this.setActive}}>
     <video
         autoplay
     ></video>

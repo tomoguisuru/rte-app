@@ -18,7 +18,7 @@ export default class EventRoute extends Route {
   async model(params) {
     const options = {
       withTokens: true,
-      useSockets: true,
+      // useSockets: true,
     };
 
     await this.manifestService.getManifest(params.event_id, options);

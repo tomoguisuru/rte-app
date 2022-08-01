@@ -10,15 +10,21 @@ import ChannelState from '../../constants/channel-state';
 export default class PhenixChannelComponent extends Component {
     @service('channel-express') channelExpressService;
     @service('stream') streamService;
+    @service('rts-api-manifest') manifestService;
+
 
     channel = null;
     mediaStream = null;
     videoElement = null;
 
-    @tracked isActive = true;
     @tracked isMuted = false;
+
     stream = null;
     token = null;
+
+    get isActive() {
+      return this.manifestService?.activeStreamId === this.stream?.id;
+    }
 
     constructor() {
       super(...arguments);
@@ -30,7 +36,7 @@ export default class PhenixChannelComponent extends Component {
       const { streamToken } = stream;
 
       this.stream = stream;
-      // this.token = streamToken;
+      this.token = streamToken;
     }
 
     isDestroying() {
@@ -70,7 +76,11 @@ export default class PhenixChannelComponent extends Component {
     }
 
     @action
-    toggleMute() {
+    toggleMute(e) {
+      if (e) {
+        e.preventDefault();
+      }
+
       this.isMuted = !this.isMuted;
 
       this.videoElement.muted = this.isMuted;
@@ -88,7 +98,7 @@ export default class PhenixChannelComponent extends Component {
     }
 
     @action
-    toggleActive() {
-      this.isActive = !this.isActive;
+    setActive() {
+      this.manifestService.setActiveStream(this.stream.id);
     }
 }
