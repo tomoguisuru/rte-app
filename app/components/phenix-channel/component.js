@@ -12,7 +12,6 @@ export default class PhenixChannelComponent extends Component {
     @service('stream') streamService;
     @service('rts-api-manifest') manifestService;
 
-
     channel = null;
     mediaStream = null;
     videoElement = null;

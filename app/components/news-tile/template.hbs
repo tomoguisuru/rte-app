@@ -1,0 +1,16 @@
+<article class="news-tile" role="button" {{on 'click' this.onClick}}>
+  <div class="news-tile__image">
+    <img
+      role="presentation"
+      src={{this.src}}
+      alt=""
+      height={{this.height}}
+      width={{this.width}}
+    >
+  </div>
+
+  <div class="news-tile__description">
+    <h2 role="presentation">{{this.title}}</h2>
+    <p>{{this.description}}</p>
+  </div>
+</article>

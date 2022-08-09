@@ -41,6 +41,7 @@
     "ember-cli-sass": "^11.0.1",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.2",
+    "ember-composable-helpers": "^5.0.0",
     "ember-concurrency": "^2.2.1",
     "ember-data": "~4.4.0",
     "ember-fetch": "^8.1.1",
@@ -79,6 +80,7 @@
   },
   "dependencies": {
     "16": "^0.0.2",
+    "@faker-js/faker": "^7.3.0",
     "@phenixrts/sdk": "~2022.0.2",
     "crypto-js": "^4.0.0",
     "moment": "^2.29.1",

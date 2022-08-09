@@ -1,0 +1,47 @@
+<div class="container">
+  <header>
+    <span>
+      Fusion Gambling
+    </span>
+    <input type="text" placeholder="Search.." />
+    <LinkTo
+      @route="home.login"
+    >
+      Login
+    </LinkTo>
+  </header>
+
+  <main>
+
+    <div class="carousel">
+      <NewsTile @height={{300}} @width={{600}}></NewsTile>
+      {{#each (repeat 5) as |empty|}}
+        <NewsTile @height={{75}} @width={{150}}></NewsTile>
+      {{/each}}
+    </div>
+
+    <div class="articles">
+      <h3>Stories for you</h3>
+      {{#each (repeat 10) as |empty|}}
+        <NewsTile></NewsTile>
+      {{/each}}
+    </div>
+
+    {{outlet}}
+
+  </main>
+
+  <aside>
+    <h3>Now Streaming</h3>
+    {{#each this.model as |event|}}
+      <NewsTile
+        @title={{event.title}}
+        @description={{event.desc}}
+        @onClick={{(fn this.onClick event.id)}}
+      />
+    {{/each}}
+  </aside>
+
+  <footer>
+  </footer>
+</div>

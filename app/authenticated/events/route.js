@@ -6,7 +6,7 @@ export default class EventsRoute extends Route {
   @service currentUser;
 
   async beforeModel() {
-    await this.store.findAll('stream', { include: 'events' });
+    await this.store.query('event', { page: 1, page_size: 20 });
   }
 
   async model() {

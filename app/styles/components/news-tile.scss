@@ -1,0 +1,20 @@
+.news-tile {
+  // background-color: $color-gray-light;
+  display: flex;
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    max-height: 100%;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    h2 {
+      color: $color-info;
+    }
+  }
+}
+

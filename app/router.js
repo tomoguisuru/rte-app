@@ -35,6 +35,10 @@ Router.map(function () {
     });
   });
 
+  this.route('home', function() {
+    this.route('login');
+  });
+
   this.route('event', { path: '/event/:event_id' });
 
   this.route('login');

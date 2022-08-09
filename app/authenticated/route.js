@@ -6,7 +6,7 @@ export default class AuthenticatedRoute extends Route {
   @service session;
 
   async beforeModel(transition) {
-    await this.session.requireAuthentication(transition, 'login');
+    await this.session.requireAuthentication(transition, 'home');
 
     if (this.session.isAuthenticated && !this.currentUser.user) {
       await this.currentUser.load();
