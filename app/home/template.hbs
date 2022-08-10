@@ -1,5 +1,5 @@
 <div class="container">
-  <header>
+  <StickyHeader>
     <span>
       Fusion Gambling
     </span>
@@ -9,10 +9,9 @@
     >
       Login
     </LinkTo>
-  </header>
+  </StickyHeader>
 
   <main>
-
     <div class="carousel">
       <NewsTile @height={{300}} @width={{600}}></NewsTile>
       {{#each (repeat 5) as |empty|}}
@@ -28,7 +27,6 @@
     </div>
 
     {{outlet}}
-
   </main>
 
   <aside>
@@ -39,6 +37,8 @@
         @description={{event.desc}}
         @onClick={{(fn this.onClick event.id)}}
       />
+    {{else}}
+      Check back later...
     {{/each}}
   </aside>
 

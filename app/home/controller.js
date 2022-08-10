@@ -7,6 +7,6 @@ export default class HomeController extends Controller {
 
   @action
   onClick(id) {
-    this.router.transitionTo('event', id);
+    this.router.transitionTo('home.event', id);
   }
 }
