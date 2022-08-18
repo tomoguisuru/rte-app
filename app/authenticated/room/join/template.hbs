@@ -1,0 +1,37 @@
+<RtsTray
+  @trayClass="publisher"
+>
+  <:content>
+    <PublisherWindow
+      @hideSettings={{roomService.isJoined}}
+      @isJoined={{(not roomService.isJoined)}}
+      @onJoin={{onJoin}}
+      @onLeave={{onLeave}}
+      @onAudioToggle={{toggleAudioInput}}
+      @onVideoToggle={{toggleVideoInput}}
+    >
+      <:fields>
+        <RtsField @label="Name">
+          <Input
+            id="user-name"
+            class="rts-field__input"
+            @type="string"
+            @value={{this.screenName}}
+          />
+        </RtsField>
+      </:fields>
+
+      <:actions>
+        {{#if roomService.isJoined}}
+          <button
+            class="rts-btn rts-btn--primary"
+            type="button"
+            {{on 'click' onLeave}}
+          >
+            Publish
+          </button>
+        {{/if}}
+      </:actions>
+    </PublisherWindow>
+  </:content>
+</RtsTray>

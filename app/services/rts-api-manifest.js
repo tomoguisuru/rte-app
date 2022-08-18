@@ -8,9 +8,7 @@ export default class ManifestService extends Service {
   @tracked event = null;
   @tracked excludedStreams = A([]);
   @tracked allStreams = A([]);
-
-  includeStaged = false;
-  updateViaWeb = false;
+  @tracked activeStreamId = null;
 
   get streams() {
     return this.allStreams.filter(
@@ -18,17 +16,26 @@ export default class ManifestService extends Service {
     );
   }
 
-  async getManifest(eventId) {
+  async getManifest(eventId, options = {}) {
+    const {
+      withTokens = false,
+      useSockets = false,
+      withStaged = false
+    } = options;
     let url = `/events/${eventId}/manifest`;
 
     const queryParams = new URLSearchParams();
 
-    if (this.includeStaged) {
+    if (withStaged) {
       queryParams.set('include_staged', true);
     }
 
-    if (this.updateViaWeb) {
+    if (useSockets) {
       queryParams.set('update_via_websocket', true);
+    }
+
+    if (withTokens) {
+      queryParams.set('include_tokens', true);
     }
 
     url = queryParams ? `${url}?${queryParams}` : url;
@@ -55,6 +62,20 @@ export default class ManifestService extends Service {
     const { streams = [] } = this.event;
 
     this._updateCollection(this.allStreams, streams);
+
+    if (this.activeStreamId === null || this.streams.findIndex(s => s.id === this.activeStreamId) < 0) {
+      if (this.streams.length > 0) {
+        this.setActiveStream(this.streams[0].id);
+      } else if (this.activeStreamId !== null) {
+        this.activeStreamId = null;
+      }
+    }
+  }
+
+  setActiveStream(id) {
+    if (id !== this.activeStreamId) {
+      this.activeStreamId = id;
+    }
   }
 
   _updateCollection(collectionA, collectionB) {

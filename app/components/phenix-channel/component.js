@@ -1,84 +1,103 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
+import {tracked} from '@glimmer/tracking';
 
-import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
+import {inject as service} from '@ember/service';
+import {action} from '@ember/object';
 
-import { Channels } from '@phenixrts/sdk';
+import {Channels} from '@phenixrts/sdk';
 import ChannelState from '../../constants/channel-state';
 
 export default class PhenixChannelComponent extends Component {
-    @service('channel-express')
-    channelExpressService;
+  @service('channel-express') channelExpressService;
+  @service('stream') streamService;
+  @service('rts-api-manifest') manifestService;
 
-    channel = null;
-    mediaStream = null;
-    videoElement = null;
+  channel = null;
+  mediaStream = null;
+  videoElement = null;
 
-    @tracked isActive = true;
-    @tracked isMuted = false;
-    stream = null;
+  @tracked isMuted = false;
 
-    constructor() {
-      super(...arguments);
+  stream = null;
+  token = null;
 
-      this.stream = this.args.stream;
+  get isActive() {
+    return this.manifestService?.activeStreamId === this.stream?.id;
+  }
+
+  constructor() {
+    super(...arguments);
+
+    const {
+      stream,
+    } = this.args;
+
+    const {streamToken} = stream;
+
+    this.stream = stream;
+    this.token = streamToken;
+  }
+
+  isDestroying() {
+    // Perform teardown
+  }
+
+  async joinChannel() {
+    let token = this.token;
+
+    if (!token) {
+      token = await this.getToken('stream');
     }
 
-    isDestroying() {
-      // Perform teardown
+    this.channel = Channels.createChannel({
+      token,
+      videoElement: this.videoElement,
+    });
+
+    this.channel.authorized.subscribe(async authorized => {
+      if (!authorized) {
+        const token = await this.getToken('stream');
+        this.channel.token = token;
+      }
+    });
+
+    this.channel.state.subscribe(state => {
+      console.info(this.stream.alias, ChannelState[state]);
+    });
+  }
+
+  async getToken(type = 'stream') {
+    const options = {
+      expiresIn: 1800, // 30 minutes
+    };
+
+    return this.streamService.getToken(this.stream, type, options);
+  }
+
+  @action
+  toggleMute(e) {
+    if (e) {
+      e.preventDefault();
     }
 
-    async joinChannel() {
-      this.channel = Channels.createChannel({
-        token: await this.getToken(),
-        videoElement: this.videoElement,
-      });
+    this.isMuted = !this.isMuted;
 
-      this.channel.authorized.subscribe(async authorized => {
-        if (!authorized) {
-          const token = await this.getToken();
-          this.channel.token = token;
-        }
-      });
+    this.videoElement.muted = this.isMuted;
+  }
 
-      this.channel.state.subscribe(state => {
-        console.info(this.stream.alias, ChannelState[state]);
-      });
-    }
+  @action
+  onInsert(element) {
+    this.videoElement = element.querySelector('video');
 
-    async getToken() {
-      const { alias: channelAlias, tags } = this.stream;
+    this.toggleMute();
 
-      const options = {
-        tags,
-        channelAlias,
-        expiresIn: 1800, // 30 minutes
-      };
+    setTimeout(async () => {
+      await this.joinChannel();
+    }, 750);
+  }
 
-      return this.channelExpressService.getToken(options, 'stream');
-    }
-
-    @action
-    toggleMute() {
-      this.isMuted = !this.isMuted;
-
-      this.videoElement.muted = this.isMuted;
-    }
-
-    @action
-    onInsert(element) {
-      this.videoElement = element.querySelector('video');
-
-      this.toggleMute();
-
-      setTimeout(async () => {
-        await this.joinChannel();
-      }, 750);
-    }
-
-    @action
-    toggleActive() {
-      this.isActive = !this.isActive;
-    }
+  @action
+  setActive() {
+    this.manifestService.setActiveStream(this.stream.id);
+  }
 }

@@ -4,6 +4,8 @@
 @import "components";
 
 @import "events";
+@import "home";
+@import "rooms";
 @import "streams";
 @import "users";
 
@@ -87,6 +89,14 @@ body {
   max-height: 100%;
   overflow: hidden;
   position: relative;
+
+  .content {
+    flex: 1;
+  }
+
+  aside {
+    flex: none;
+  }
 }
 
 video {

@@ -10,11 +10,18 @@ export default class EventRoute extends Route {
   @service('channel-express')
   channelExpressService;
 
+  @service router;
+
   // Needed so that shared implementations can share the template
   templateName = 'event'
 
   async model(params) {
-    await this.manifestService.getManifest(params.event_id);
+    const options = {
+      withTokens: true,
+      // useSockets: true,
+    };
+
+    await this.manifestService.getManifest(params.event_id, options);
     const { event } = this.manifestService;
 
     if (event) {
@@ -26,7 +33,7 @@ export default class EventRoute extends Route {
 
   afterModel(model) {
     if (!model) {
-      return this.transitionTo('not-found');
+      return this.router.transitionTo('not-found');
     }
 
     this.channelExpressService.eventId = model.id;

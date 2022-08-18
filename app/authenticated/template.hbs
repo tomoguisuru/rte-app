@@ -1,17 +1,60 @@
+<div class="rts-wrap">
+  <header class="rts-hdr">
+    <div class="rts-hdr__title">
+      <PortalTarget @name="header-title" />
+    </div>
 
-{{outlet}}
+    <div class="rts-hdr__brand">
+      {{!-- Your brand goes here --}}
+    </div>
+  </header>
 
-<Portal @target="nav">
-  <nav>
-    <ul>
-      <li><LinkTo @route="authenticated.events">My Events</LinkTo></li>
-      {{#if (eq this.user.role "admin")}}
-      <li><LinkTo @route="authenticated.admin.users">Users</LinkTo></li>
-      <li><LinkTo @route="authenticated.admin.events">Events</LinkTo></li>
-      {{/if}}
-    </ul>
-  </nav>
+  <div class="rts-nav">
+    <nav>
+      <ul>
+        <li>
+          <LinkTo
+            @route="authenticated.events"
+            @current-when='authenticated.events authenticated.event'
+          >
+            My Events
+          </LinkTo>
+        </li>
+        <li>
+          <LinkTo
+            @route="authenticated.rooms"
+            @current-when='authenticated.rooms authenticated.room'
+          >
+            My Rooms
+          </LinkTo>
+        </li>
+        {{#if (eq this.user.role "admin")}}
+        <li><LinkTo @route="authenticated.admin.users">Users</LinkTo></li>
+        <li><LinkTo @route="authenticated.admin.events">Events</LinkTo></li>
+        <li><LinkTo @route="authenticated.admin.rooms">Rooms</LinkTo></li>
+        {{/if}}
+      </ul>
+    </nav>
 
-  <UserLogout @username={{this.user.firstName}}>
-  </UserLogout>
-</Portal>
+    <UserLogout @username={{this.user.firstName}} />
+  </div>
+
+  <main class="rts-main">
+    {{outlet}}
+  </main>
+
+  <footer class="rts-ftr">
+    <div class="rts-ftr__controls" id="footer_left_controls">
+      <PortalTarget @name="footer-left" />
+    </div>
+    <div class="rts-ftr__controls">
+      <PortalTarget @name="footer-center" />
+    </div>
+
+    <div class="rts-ftr__controls">
+      <div>
+        <PortalTarget @name="footer-right" />
+      </div>
+    </div>
+  </footer>
+</div>

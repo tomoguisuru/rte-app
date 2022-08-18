@@ -1,0 +1,21 @@
+<div class="rte-modal" {{did-insert this.onInsert}}>
+  <div class="rte-modal__content">
+    {{#if (has-block "title")}}
+    <header>
+      <h4>{{yield to="title"}}</h4>
+      <span>close</span>
+    </header>
+    {{/if}}
+
+    <div class="rte-modal__content__main">
+      {{yield to="content"}}
+    </div>
+
+    {{#if (has-block "footer")}}
+    <footer>
+      {{yield to="footer"}}
+    </footer>
+    {{/if}}
+
+  </div>
+</div>

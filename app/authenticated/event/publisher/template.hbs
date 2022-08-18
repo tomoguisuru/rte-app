@@ -1,66 +1,14 @@
-{{#if this.showPublisher}}
-<RtsTray @trayClass="publisher">
+<RtsTray
+  @trayClass="publisher"
+>
   <:content>
-    <div class="rts-settings">
-      <div class="rts-settings__preview" {{did-insert this.onInsert}}>
-        <video id="publisherStream" playsinline autoplay muted></video>
-      </div>
-
-      <div class="rts-settings__config">
-        <form class="rts-form">
-          {{#unless this.hasPublisher}}
-
-          <RtsField @type="select" @label="Camera">
-            <select class="rts-field__input" {{on 'change' this.updateSelectedVideo}}>
-              {{#each this.videoInputOptions as |input|}}
-              <option value="{{input.value}}">{{input.text}}</option>
-              {{/each}}
-            </select>
-          </RtsField>
-
-          <RtsField @type="select" @label="Microphone">
-            <select class="rts-field__input" {{on 'change' this.updateSelectedAudio}}>
-              {{#each this.audioInputOptions as |input|}}
-              <option value="{{input.value}}">{{input.text}}</option>
-              {{/each}}
-            </select>
-          </RtsField>
-
-          {{/unless}}
-        </form>
-      </div>
-    </div>
+    <PublisherWindow
+      @hideSettings={{this.hasPublisher}}
+      @isJoined={{(not this.hasPublisher)}}
+      @onJoin={{this.publishStream}}
+      @onLeave={{this.stop}}
+      @onAudioToggle={{this.toggleAudioInput}}
+      @onVideoToggle={{this.toggleVideoInput}}
+    />
   </:content>
 </RtsTray>
-{{/if}}
-
-<Portal @target="footer-center">
-  <button class="rts-btn rts-btn--icon" type="button">
-    <span class="material-icons" {{on 'click' this.toggleAudioInput}}>
-      {{if this.streamAudio "mic" "mic_off"}}
-    </span>
-  </button>
-
-  <button class="rts-btn rts-btn--icon" type="button">
-    <span class="material-icons" {{on 'click' this.toggleVideoInput}}>
-      {{if this.streamVideo "videocam" "videocam_off"}}
-    </span>
-  </button>
-
-  {{#if this.hasPublisher}}
-    <button class="rts-btn rts-btn--primary" type="button" {{on 'click' this.stop}}>
-      Leave
-    </button>
-    {{else}}
-    <button class="rts-btn rts-btn--primary" type="button" {{on 'click' this.publishStream}}>
-      Join
-    </button>
-  {{/if}}
-
-</Portal>
-
-<Portal @target="footer-right">
-  <button class="rts-btn rts-btn--icon {{if this.showPublisher " rts-btn--secondary"}}" type="button" {{on "click" this.togglePublisher}}>
-    <span class="material-icons md-20">settings</span>
-  </button>
-</Portal>

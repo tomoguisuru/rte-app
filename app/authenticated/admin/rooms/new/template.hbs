@@ -1,0 +1,31 @@
+<RtsTray @trayClass="room">
+  <:title>
+        New Room:
+  </:title>
+
+  <:content>
+    <div class="rts-form">
+      <RtsField @label="Title">
+        <Input
+          id="room-title"
+          class="rts-field__input"
+          @type="text"
+          @value={{this.title}}
+        />
+      </RtsField>
+    </div>
+  </:content>
+
+  <:actions>
+    <LinkTo
+      @route="authenticated.event.rooms"
+      class="rts-btn rts-btn--secondary"
+    >
+      Cancel
+    </LinkTo>
+
+    <button class="rts-btn rts-btn--primary" type="submit" {{on "click" this.onSave}}>
+      Save
+    </button>
+  </:actions>
+</RtsTray>

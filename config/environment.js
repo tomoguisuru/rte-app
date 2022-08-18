@@ -5,28 +5,16 @@ module.exports = function (environment) {
     modulePrefix: 'client-app',
     environment,
     rootURL: '/',
-    locationType: 'auto',
+    locationType: 'history',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
       },
-      EXTEND_PROTOTYPES: {
-        // Prevent Ember Data from overriding Date.parse.
-        Date: false,
-      },
     },
 
     APP: {
-      // Here you can pass flags/options to your application instance
-      // when it is created
       API_HOST: process.env.API_HOST,
-      SERVICES: {
-        OWNER_ID: process.env.CMS_OWNER_ID,
-        API_HOST: process.env.CMS_HOST,
-        API_V4: `${process.env.CMS_HOST}/api/v4`,
-        API_KEY: process.env.CMS_API_KEY,
-      },
     },
     contentSecurityPolicy: {
       'default-src': ["'none'"],
@@ -49,9 +37,13 @@ module.exports = function (environment) {
         'wss://*.downlynk.com/ws',
         'wss://*.uplynk.com/ws',
         'wss://*.downlynk.net/messages',
-        'wss://ws-emqx-ausw2-dp-1.downlynk.net/messages/',
+        'wss://*.uplynk.net/messages/',
       ],
-      'img-src': ["'self'", 'data:'],
+      'img-src': [
+        "'self'",
+        'https://loremflickr.com',
+        'data:'
+      ],
       'style-src': [
         "'self'",
         "'unsafe-inline'",
@@ -83,6 +75,7 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+
   }
 
   if (environment === 'test') {

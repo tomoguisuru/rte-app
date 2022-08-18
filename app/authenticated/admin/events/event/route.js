@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 
 export default class EventRoute extends Route {
   @service session;
+  @service store;
 
   async beforeModel() {
     return this.store.findAll('user');

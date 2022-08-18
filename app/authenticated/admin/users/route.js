@@ -4,13 +4,14 @@ import { inject as service } from '@ember/service';
 export default class UsersRoute extends Route {
   @service currentUser;
   @service store;
+  @service router;
 
   beforeModel(transition) {
     const { user } = this.currentUser;
 
     if (!(['admin'].includes(user.role))) {
       transition.abort();
-      this.transitionTo('authenticated.events');
+      this.router.transitionTo('authenticated.events');
     }
   }
 

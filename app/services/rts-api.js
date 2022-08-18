@@ -59,8 +59,9 @@ export default class RtsApiService extends Service {
         } else {
           value = this._transform(value, method);
         }
-        const _key =
-                  method === 'camelize' ? camelize(key) : underscore(key);
+        const _key = method === 'camelize'
+          ? camelize(key)
+          : underscore(key);
         rv[_key] = value;
 
         return rv;

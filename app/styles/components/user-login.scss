@@ -1,19 +1,14 @@
 .user-login {
-    &.rts-form {
-        display: flex;
-        flex-direction: column;
-        width: 250px;
-        height: 205px;
-        background-color: $color-gray-darkest;
-        margin: 10% auto 0;
-        padding: 10px;
-        border-radius: 6px;
-        box-shadow: 2px 2px 8px $color-black;
+  &.rts-form {
+    display: flex;
+    flex-direction: column;
+    background-color: #282828;
+    padding: 10px;
 
-        .rts-field {
-            &__label {
-                background-color: $color-gray-darkest;
-            }
-        }
+    .rts-field {
+      &__label {
+        background-color: $color-gray-darkest;
+      }
     }
+  }
 }

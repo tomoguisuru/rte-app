@@ -13,7 +13,9 @@ export default class UserLoginComponent extends Component {
     password = null;
 
     @action
-    async login() {
+    async login(e) {
+      e.preventDefault();
+
       if (!this.email || !this.password) {
         this.errorMessage = 'Email and Password are required';
       }

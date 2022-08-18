@@ -1,0 +1,12 @@
+<div class="rts-events">
+  <div class="rts-events--items">
+  {{#each this.model as |room|}}
+    <RoomItem
+      @room={{room}}
+      @onClick={{fn this.onEventClick room.id}}
+    />
+  {{else}}
+    <p>No rooms</p>
+  {{/each}}
+  </div>
+</div>

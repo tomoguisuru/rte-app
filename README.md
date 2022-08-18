@@ -8,7 +8,7 @@ You will need the following things properly installed on your computer.
 
 * [Git](https://git-scm.com/)
 * [Node.js](https://nodejs.org/) (with npm)
-* [Ember CLI](https://ember-cli.com/)
+* [Ember CLI](https://cli.emberjs.com/release/)
 * [Google Chrome](https://google.com/chrome/)
 
 
@@ -66,7 +66,7 @@ The .env addon allows you to have different environment configurations available
 cd client-app
 touch .env
 touch .env.development
-touch .env.staging
+touch .env.test
 ```
 
 you will then need to add the following to each file
@@ -83,18 +83,12 @@ API_HOST=https://rtsapi.uplynk.com
 
 _.env.development_
 ```
-API_HOST=https://rtsapi.uplynk.com
-```
-
-_.env.staging_
-```
-API_HOST=https://rtsapi-staging.uplynk.com
+API_HOST=http://rtsapi.uplynk.localhost:3000
 ```
 
 _.env_
 ```
-
-API_HOST=http://rtsapi.uplynk.localhost:3000
+API_HOST=https://rtsapi.uplynk.com
 ```
 
 ---
@@ -106,11 +100,6 @@ the `development` environment is the default but you can easily specify addition
 Development
 ```bash
 ember s
-```
-
-Staging
-```bash
-ember s -e staging
 ```
 
 Production
@@ -144,7 +133,7 @@ Login using either an `admin` or `publisher` account
 ## Further Reading / Useful Links
 
 * [ember.js](https://emberjs.com/)
-* [ember-cli](https://ember-cli.com/)
+* [ember-cli](https://cli.emberjs.com/release/)
 * Development Browser Extensions
   * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
   * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)

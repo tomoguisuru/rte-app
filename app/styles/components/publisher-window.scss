@@ -1,0 +1,30 @@
+.publisher-window {
+  &__preview {
+    position: relative;
+  }
+
+  &__actions {
+    button {
+      width: 100%;
+    }
+  }
+
+  &__preview-actions {
+    background-color: $color-gray-dark;
+    border-radius: 20px;
+    left: 50%;
+    opacity: 0.1;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    &:hover {
+      opacity: 1;
+    }
+
+    .rts-btn {
+      box-shadow: none;
+      background-color: transparent;
+    }
+  }
+}

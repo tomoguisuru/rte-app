@@ -1,19 +1,54 @@
 import Service, { inject as service } from '@ember/service';
 
+const ALLOWED_PARAMS = [
+  'capabilities',
+  'expiresAt',
+  'expiresIn',
+  'originStreamId',
+  'sessionId',
+  'tags',
+];
+
 export default class StreamService extends Service {
-  @service('hyperion')
-  hyperionApi;
+  @service('rts-api') api;
 
-  async getStream(eventId, email, publisher_token) {
-    const url = `/rts/events/${eventId}/publishers`;
+  sessionId = null;
 
-    const data = {
-      email,
-      publisher_token,
-    };
+  async getToken(stream, type, options = {}) {
+    if (!stream) {
+      throw new Error('Unable to request token.');
+    }
 
-    const json = await this.hyperionApi.request(url, 'post', data);
+    if (this.sessionId) {
+      options['sessionId'] = this.sessionId;
+    }
 
-    return json['@included'][0];
+    const url = `/streams/${stream.id}/token/${type}`;
+
+    const resp = await this.api.request(
+      url,
+      'post',
+      this.filterOptions(options),
+    );
+
+    if (!('token' in resp)) {
+      throw new Error('Unable to retrieve token');
+    }
+
+    return resp.token;
+  }
+
+  filterOptions(options) {
+    const data = {};
+
+    ALLOWED_PARAMS.forEach(k => {
+      const value = options[k];
+
+      if (value) {
+        data[k] = value;
+      }
+    });
+
+    return data;
   }
 }

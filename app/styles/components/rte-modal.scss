@@ -1,0 +1,82 @@
+.rte-modal {
+  --gutter: 14px;
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 2000;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,.7);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+  &__content {
+    min-width: 300px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    max-width:calc(100% - 80px);
+    max-height:calc(100% - 80px);
+
+    header {
+      min-height: 60px;
+      height: 60px;
+      color: $color-white;
+      background-color: $color-gray;
+      display: grid;
+      padding-left: var(--gutter);
+      align-items: center;
+      grid-template-columns: auto 60px;
+
+      h4 {
+        margin: 0;
+        text-align: left;
+      }
+
+      span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        font-size: 20px;
+        opacity: .8;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    &__main {
+      flex: 1;
+      text-align: left;
+      overflow: auto;
+      color: $color-black;
+    }
+
+    footer {
+      height: auto;
+      text-align: right;
+      border-top: solid 1px $color-gray-light;
+      padding: var(--gutter);
+
+      button, input {
+        margin: 0;
+
+        &:not(:last-child) {
+          margin-right: var(--gutter);
+        }
+      }
+    }
+  }
+}
+

@@ -9,6 +9,8 @@ export default class EventController extends Controller {
 
   @service mqtt;
 
+  @tracked activeId = null;
+
   pollInterval = 10 * 1000;
   pollTracker = null;
 
@@ -92,7 +94,7 @@ export default class EventController extends Controller {
     });
 
     this.mqtt.on('mqtt-message', (sTopic, sMessage) => {
-      console.info('message', sTopic);
+      console.info('Message', sTopic);
       if (sTopic === `rts/${this.model.id}/message`) {
         let decoded = new TextDecoder('utf-8').decode(sMessage);
         let data = JSON.parse(decoded);
@@ -120,7 +122,6 @@ export default class EventController extends Controller {
       this.subscribe();
     } catch (err) {
       console.info('Cannot connect to MQTT');
-      console.error(err);
 
       this.initPolling();
     }

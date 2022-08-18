@@ -1,49 +1,9 @@
-@font-face {
-    font-family: 'VerizonNHGeDS-Bold';
-    src: url('/fonts/nhg/VerizonNHGeDS-Bold.woff2') format('woff2'),
-         url('/fonts/nhg/VerizonNHGeDS-Bold.woff') format('woff'),
-         url('/fonts/nhg/VerizonNHGeDS-Bold.eot') format('eot'),
-         url('/fonts/nhg/VerizonNHGeDS-Bold.ttf') format('truetype');
-    font-weight: bold;
-
-}
-
-@font-face {
-    font-family: 'VerizonNHGeDS-Regular';
-    src: url('/fonts/nhg/VerizonNHGeDS-Regular.woff2') format('woff2'),
-         url('/fonts/nhg/VerizonNHGeDS-Regular.woff') format('woff'),
-         url('/fonts/nhg/VerizonNHGeDS-Regular.eot') format('eot'),
-         url('/fonts/nhg/VerizonNHGeDS-Regular.ttf') format('truetype');
-    font-weight: normal;
-}
-
-@font-face {
-    font-family: 'VerizonNHGeTX-Bold';
-    src: url('/fonts/nhg/VerizonNHGeTX-Bold.woff2') format('woff2'),
-         url('/fonts/nhg/VerizonNHGeTX-Bold.woff') format('woff'),
-         url('/fonts/nhg/VerizonNHGeTX-Bold.eot') format('eot'),
-         url('/fonts/nhg/VerizonNHGeTX-Bold.ttf') format('truetype');
-    font-weight: bold;
-
-}
-
-@font-face {
-    font-family: 'VerizonNHGeTX-Regular';
-    src: url('/fonts/nhg/VerizonNHGeTX-Regular.woff2') format('woff2'),
-         url('/fonts/nhg/VerizonNHGeTX-Regular.woff') format('woff'),
-         url('/fonts/nhg/VerizonNHGeTX-Regular.eot') format('eot'),
-         url('/fonts/nhg/VerizonNHGeTX-Regular.ttf') format('truetype');
-    font-weight: normal;
-
-}
-
-
 html,
 body {
-    font-family: 'VerizonNHGeTX-Regular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
     strong {
-        font-family: 'VerizonNHGeTX-Bold', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
 }
 
@@ -53,7 +13,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: 'VerizonNHGeDS-Bold', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 h1,
