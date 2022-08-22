@@ -22,8 +22,8 @@ Both are provided as an example only and are provided without warranty or suppor
 ## Installation
 
 ```bash
-# should be using node version 12.22.xx
-# should be using npm version 6.14.x
+# should be using node version >= 16.16.xx
+# should be using npm version >= 8.11.x
 nvm use 16
 npm install -g ember-cli
 git clone <current-repo-ssh-link>
