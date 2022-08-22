@@ -11,8 +11,6 @@ You will need the following things properly installed on your computer.
 * [Ember CLI](https://cli.emberjs.com/release/)
 * [Google Chrome](https://google.com/chrome/)
 
-
-
 This application requires a backend API to be setup to handle requests.
 
 You can find a pre-constructed demo API [here](https://github.com/tomoguisuru/rte-api)
@@ -21,33 +19,12 @@ Both are provided as an example only and are provided without warranty or suppor
 
 ---
 
-## Docker
-```bash
-git clone <current-repo-ssh-link>
-cd client-app
-```
-create .env file and add:
-
-```
-API_HOST=https://rtsapi.uplynk.com
-```
-
-run docker with the following commands
-
-```bash
-docker build . -t client-app
-docker run -d -p 4200:4200 -p 7357:7357 -p 9222:9222 client-app
-```
-
-Client: `http://localhost:4200/event/:rts_event_id`
-Admin/Publisher: `http://localhost:4200`
-
 ## Installation
 
 ```bash
 # should be using node version 12.22.xx
 # should be using npm version 6.14.x
-nvm use 12
+nvm use 16
 npm install -g ember-cli
 git clone <current-repo-ssh-link>
 cd client-app
@@ -64,31 +41,13 @@ The .env addon allows you to have different environment configurations available
 
 ```bash
 cd client-app
-touch .env
-touch .env.development
-touch .env.test
+cp .env.development .env
 ```
 
 you will then need to add the following to each file
 
 ```
-API_HOST=https://rtsapi.uplynk.com
-```
-
-### Where do I get my `owner_id` and `integration key`?
-* [owner_id](https://cms.uplynk.com/static/cms2/index.html#/settings/)
-* [Integration Key](https://cms.uplynk.com/static/cms2/index.html#/settings/integration-keys)
-
-**Example .env Configs**:
-
-_.env.development_
-```
-API_HOST=http://rtsapi.uplynk.localhost:3000
-```
-
-_.env_
-```
-API_HOST=https://rtsapi.uplynk.com
+API_HOST=http://localhost:3000
 ```
 
 ---
@@ -116,17 +75,6 @@ NOTE: Your event must be in a `LIVE` state or no streams will be returned in the
 Navigate to http://localhost:4200/event/:rts_event_id
 
 * `:rts_event_id` is the id of the event that you want to view
-
-___
-
-
-## Publishing a Streams
-
-NOTE: Your event must be in a `LIVE`state or no streams will be returned in the manifest
-
-Navigate to http://localhost:4200/
-
-Login using either an `admin` or `publisher` account
 
 ---
 
